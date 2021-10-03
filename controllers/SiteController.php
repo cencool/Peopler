@@ -9,29 +9,6 @@ use yii\filters\AccessControl;
 
 class SiteController extends Controller {
 
-	public function behaviors() {
-		return [
-			'access' => [
-				'class' => AccessControl::class,
-				'only' => ['login', 'logout', 'select-db', 'select-table', 'show-table','show-active-table'],
-				'rules' => [
-					[
-						'allow' => true,
-						'actions' => ['login'],
-						'roles' => ['?'],
-
-					],
-					[
-						'allow' => true,
-						'actions' => ['login', 'logout', 'select-db', 'select-table', 'show-table', 'show-active-table'],
-						'roles' => ['@'],
-					]
-				],
-
-			],
-		];
-	}
-
 	public function actionIndex() {
 		return $this->render('index');
 	}
