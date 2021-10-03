@@ -30,15 +30,6 @@ $config = [
 				],
 			],
 		],
-		'user' => [
-			'identityClass' => 'app\models\UserIdentity',
-			'enableAutoLogin' => true,
-			'loginUrl' => ['site/login'],
-		],
-		'dba' => [
-			'class' => 'yii\db\Connection',
-			'dsn' => 'mysql:host=localhost;',
-		],
 		'db' => $db,
 		'i18n' => [
 			'translations' => [

@@ -29,43 +29,8 @@ $this->beginPage();
 				<a href=<?= Url::to(['index']) ?> class='navbar-brand'><img src='/icicle.png' width='25' height='25'></a>
 			</div>
 			<ul class='nav navbar-nav'>
-				<li><a href='/index.php'><?= Yii::t('app', 'Home') ?></a></li>
 				<li>
-					<?php echo (Yii::$app->user->isGuest) == true ?
-						Html::a(\Yii::t('app', 'Login'), ['site/login']) :
-						Html::a(\Yii::t('app', 'Logout ') . '('
-							. Yii::$app->user->id . ')', ['site/logout']);
-					?>
-				</li>
-				<li>
-					<?php if (Yii::$app->user->isGuest) {
-						echo '';
-					} elseif (isset($this->params['dbName'])) {
-						echo Html::a('<b>Db:</b> ' . $this->params['dbName'], ['site/select-db']);
-					} else {
-						echo Html::a(Yii::t('app', 'Select Db'), ['site/select-db']);
-					} ?>
-
-				</li>
-				<li>
-					<?php if (isset($this->params['dbName'])) {
-						if (isset($this->params['tableName'])) {
-							echo Html::a('<b>Table:</b> ' .
-								$this->params['tableName'], ['site/select-table']);
-						} else {
-							echo Html::a(Yii::t('app', 'Select Table'), ['site/select-table']);
-						}
-					}
-					?>
-				</li>
-				<li>
-					<?= Html::a('Calculator', ['calc/']) ?>
-				</li>
-				<li>
-					<?= Html::a('GridView', ['site/show-active-table']) ?>
-				</li>
-				<li>
-					<?= Html::a('MyDb', ['my-db/index']) ?>
+					<?= Html::a(Yii::t('app','List'), ['my-db/index']) ?>
 			</ul>
 		</nav>
 

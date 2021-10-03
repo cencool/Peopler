@@ -30,6 +30,7 @@ return [
 	'Add Relation' => 'Pridať vzťah',
 	'Select' => 'Vybrať',
 	'Update Relation' => 'Upraviť vzťah',
+	'List' => 'Zoznam',
 
 
 ]
