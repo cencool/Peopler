@@ -26,11 +26,11 @@ $this->beginPage();
 	<header>
 		<nav class='navbar navbar-default navbar-fixed-top '>
 			<div class='navbar-header'>
-				<a href=<?= Url::to(['index']) ?> class='navbar-brand'><img src='/icicle.png' width='25' height='25'></a>
+				<a href=<?= Url::to(['site/index']) ?> class='navbar-brand'><img src='/icicle.png' width='25' height='25'></a>
 			</div>
 			<ul class='nav navbar-nav'>
 				<li>
-					<?= Html::a(Yii::t('app','List'), ['my-db/index']) ?>
+					<?= Html::a(Yii::t('app','List'), ['person/index']) ?>
 			</ul>
 		</nav>
 
