@@ -11,7 +11,7 @@ use yii\bootstrap\Alert;
 AddRelationAsset::register($this);
 
 
-$this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['my-db/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $person->surname . ', ' . $person->name, 'url' => ['person/update', 'id' => $person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Add Relation')];
 
@@ -43,7 +43,7 @@ $form = ActiveForm::begin([
 <div class='row'>
 	<div class='col-xs-3'>
 		<?php
-		echo $form->field($model, 'relation_ab')->dropDownList($relationsList, ['prompt' => Yii::t('app', 'Select')]);
+		echo $form->field($model, 'relation_ab_id')->dropDownList($relationsList, ['prompt' => Yii::t('app', 'Select')]);
 		echo Html::activeHiddenInput($model, 'person_b_id');
 		echo Html::activeHiddenInput($model, 'person_a_id', ['value' => strval($person->id)]);
 		?>

@@ -52,10 +52,20 @@ class m211004_184234_create_db_tables extends Migration {
 				[
 					'id' => $this->primaryKey(),
 					'person_a_id' => $this->integer()->notNull(),
-					'relation_ab' => $this->string(20)->notNull(),
+					'relation_ab_id' => $this->integer()->notNull(),
 					'person_b_id' => $this->integer()->notNull(),
 				],
 
+			);
+
+			$this->addForeignKey(
+				'person_relation_fk',
+				'person_relation',
+				'relation_ab_id',
+				'relation_name',
+				'id',
+				'CASCADE',
+				'CASCADE'
 			);
 
 			$this->execute(

@@ -9,6 +9,7 @@ use app\models\myDb\PersonDetail;
 use app\models\myDb\RelationPair;
 use app\models\myDb\RelationSearch;
 use app\models\myDb\PersonRelation;
+use app\models\myDb\RelationName;
 use Yii;
 
 class RelationController extends Controller {
@@ -26,7 +27,16 @@ class RelationController extends Controller {
 		$person = Person::findOne($id);
 		$session = Yii::$app->session;
 
-		$relationsList = RelationPair::relationsList($person->gender);
+		//$relationsList = RelationPair::relationsList($person->gender);
+		$relationsListAr = RelationName::find()
+			->where(['gender' => $person->gender])
+			->all();
+		$relationsList = [];
+		foreach ($relationsListAr as $row) {
+			$relationsList[$row['id']] = $person->gender == 'm' ?
+				Yii::t('app-m', $row['relation_name']) : Yii::t('app-f', $row['relation_name']);
+		}
+
 
 		// model for selecting 'b' person of relation
 		$searchModel = new PersonSearch();

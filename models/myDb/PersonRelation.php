@@ -15,15 +15,15 @@ class PersonRelation extends ActiveRecord
     public function rules()
     {
         return [
-            [['person_a_id', 'person_b_id', 'relation_ab'], 'safe'],
-            [['person_a_id', 'person_b_id', 'relation_ab'], 'required'],
+            [['person_a_id', 'person_b_id', 'relation_ab_id'], 'safe'],
+            [['person_a_id', 'person_b_id', 'relation_ab_id'], 'required'],
             [['person_a_id', 'person_b_id'], 'filter','filter'=>'intval'],
         ];
     }
 
 	public function attributeLabels() {
 		return [
-			'relation_ab' => Yii::t('app','Relation'),
+			'relation_ab_id' => Yii::t('app','Relation'),
 		];
 	}
 
@@ -37,4 +37,9 @@ class PersonRelation extends ActiveRecord
     {
         return $this->hasOne(Person::class, ['id' => 'person_b_id']);
     }
+
+	public function getRelationName()
+	{
+		return $this->hasOne(RelationName::class,['id' => 'relation_ab_id']);
+	}
 }

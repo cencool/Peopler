@@ -3,7 +3,6 @@
 namespace app\models\myDb;
 
 use yii\db\ActiveRecord;
-use yii\helpers\Html;
 use Yii;
 
 class Person extends ActiveRecord {
@@ -51,7 +50,8 @@ class Person extends ActiveRecord {
 
 		foreach ($relationsFrom as $record) {
 			$relationRow['relation_id'] = $record->id;
-			$relationRow['relation'] = $record->relation_ab;
+			$relationRow['relation'] = $record->relationName->relation_name;
+
 			$relationRow['to_whom_id'] = $record->person_b_id;
 			$relationRow['relation_to_whom'] = $record->person_b->surname . ' ' . $record->person_b->name;
 			$relations[] = $relationRow;
@@ -63,7 +63,7 @@ class Person extends ActiveRecord {
 		$personFromGender = $this->gender;
 		foreach ($relationsTo as $record) {
 			$personToGender = $record->person_a->gender;
-			$relationTo = $record->relation_ab;
+			$relationTo = $record->relationName->relation_name;
 			$relationRow['relation_id'] = $record->id;
 			$relationRow['to_whom_id'] = $record->person_a_id;
 			$relationRow['relation_to_whom'] = $record->person_a->surname . ' ' . $record->person_a->name;
@@ -94,6 +94,11 @@ class Person extends ActiveRecord {
 			if (!$duplicate) {
 				$relations[] = $relationRow;
 			}
+		}
+		// translation of relations
+		foreach ($relations as $key => $value) {
+			$value['relation'] = $this->gender == 'm' ? Yii::t('app-m', $value['relation']) : Yii::t('app-f', $value['relation']);
+			$relations[$key] = $value;
 		}
 		return $relations;
 	}

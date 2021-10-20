@@ -4,7 +4,7 @@ use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
-$this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['my-db/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->name];
 
 ?>

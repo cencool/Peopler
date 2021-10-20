@@ -33,8 +33,13 @@ $config = [
 		'db' => $db,
 		'i18n' => [
 			'translations' => [
-				'app' => [
+				'app*' => [
 					'class' => 'yii\i18n\PhpMessageSource',
+					'fileMap' => [
+						'app' => 'app.php',
+						'app-m' => 'app-m.php',
+						'app-f' => 'app-f.php',
+					]
 				],
 			],
 		],
