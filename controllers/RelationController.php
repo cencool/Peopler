@@ -3,13 +3,13 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use app\models\myDb\Person;
-use app\models\myDb\PersonSearch;
-use app\models\myDb\PersonDetail;
-use app\models\myDb\RelationPair;
-use app\models\myDb\RelationSearch;
-use app\models\myDb\PersonRelation;
-use app\models\myDb\RelationName;
+use app\models\basic\Person;
+use app\models\basic\PersonSearch;
+use app\models\basic\PersonDetail;
+use app\models\basic\RelationPair;
+use app\models\basic\RelationSearch;
+use app\models\basic\PersonRelation;
+use app\models\basic\RelationName;
 use Yii;
 
 class RelationController extends Controller {

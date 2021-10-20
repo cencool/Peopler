@@ -122,7 +122,10 @@ $addRelationClass = ($person->id != null) ? 'btn btn-primary pull-right' : 'disa
 			'class' => 'table table-hover table-condensed table-bordered',
 		],
 		'columns' => [
-			['attribute' => 'relation_id',],
+			[
+				'attribute' => 'relation_id',
+				'label' => 'Rel. ID',
+			],
 			[
 				'class' => '\yii\grid\ActionColumn',
 				'template' => '{update} {delete}',

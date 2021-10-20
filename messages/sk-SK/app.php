@@ -31,6 +31,7 @@ return [
 	'Select' => 'Vybrať',
 	'Update Relation' => 'Upraviť vzťah',
 	'List' => 'Zoznam',
+	'Relation was added' => 'Vzťah pridaný',
 
 
 ]

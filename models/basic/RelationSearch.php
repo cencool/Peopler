@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models\myDb;
+namespace app\models\basic;
 
 use yii\base\Model;
 use yii\data\ArrayDataProvider;
-use app\models\myDb\Person;
+use app\models\basic\Person;
 
 class RelationSearch extends Model {
 

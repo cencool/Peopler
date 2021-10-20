@@ -3,10 +3,10 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use app\models\myDb\Person;
-use app\models\myDb\PersonSearch;
-use app\models\myDb\PersonDetail;
-use app\models\myDb\RelationSearch;
+use app\models\basic\Person;
+use app\models\basic\PersonSearch;
+use app\models\basic\PersonDetail;
+use app\models\basic\RelationSearch;
 use Yii;
 
 class PersonController extends Controller {

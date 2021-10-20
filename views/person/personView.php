@@ -81,8 +81,6 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
             'class' => 'table table-hover table-condensed table-bordered',
         ],
         'columns' => [
-			['attribute' => 'to_whom_id',
-			],
             [
                 'attribute' => 'relation_id',
                 'label' => 'ID'

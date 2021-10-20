@@ -2,19 +2,20 @@
 
 return [
 	'mother'=>'matka',
-	'daughter' => 'dcéra',
 	'grandmother'=>'babka',
+	'daughter' => 'dcéra',
 	'granddaughter' => 'vnučka',
 	'wife' => 'manželka',
-	'colleague' => 'kolegyňa',
-	'classmate' => 'spolužiačka',
+	'friend' =>'priateľka', 
 	'sister-in-law' => 'švagriná',
 	'mother-in-law' => 'svokra',
 	'cousin' => 'sesternica',
 	'niece' => 'neter',
-	'friend' =>'priateľka', 
-	'acquaintance'=>'známa',
 	'sister' => 'sestra',
+	'daughter-in-law' => 'nevesta',
+	'colleague' => 'kolegyňa',
+	'classmate' => 'spolužiačka',
+	'acquaintance'=>'známa',
 
 
 
