@@ -9,6 +9,7 @@ use yii\bootstrap\Alert;
 
 
 AddRelationAsset::register($this);
+$this->registerJsVar('adr',Url::current([],true));
 
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];

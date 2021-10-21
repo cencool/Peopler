@@ -32,6 +32,7 @@ return [
 	'Update Relation' => 'Upraviť vzťah',
 	'List' => 'Zoznam',
 	'Relation was added' => 'Vzťah pridaný',
+	'Language' => 'Jazyk',
 
 
 ]

@@ -30,7 +30,21 @@ $this->beginPage();
 			</div>
 			<ul class='nav navbar-nav'>
 				<li>
-					<?= Html::a(Yii::t('app','List'), ['person/index']) ?>
+					<?= Html::a(Yii::t('app', 'List'), ['person/index']) ?>
+				</li>
+			</ul>
+			<ul class='nav navbar-nav navbar-right'>
+
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+						<?= Yii::t('app', 'Language').' ' ?><span class='caret'></span></a>
+					<ul class='dropdown-menu dropdown-menu-right'>
+						<li><a href=<?= Url::current(['lng' => 'sk']) ?>>SK</a></li>
+						<li><a href=<?= Url::current(['lng' => 'en']) ?>>EN</a></li>
+					</ul>
+				<li> <a href='#'> <?= Yii::$app->language ?> </a></li>
+
+				</li>
 			</ul>
 		</nav>
 
