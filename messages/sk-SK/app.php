@@ -34,6 +34,8 @@ return [
 	'Relation was added' => 'Vzťah pridaný',
 	'Language' => 'Jazyk',
 	'Relation updated'=> 'Vzťah upravený',
+	'to' => 'k',
+	'deleted' => 'vymazaný',
 
 
 ]

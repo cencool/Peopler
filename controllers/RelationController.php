@@ -142,10 +142,17 @@ class RelationController extends Controller {
 
 	public function actionDelete($id, $relation_id) {
 		$personRelation = PersonRelation::findOne($relation_id);
-		$relation = $personRelation->relation_ab;
-		$name = $personRelation->person_b->name . ' ' . $personRelation->person_b->surname;
+		$relation = $personRelation->relationName->relation_name;
+		$relation = $personRelation->person_a->gender == 'm' ?
+			Yii::t('app-m', $relation) : Yii::t('app-f', $relation);
+		$nameTo = $personRelation->person_b->name . ' ' . $personRelation->person_b->surname;
+		$nameFrom = $personRelation->person_a->name . ' ' . $personRelation->person_a->surname;
 		if ($personRelation->delete()) {
-			Yii::$app->session->setFlash('relationDeleted', 'Relation:' . $relation . ' to ' . $name . ' deleted');
+			Yii::$app->session->setFlash(
+				'relationDeleted',
+				Yii::t('app', 'Relation') . ': "' . $relation . '" '
+				.' '.$nameFrom.' '. Yii::t('app', 'to') . ' ' . $nameTo . ' ' . Yii::t('app', 'deleted')
+			);
 		}
 		return $this->redirect(['person/update', 'id' => $id]);
 	}

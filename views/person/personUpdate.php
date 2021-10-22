@@ -98,7 +98,7 @@ if (Yii::$app->session->hasFlash('personAdded')) {
 <?php
 if (Yii::$app->session->hasFlash('relationDeleted')) {
 	echo Alert::widget([
-		'options' => ['class' => 'alert-info'],
+		'options' => ['class' => 'alert-success'],
 		'body' => Yii::$app->session->getFlash('relationDeleted'),
 	]);
 }
