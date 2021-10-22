@@ -1,3 +1,5 @@
+/* select ID of 'person_b' in added relation */
+
 let personBids = document.getElementsByName('personBid');
 let personBinput = document.getElementById('personrelation-person_b_id');
 
@@ -13,6 +15,3 @@ personBids.forEach(function (val) {
 
 	})
 })
-
-
-

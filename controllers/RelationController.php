@@ -101,27 +101,43 @@ class RelationController extends Controller {
 
 		$model = PersonRelation::findOne($relation_id);
 		$person = Person::findOne($id);
-		$relationsList = RelationPair::relationsList($person->gender);
-		$session = Yii::$app->session;
 
-		try {
-			if (
-				$model->load(Yii::$app->request->post())
-				&& $model->validate()
-				&& $model->getDirtyAttributes()
-				&& $model->save()
-			) {
-				$session->setFlash('relationUpdated', 'Relation was updated');
+		// if it is direct relation
+		if ($model->person_a_id == $id) {
+
+			// create list of relations to choose from
+			$relationsListAr = RelationName::find()
+				->where(['gender' => $person->gender])
+				->all();
+			$relationsList = [];
+			foreach ($relationsListAr as $row) {
+				$relationsList[$row['id']] = $person->gender == 'm' ?
+					Yii::t('app-m', $row['relation_name']) : Yii::t('app-f', $row['relation_name']);
 			}
-		} catch (\Exception $ex) {
-			$session->setFlash('relationUpdateError', $ex->getMessage());
-		}
+			$session = Yii::$app->session;
 
-		return $this->render('relationUpdate', [
-			'person' => $person,
-			'model' => $model,
-			'relationsList' => $relationsList,
-		]);
+			try {
+				if (
+					$model->load(Yii::$app->request->post())
+					&& $model->validate()
+					&& $model->getDirtyAttributes()
+					&& $model->save()
+				) {
+					$session->setFlash('relationUpdated', Yii::t('app', 'Relation updated'));
+				}
+			} catch (\Exception $ex) {
+				$session->setFlash('relationUpdateError', $ex->getMessage());
+			}
+
+			return $this->render('relationUpdate', [
+				'person' => $person,
+				'model' => $model,
+				'relationsList' => $relationsList,
+			]);
+			// redirect to direct relation of person b then
+		} else {
+			return $this->redirect(['relation/update', 'id' => $model->person_a_id, 'relation_id' => $relation_id]);
+		}
 	}
 
 	public function actionDelete($id, $relation_id) {

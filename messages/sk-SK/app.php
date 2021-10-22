@@ -33,6 +33,7 @@ return [
 	'List' => 'Zoznam',
 	'Relation was added' => 'Vzťah pridaný',
 	'Language' => 'Jazyk',
+	'Relation updated'=> 'Vzťah upravený',
 
 
 ]

@@ -6,13 +6,13 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\bootstrap\Alert;
 
-$this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['my-db/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $person->surname . ', ' . $person->name, 'url' => ['person/update', 'id' => $person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Update Relation')];
 
 if (Yii::$app->session->hasFlash('relationUpdated')) {
 	echo Alert::widget([
-		'options' => ['class' => 'alert-info'],
+		'options' => ['class' => 'alert-success'],
 		'body' => Yii::$app->session->getFlash('relationUpdated'),
 	]);
 }
@@ -32,7 +32,7 @@ $form = ActiveForm::begin([
 ]);
 
 
-echo $form->field($model, 'relation_ab')->dropDownList($relationsList, ['prompt' => Yii::t('app', 'Select')]);
+echo $form->field($model, 'relation_ab_id')->dropDownList($relationsList, ['prompt' => Yii::t('app', 'Select')]);
 echo Html::tag('h3', Yii::t('app','To Whom').': '.$model->person_b->surname . ' ' . $model->person_b->name);
 echo $form->field($model, 'person_b_id')->hiddenInput()->label(false);
 echo $form->field($model, 'person_a_id')->hiddenInput()->label(false);
@@ -40,7 +40,7 @@ echo $form->field($model, 'person_a_id')->hiddenInput()->label(false);
 ?>
 
 <div class='form-group'>
-	<?= Html::submitButton('Submit') ?>
+	<?= Html::submitButton(Yii::t('app','Update'),['class'=>'btn btn-primary']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>

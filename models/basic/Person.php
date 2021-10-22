@@ -85,16 +85,9 @@ class Person extends ActiveRecord {
 			$relationRow['relation'] = ($relationPairs[0]['relation_ab'] == $relationTo) ?
 				$relationPairs[0]['relation_ba'] : $relationPairs[0]['relation_ab'];
 
-			$duplicate = false;
-			foreach ($relations as $relation) {
-				if ($relation['to_whom_id'] == $relationRow['to_whom_id'] && $relation['relation'] == $relationRow['relation']) {
-					$duplicate = true;
-				}
-			}
-			if (!$duplicate) {
-				$relations[] = $relationRow;
-			}
+			$relations[] = $relationRow;
 		}
+
 		// translation of relations
 		foreach ($relations as $key => $value) {
 			$value['relation'] = $this->gender == 'm' ? Yii::t('app-m', $value['relation']) : Yii::t('app-f', $value['relation']);
