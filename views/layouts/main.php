@@ -25,30 +25,28 @@ $this->beginPage();
 	<?php $this->beginBody() ?>
 	<header>
 		<nav class='navbar navbar-default navbar-fixed-top '>
-			<div class='navbar-header'>
-				<a href=<?= Url::to(['site/index']) ?> class='navbar-brand'><img src='/icicle.png' width='25' height='25'></a>
+			<div class='container'>
+				<div class='navbar-header'>
+					<a href=<?= Url::to(['site/index']) ?> class='navbar-brand'><img src='/icicle.png' width='25' height='25'></a>
+				</div>
+				<ul class='nav navbar-nav'>
+					<li>
+						<?= Html::a(Yii::t('app', 'List'), ['person/index']) ?>
+					</li>
+				</ul>
+				<ul class='nav navbar-nav navbar-right'>
+
+					<li class='dropdown'>
+						<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+							<?= Yii::t('app', 'Language') . ' ' ?><span class='caret'></span></a>
+						<ul class='dropdown-menu dropdown-menu-right'>
+							<li><a href=<?= Url::current(['lng' => 'sk']) ?>>SK</a></li>
+							<li><a href=<?= Url::current(['lng' => 'en']) ?>>EN</a></li>
+						</ul>
+					</li>
+				</ul>
 			</div>
-			<ul class='nav navbar-nav'>
-				<li>
-					<?= Html::a(Yii::t('app', 'List'), ['person/index']) ?>
-				</li>
-			</ul>
-			<ul class='nav navbar-nav navbar-right'>
-
-				<li class='dropdown'>
-					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
-						<?= Yii::t('app', 'Language').' ' ?><span class='caret'></span></a>
-					<ul class='dropdown-menu dropdown-menu-right'>
-						<li><a href=<?= Url::current(['lng' => 'sk']) ?>>SK</a></li>
-						<li><a href=<?= Url::current(['lng' => 'en']) ?>>EN</a></li>
-					</ul>
-				<li> <a href='#'> <?= Yii::$app->language ?> </a></li>
-
-				</li>
-			</ul>
 		</nav>
-
-
 	</header>
 	<div class='container'>
 		<?= Breadcrumbs::widget([

@@ -24,7 +24,7 @@ if (Yii::$app->session->hasFlash('relationUpdateError')) {
 }
 ?>
 
-<h3><?= $person->name . ' ' . $person->surname ?> </h3>
+<h3><?= $person->name . ' ' . $person->surname .' '.Yii::t('app','is').' :' ?> </h3>
 
 <?php
 $form = ActiveForm::begin([
@@ -32,10 +32,8 @@ $form = ActiveForm::begin([
 ]);
 
 
-echo $form->field($model, 'relation_ab_id')->dropDownList($relationsList, ['prompt' => Yii::t('app', 'Select')]);
-echo Html::tag('h3', Yii::t('app','To Whom').': '.$model->person_b->surname . ' ' . $model->person_b->name);
-echo $form->field($model, 'person_b_id')->hiddenInput()->label(false);
-echo $form->field($model, 'person_a_id')->hiddenInput()->label(false);
+echo $form->field($model, 'relation_ab_id')->dropDownList($relationsList, ['prompt' => Yii::t('app', 'Select')])->label(false);
+echo Html::tag('h3', Yii::t('app','To Whom').': '.$model->surname . ' ' . $model->name);
 
 ?>
 

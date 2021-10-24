@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
         'columns' => [
             [
                 'attribute' => 'relation_id',
-                'label' => 'ID'
+                'label' => Yii::t('app','Relation ID'),
             ],
             [
                 'attribute' => 'relation',

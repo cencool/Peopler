@@ -46,6 +46,18 @@ class m211004_184234_create_db_tables extends Migration {
 			);
 		}
 
+		if (Yii::$app->db->getTableSchema('relation_name', true) === null) {
+			$this->createTable('relation_name', [
+				'id' => $this->primaryKey(),
+				'gender' => $this->char(1)->notNull(),
+				'relation_name' => $this->string(20)->notNull(),
+			]);
+
+			$this->execute(
+				'ALTER TABLE `relation_name` ADD CONSTRAINT unique_index UNIQUE (gender, relation_name)'
+			);
+		}
+
 		if (Yii::$app->db->getTableSchema('person_relation', true) === null) {
 			$this->createTable(
 				'person_relation',
@@ -58,6 +70,10 @@ class m211004_184234_create_db_tables extends Migration {
 
 			);
 
+			$this->execute(
+				'ALTER TABLE `person_relation` ADD CONSTRAINT unique_index UNIQUE (person_a_id, relation_ab_id,person_b_id)'
+			);
+
 			$this->addForeignKey(
 				'person_relation_fk',
 				'person_relation',
@@ -68,9 +84,6 @@ class m211004_184234_create_db_tables extends Migration {
 				'CASCADE'
 			);
 
-			$this->execute(
-				'ALTER TABLE `person_relation` ADD CONSTRAINT unique_index UNIQUE (person_a_id, relation_ab, person_b_id)'
-			);
 
 			$this->addForeignKey(
 				'person_relation_fk1',
@@ -145,22 +158,16 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'son', 'm', 'father'],
 					['m', 'son-in-law', 'f', 'mother-in-law'],
 					['m', 'son-in-law', 'm', 'father-in-law'],
+					['f', 'daughter-in-law', 'm', 'father-in-law'],
+					['f', 'daughter-in-law', 'f', 'mother-in-law'],
+					['m', 'brother-in-law', 'm', 'brother-in-law'],
+					['m', 'brother-in-law', 'f', 'sister-in-law'],
+					['f', 'siter-in-law', 'f', 'sister-in-law'],
 				]
 
 			);
 		}
 
-		if (Yii::$app->db->getTableSchema('relation_name', true) === null) {
-			$this->createTable('relation_name', [
-				'id' => $this->primaryKey(),
-				'gender' => $this->char(1)->notNull(),
-				'relation_name' => $this->string(20)->notNull(),
-			]);
-
-			$this->execute(
-				'ALTER TABLE `relation_name` ADD CONSTRAINT unique_index UNIQUE (gender, relation_name)'
-			);
-		}
 
 		$this->batchInsert(
 			'relation_name',
@@ -181,6 +188,7 @@ class m211004_184234_create_db_tables extends Migration {
 				['f', 'sister'],
 				['f', 'sister-in-law'],
 				['f', 'wife'],
+				['f', 'mother-in-law'],
 				['m', 'acquaintance'],
 				['m', 'brother'],
 				['m', 'brother-in-law'],

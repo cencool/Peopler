@@ -51,7 +51,6 @@ class Person extends ActiveRecord {
 		foreach ($relationsFrom as $record) {
 			$relationRow['relation_id'] = $record->id;
 			$relationRow['relation'] = $record->relationName->relation_name;
-
 			$relationRow['to_whom_id'] = $record->person_b_id;
 			$relationRow['relation_to_whom'] = $record->person_b->surname . ' ' . $record->person_b->name;
 			$relations[] = $relationRow;
@@ -59,7 +58,6 @@ class Person extends ActiveRecord {
 
 		unset($relationRow);
 		$relationsTo = $this->relationsToPerson;
-		$relationPairQuery = RelationPair::find();
 		$personFromGender = $this->gender;
 		foreach ($relationsTo as $record) {
 			$personToGender = $record->person_a->gender;
@@ -67,23 +65,7 @@ class Person extends ActiveRecord {
 			$relationRow['relation_id'] = $record->id;
 			$relationRow['to_whom_id'] = $record->person_a_id;
 			$relationRow['relation_to_whom'] = $record->person_a->surname . ' ' . $record->person_a->name;
-			$relationPairs = $relationPairQuery->where(
-				[
-					'or',
-					['gender_a' => $personToGender, 'gender_b' => $personFromGender],
-					['gender_a' => $personFromGender, 'gender_b' => $personToGender]
-				]
-			)->andWhere(
-				[
-					'or',
-					['gender_a' => $personToGender, 'relation_ab' => $relationTo],
-					['gender_b' => $personToGender, 'relation_ba' => $relationTo]
-				]
-			)
-				->asArray()->all();
-
-			$relationRow['relation'] = ($relationPairs[0]['relation_ab'] == $relationTo) ?
-				$relationPairs[0]['relation_ba'] : $relationPairs[0]['relation_ab'];
+			$relationRow['relation'] = RelationPair::relationToComplement($personFromGender,$personToGender,$relationTo);
 
 			$relations[] = $relationRow;
 		}

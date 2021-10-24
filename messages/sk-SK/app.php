@@ -36,6 +36,8 @@ return [
 	'Relation updated'=> 'Vzťah upravený',
 	'to' => 'k',
 	'deleted' => 'vymazaný',
+	'Relation ID' => 'ID Vzťahu',
+	'is' => 'je',
 
 
 ]
