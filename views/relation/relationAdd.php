@@ -22,6 +22,12 @@ if (Yii::$app->session->hasFlash('relationAdded')) {
 		'body' => Yii::$app->session->getFlash('relationAdded'),
 	]);
 }
+if (Yii::$app->session->hasFlash('relationDuplicate')) {
+	echo Alert::widget([
+		'options' => ['class' => 'alert-info'],
+		'body' => Yii::$app->session->getFlash('relationDuplicate'),
+	]);
+}
 if (Yii::$app->session->hasFlash('relationAddError')) {
 	echo Alert::widget([
 		'options' => ['class' => 'alert-danger'],

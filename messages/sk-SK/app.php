@@ -38,6 +38,7 @@ return [
 	'deleted' => 'vymazaný',
 	'Relation ID' => 'ID Vzťahu',
 	'is' => 'je',
+	'Relation already exists!' => 'Vzťah už existuje!',
 
 
 ]

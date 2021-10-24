@@ -48,7 +48,6 @@ class RelationController extends Controller {
 		$person = Person::findOne($id);
 		$session = Yii::$app->session;
 
-		//$relationsList = RelationPair::relationsList($person->gender);
 		$relationsListAr = RelationName::find()
 			->where(['gender' => $person->gender])
 			->all();
@@ -67,23 +66,39 @@ class RelationController extends Controller {
 		$model = new PersonRelation;
 		$success = false;
 
-		try {
-			if ($model->load(Yii::$app->request->post()) && $model->save()) {
-				$success = true;
-				$session->setFlash('relationAdded', Yii::t('app', 'Relation was added'));
+			if ($model->load(Yii::$app->request->post())) {
+
+				$relationFromName = RelationName::find()->where(['id' => $model->relation_ab_id])->all()[0]->relation_name;
+				$personBgender = Person::findOne($model->person_b_id)->gender;
+				$relationToName = RelationPair::relationFromComplement($person->gender, $personBgender, $relationFromName);
+				$relationToId = RelationName::find()->where(['relation_name' => $relationToName, 'gender' => $personBgender])->all()[0]->id;
+				$duplicate = PersonRelation::find()
+					->where(['person_a_id' => $model->person_b_id, 'relation_ab_id' => $relationToId, 'person_b_id' => $id])->all();
+
+			if (!$duplicate) {
+
+				try {
+					if ($model->validate() && $model->save()) {
+						$success = true;
+						$session->setFlash('relationAdded', Yii::t('app', 'Relation was added'));
+					}
+				} catch (\Exception $ex) {
+
+					$session->setFlash('relationAddError', $ex->getMessage());
+
+					return $this->render('relationAdd', [
+						'person' => $person,
+						'model' => $model,
+						'relationsList' => $relationsList,
+						'provider' => $provider,
+						'searchModel' => $searchModel,
+						'success' => $success,
+					]);
+				}
+			} else {
+				$success = false;
+				$session->setFlash('relationDuplicate', Yii::t('app', 'Relation already exists!'));
 			}
-		} catch (\Exception $ex) {
-
-			$session->setFlash('relationAddError', $ex->getMessage());
-
-			return $this->render('relationAdd', [
-				'person' => $person,
-				'model' => $model,
-				'relationsList' => $relationsList,
-				'provider' => $provider,
-				'searchModel' => $searchModel,
-				'success' => $success,
-			]);
 		}
 
 		return $this->render('relationAdd', [
