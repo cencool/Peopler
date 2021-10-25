@@ -68,8 +68,8 @@ class RelationController extends Controller {
 
 			if ($model->load(Yii::$app->request->post())) {
 
-				$relationFromName = RelationName::find()->where(['id' => $model->relation_ab_id])->all()[0]->relation_name;
-				$personBgender = Person::findOne($model->person_b_id)->gender;
+				$relationFromName = $model->relationName->relation_name;
+				$personBgender = $model->person_b->gender;
 				$relationToName = RelationPair::relationFromComplement($person->gender, $personBgender, $relationFromName);
 				$relationToId = RelationName::find()->where(['relation_name' => $relationToName, 'gender' => $personBgender])->all()[0]->id;
 				$duplicate = PersonRelation::find()

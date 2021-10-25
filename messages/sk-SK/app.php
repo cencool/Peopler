@@ -39,6 +39,9 @@ return [
 	'Relation ID' => 'ID Vzťahu',
 	'is' => 'je',
 	'Relation already exists!' => 'Vzťah už existuje!',
+	'Person' => 'Osoba',
+	'added' => 'pridaný',
+	
 
 
 ]

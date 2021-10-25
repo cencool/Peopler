@@ -56,7 +56,7 @@ class PersonController extends Controller {
 		if ($person->load($_POST) && $person->getDirtyAttributes() && $person->save()) {
 			$personDetail->load($_POST);
 			$personDetail->link('person', $person);
-			Yii::$app->session->setFlash('personAdded', 'Person ' . $person->name . ' ' . $person->surname . ' added');
+			Yii::$app->session->setFlash('personAdded',Yii::t('app','Person').' ' . $person->name . ' ' . $person->surname . ' '.Yii::t('app','added'));
 			return $this->redirect(['update', 'id' => $person->id]);
 		};
 
@@ -103,4 +103,18 @@ class PersonController extends Controller {
 			return $this->redirect(['index']);
 		}
 	}
+
+	public function actionDelete($id) {
+		$person = Person::findOne($id);
+		$session = Yii::$app->session;
+		try {
+			$person->delete();
+			Yii::$app->session->setFlash('personDeleted', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'deleted'));
+		} catch (\Exception $ex) {
+
+			$session->setFlash('personDeleteError', $ex->getMessage());
+		}
+			return $this->redirect(['index']);
+	}
 }
+
