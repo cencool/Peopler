@@ -103,6 +103,10 @@ class PersonController extends Controller {
 			return $this->redirect(['index']);
 		}
 	}
+	/**
+	 * deletes person from database,  related records deleted as cascade
+	 * @param integer $id person id to be deleted
+	 */ 
 
 	public function actionDelete($id) {
 		$person = Person::findOne($id);
