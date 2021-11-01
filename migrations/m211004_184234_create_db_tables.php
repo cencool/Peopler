@@ -163,6 +163,10 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'brother-in-law', 'm', 'brother-in-law'],
 					['m', 'brother-in-law', 'f', 'sister-in-law'],
 					['f', 'siter-in-law', 'f', 'sister-in-law'],
+					['f', 'niece','m','uncle'],
+					['f','niece','f','aunt'],
+					['m','nephew','m','uncle'],
+					['m','nephew','f','aunt'],
 				]
 
 			);

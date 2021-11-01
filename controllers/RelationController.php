@@ -66,7 +66,7 @@ class RelationController extends Controller {
 		$model = new PersonRelation;
 		$success = false;
 
-			if ($model->load(Yii::$app->request->post())) {
+			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
 				$relationFromName = $model->relationName->relation_name;
 				$personBgender = $model->person_b->gender;
@@ -99,6 +99,10 @@ class RelationController extends Controller {
 				$success = false;
 				$session->setFlash('relationDuplicate', Yii::t('app', 'Relation already exists!'));
 			}
+		}
+
+		if ($e_msg=$model->getFirstError('person_b_id')) {
+			$session->setFlash('relationAddError', $e_msg);
 		}
 
 		return $this->render('relationAdd', [

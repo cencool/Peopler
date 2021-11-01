@@ -41,6 +41,7 @@ return [
 	'Relation already exists!' => 'Vzťah už existuje!',
 	'Person' => 'Osoba',
 	'added' => 'pridaný',
+	'Second person missing' => 'Chýba druhá osoba',
 	
 
 

@@ -34,9 +34,6 @@ if (Yii::$app->session->hasFlash('personDeleteError')) {
 	],
 	'columns' => [
 		[
-			'class' => 'yii\grid\SerialColumn',
-		],
-		[
 			'attribute' => 'id',
 		],
 		[
