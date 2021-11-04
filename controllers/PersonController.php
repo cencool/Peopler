@@ -79,8 +79,18 @@ class PersonController extends Controller {
 			}
 
 			// if change in person and save successfull
-			if ($person->load($_POST) && $person->getDirtyAttributes() && $person->save()) {
-				Yii::$app->session->setFlash('personUpdated', 'Person ' . $person->name . ',' . $person->surname . ' updated');
+			if ($person->load($_POST) && $person->getDirtyAttributes()) {
+				/*
+				$pClass = get_class($person);
+				$pAtt = $person->getAttributes();
+				$pDet = $person->detail;
+				$pFrom = $person->relationsFromPerson();
+				$pTo = $person->relationsToPerson();
+				 */
+
+				if ($person->save()) {
+					Yii::$app->session->setFlash('personUpdated', 'Person ' . $person->name . ',' . $person->surname . ' updated');
+				}
 			};
 
 			// if change in detail save it using 'link' method for relation

@@ -10,7 +10,7 @@ class PersonDetail extends ActiveRecord {
     public function rules()
     {
         return [
-            [['marital_status', 'maidenName','note','address'],'safe'],
+            [['marital_status', 'maiden_name','note','address'],'safe'],
             ['marital_status','string','max'=>1],
             ['marital_status', 'match', 'pattern' => '@\bm\b|\bs\b|\bd\b|\?@', 'message' => Yii::t('app', 'Unknown status')],
         ];

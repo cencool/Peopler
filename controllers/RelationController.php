@@ -78,7 +78,7 @@ class RelationController extends Controller {
 			if (!$duplicate) {
 
 				try {
-					if ($model->validate() && $model->save()) {
+					if ($model->save()) {
 						$success = true;
 						$session->setFlash('relationAdded', Yii::t('app', 'Relation was added'));
 					}
