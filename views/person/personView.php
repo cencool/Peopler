@@ -53,14 +53,18 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
                  'class' => 'table table-bordered table-condensed detail-view',
                     'style' => 'width:100%;',
                 ],
-                'attributes' => [
-                    [
-                        'attribute' => 'marital_status',
-                        'captionOptions' => ['style' => 'width:20%;']
-                    ],
-                    ['attribute' => 'note'],
-                    ['attribute' => 'address'],
-                ],
+				'attributes' => [
+					[
+						'attribute' => 'marital_status',
+						'captionOptions' => ['style' => 'width:20%;']
+					],
+					[
+						'attribute' => 'maiden_name',
+						'visible' => $model->gender == 'f' ? true : false
+					],
+					['attribute' => 'note'],
+					['attribute' => 'address'],
+				],
 
             ]);
         };

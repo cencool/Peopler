@@ -82,7 +82,7 @@ if (Yii::$app->session->hasFlash('personAdded')) {
 			<?= $form->field($personDetail, 'marital_status') ?>
 
 			<?php
-			if ($person->gender === 'f') {
+			if ($person->gender == null || $person->gender === 'f') {
 				echo $form->field($personDetail, 'maiden_name');
 			}
 			?>
