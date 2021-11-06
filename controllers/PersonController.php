@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace app\controllers;
 
@@ -7,6 +8,7 @@ use app\models\basic\Person;
 use app\models\basic\PersonSearch;
 use app\models\basic\PersonDetail;
 use app\models\basic\RelationSearch;
+use app\models\basic\Undelete;
 use Yii;
 
 class PersonController extends Controller {
@@ -54,8 +56,10 @@ class PersonController extends Controller {
 		$person = new Person;
 		$personDetail = new PersonDetail;
 		if ($person->load($_POST) && $person->getDirtyAttributes() && $person->save()) {
-			$personDetail->load($_POST);
-			$personDetail->link('person', $person);
+			if ($personDetail->load($_POST) && $personDetail->getDirtyAttributes()) {
+				$personDetail->link('person', $person);
+			}
+
 			Yii::$app->session->setFlash('personAdded',Yii::t('app','Person').' ' . $person->name . ' ' . $person->surname . ' '.Yii::t('app','added'));
 			return $this->redirect(['update', 'id' => $person->id]);
 		};
@@ -80,13 +84,6 @@ class PersonController extends Controller {
 
 			// if change in person and save successfull
 			if ($person->load($_POST) && $person->getDirtyAttributes()) {
-				/*
-				$pClass = get_class($person);
-				$pAtt = $person->getAttributes();
-				$pDet = $person->detail;
-				$pFrom = $person->relationsFromPerson();
-				$pTo = $person->relationsToPerson();
-				 */
 
 				if ($person->save()) {
 					Yii::$app->session->setFlash('personUpdated', 'Person ' . $person->name . ',' . $person->surname . ' updated');
@@ -119,8 +116,12 @@ class PersonController extends Controller {
 	 */ 
 
 	public function actionDelete($id) {
+
 		$person = Person::findOne($id);
-		$session = Yii::$app->session;
+		$session=Yii::$app->session;
+
+		Undelete::addUndeleteRecord('person',$person);
+
 		try {
 			$person->delete();
 			Yii::$app->session->setFlash('personDeleted', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'deleted'));

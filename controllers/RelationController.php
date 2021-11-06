@@ -177,6 +177,7 @@ class RelationController extends Controller {
 	}
 
 	public function actionDelete($id, $relation_id) {
+
 		$personRelation = PersonRelation::findOne($relation_id);
 		$relation = $personRelation->relationName->relation_name;
 		$relation = $personRelation->person_a->gender == 'm' ?
