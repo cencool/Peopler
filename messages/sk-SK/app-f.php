@@ -16,6 +16,8 @@ return [
 	'colleague' => 'kolegyňa',
 	'classmate' => 'spolužiačka',
 	'acquaintance'=>'známa',
+	'aunt' => 'teta',
+	'godmother' => 'krstná',
 
 
 

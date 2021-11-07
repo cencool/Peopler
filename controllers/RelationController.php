@@ -9,6 +9,7 @@ use app\models\basic\RelationUpdate;
 use app\models\basic\PersonRelation;
 use app\models\basic\RelationName;
 use app\models\basic\RelationPair;
+use app\models\basic\Undelete;
 use Yii;
 
 class RelationController extends Controller {
@@ -179,6 +180,7 @@ class RelationController extends Controller {
 	public function actionDelete($id, $relation_id) {
 
 		$personRelation = PersonRelation::findOne($relation_id);
+
 		$relation = $personRelation->relationName->relation_name;
 		$relation = $personRelation->person_a->gender == 'm' ?
 			Yii::t('app-m', $relation) : Yii::t('app-f', $relation);

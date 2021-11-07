@@ -18,8 +18,18 @@ if (Yii::$app->session->hasFlash('personDeleteError')) {
 		'body' => Yii::$app->session->getFlash('personDeleteError'),
 	]);
 }
+
+$undeleteButtonClass = Yii::$app->session['undelete'] != null ?   'btn btn-primary': 'btn btn-primary disabled';
+
 ?>
-<?= Html::a(Yii::t('app', 'New Item'), ['person/new-person', 'id' => null], ['class' => 'btn btn-primary']) ?>
+<div class='row'>
+	<div class='col-xs-6 text-left'>
+		<?= Html::a(Yii::t('app', 'New Item'), ['person/new-person', 'id' => null], ['class' => 'btn btn-primary']) ?>
+	</div>
+	<div class='col-xs-6 text-right'>
+		<?= Html::a(Yii::t('app', 'Undelete'), ['person/undelete'], ['class' => $undeleteButtonClass]) ?>
+	</div>
+</div>
 
 
 <?= GridView::widget([

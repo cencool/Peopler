@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace app\controllers;
@@ -60,7 +61,7 @@ class PersonController extends Controller {
 				$personDetail->link('person', $person);
 			}
 
-			Yii::$app->session->setFlash('personAdded',Yii::t('app','Person').' ' . $person->name . ' ' . $person->surname . ' '.Yii::t('app','added'));
+			Yii::$app->session->setFlash('personAdded', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'added'));
 			return $this->redirect(['update', 'id' => $person->id]);
 		};
 
@@ -113,14 +114,14 @@ class PersonController extends Controller {
 	/**
 	 * deletes person from database,  related records deleted as cascade
 	 * @param integer $id person id to be deleted
-	 */ 
+	 */
 
 	public function actionDelete($id) {
 
 		$person = Person::findOne($id);
-		$session=Yii::$app->session;
+		$session = Yii::$app->session;
 
-		Undelete::addUndeleteRecord('person',$person);
+		Undelete::addUndeleteRecord($person);
 
 		try {
 			$person->delete();
@@ -129,7 +130,13 @@ class PersonController extends Controller {
 
 			$session->setFlash('personDeleteError', $ex->getMessage());
 		}
-			return $this->redirect(['index']);
+		return $this->redirect(['index']);
+	}
+
+	public function actionUndelete() {
+		Undelete::undeletePerson();
+		return $this->redirect(['index']);
+
 	}
 }
 
