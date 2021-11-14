@@ -10,9 +10,26 @@ use app\models\basic\PersonSearch;
 use app\models\basic\PersonDetail;
 use app\models\basic\RelationSearch;
 use app\models\basic\Undelete;
+use yii\filters\AccessControl;
 use Yii;
 
 class PersonController extends Controller {
+
+	public function behaviors() {
+
+		return [
+			'access' => [
+				'class' => AccessControl::class,
+				'rules' => [
+					[
+						'allow' => true,
+						'roles' => ['@'],
+					]
+
+				]
+			]
+		];
+	}
 
 	public function beforeAction($action) {
 
@@ -136,7 +153,6 @@ class PersonController extends Controller {
 	public function actionUndelete() {
 		Undelete::undeletePerson();
 		return $this->redirect(['index']);
-
 	}
 }
 

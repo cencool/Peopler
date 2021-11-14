@@ -42,6 +42,8 @@ return [
 	'Person' => 'Osoba',
 	'added' => 'pridaný',
 	'Second person missing' => 'Chýba druhá osoba',
+	'User' => 'Uživateľ',
+	'Password' => 'Heslo',
 	
 
 

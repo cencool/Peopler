@@ -35,7 +35,15 @@ $this->beginPage();
 					</li>
 				</ul>
 				<ul class='nav navbar-nav navbar-right'>
-
+					<?php if (Yii::$app->user->isGuest) { ?>
+						<li>
+							<?= Html::a(Yii::t('app', 'Login'), ['site/login']) ?>
+						</li>
+					<?php } else { ?>
+						<li>
+							<?= Html::a(Yii::t('app', 'Logout') . ' ' . Yii::$app->user->id, ['site/logout']) ?>
+						</li>
+					<?php } ?>
 					<li class='dropdown'>
 						<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
 							<?= Yii::t('app', 'Language') . ' ' ?><span class='caret'></span></a>

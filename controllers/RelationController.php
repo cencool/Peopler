@@ -9,11 +9,26 @@ use app\models\basic\RelationUpdate;
 use app\models\basic\PersonRelation;
 use app\models\basic\RelationName;
 use app\models\basic\RelationPair;
-use app\models\basic\Undelete;
+use yii\filters\AccessControl;
 use Yii;
 
 class RelationController extends Controller {
 
+	public function behaviors() {
+
+		return [
+			'access' => [
+				'class' => AccessControl::class,
+				'rules' => [
+					[
+						'allow' => true,
+						'roles' => ['@'],
+					]
+
+				]
+			]
+		];
+	}
 	public function beforeAction($action) {
 
 		$session = Yii::$app->session;

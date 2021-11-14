@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use yii\web\Controller;
+use app\models\basic\Login;
+use app\models\basic\User;
 use Yii;
 
 class SiteController extends Controller {
@@ -32,5 +34,22 @@ class SiteController extends Controller {
 
 	public function actionIndex() {
 		return $this->redirect(['person/index']);
+	}
+
+	public function actionLogin($required = false) {
+		$model = new  Login;
+		$post = Yii::$app->request->post();
+		if ($model->load($post)) {
+			if (($identity = User::findIdentity($model->IdInput)) && ($identity->validateAuthKey($model->PwdInput))) {
+				Yii::$app->user->login($identity);
+				return $this->redirect(Yii::$app->user->returnUrl);
+			} 
+		}
+		return $this->render('loginForm', ['model' => $model, 'required' => $required]);
+	}
+
+	public function actionLogout() {
+		Yii::$app->user->logout();
+		return $this->redirect(['site/login']);
 	}
 }
