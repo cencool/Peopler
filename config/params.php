@@ -2,4 +2,7 @@
 
 
 return [
+	'identities' => [
+		'admin' => 'admin',
+	]
 ];

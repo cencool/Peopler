@@ -3,7 +3,7 @@
 return [
 	'a primitive Database Viewer for purpose of learning yii' => 'primitívny prehliadač databáz na skúšanie yii',
 	'Login'=>'Prihlásiť',
-	'Logout ' => 'Odhlásiť ',
+	'Logout' => 'Odhlásiť ',
 	'Select Db'=> 'Vybrať Db',
 	'Select Table' => 'Vybrať Tabuľku',
 	'Home' => 'Domov',
@@ -44,6 +44,8 @@ return [
 	'Second person missing' => 'Chýba druhá osoba',
 	'User' => 'Uživateľ',
 	'Password' => 'Heslo',
+	'You have to login first!' => 'Najprv sa musíš prihlásiť !',
+	'Incorrect credentials' => 'Nesprávne údaje',
 	
 
 

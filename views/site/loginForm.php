@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\bootstrap\Alert;
 
 $form = ActiveForm::begin([
 	'options' => ['class' => 'form-horizontal'],
@@ -14,9 +15,17 @@ $form = ActiveForm::begin([
 	<div class='col-xs-3'>
 		<?php if ($required) { ?>
 			<div class='alert alert-info text-center'>
-				You have to login !
+				<?= Yii::t('app', 'You have to login first!'); ?>
 			</div>
 		<?php } ?>
+		<?php
+		if (Yii::$app->session->hasFlash('loginIncorrect')) {
+			echo Alert::widget([
+				'options' => ['class' => 'alert-danger'],
+				'body' => Yii::$app->session->getFlash('loginIncorrect'),
+			]);
+		}
+		?>
 		<?= $form->field($model, 'IdInput') ?>
 		<?= $form->field($model, 'PwdInput')->passwordInput() ?>
 

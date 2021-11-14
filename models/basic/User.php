@@ -3,13 +3,10 @@
 namespace app\models\basic;
 
 use yii\web\IdentityInterface;
+use Yii;
 
 class User implements IdentityInterface {
 
-	public static $identities = [
-		'milhar' => 'aaaaaa',
-		'demo' => 'demo',
-	];
 
 	private $_id;
 
@@ -18,7 +15,8 @@ class User implements IdentityInterface {
 	}
 
 	public static function findIdentity($id) {
-		return array_key_exists($id, self::$identities) ? new self($id) : null;
+		$identities = Yii::$app->params['identities'];
+		return array_key_exists($id, $identities) ? new self($id) : null;
 	}
 
 	public function getId() {
@@ -29,7 +27,8 @@ class User implements IdentityInterface {
 	}
 
 	public function getAuthKey() {
-		return self::$identities[$this->_id];
+		$identities = Yii::$app->params['identities'];
+		return $identities[$this->_id];
 	}
 
 	public function validateAuthKey($authKey) {

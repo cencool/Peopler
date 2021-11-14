@@ -43,7 +43,10 @@ class SiteController extends Controller {
 			if (($identity = User::findIdentity($model->IdInput)) && ($identity->validateAuthKey($model->PwdInput))) {
 				Yii::$app->user->login($identity);
 				return $this->redirect(Yii::$app->user->returnUrl);
-			} 
+			} else {
+				$session= Yii::$app->session;
+				$session->setFlash('loginIncorrect',Yii::t('app','Incorrect credentials'));
+			}
 		}
 		return $this->render('loginForm', ['model' => $model, 'required' => $required]);
 	}
