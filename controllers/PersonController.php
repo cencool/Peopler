@@ -11,6 +11,7 @@ use app\models\basic\PersonDetail;
 use app\models\basic\RelationSearch;
 use app\models\basic\Undelete;
 use yii\filters\AccessControl;
+use app\models\basic\UploadForm;
 use Yii;
 
 class PersonController extends Controller {
@@ -116,6 +117,7 @@ class PersonController extends Controller {
 
 			$searchModel = new RelationSearch();
 			$provider = $searchModel->search(Yii::$app->request->get());
+
 
 			return $this->render('personUpdate', [
 				'person' => $person,

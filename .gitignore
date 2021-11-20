@@ -46,7 +46,9 @@ db.php
 
 .vimspector.json
 
+uploads/**
 
+!uploads/note.txt
 
 
 

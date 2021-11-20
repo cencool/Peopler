@@ -9,6 +9,7 @@ class Person extends ActiveRecord {
 	public function rules() {
 		return [
 			[['name', 'surname', 'place', 'gender'], 'safe'],
+			[['name', 'surname', 'place', 'gender'], 'trim'],
 			[['surname', 'gender'], 'required'],
 			[['name', 'surname', 'place'], 'string', 'max' => 20],
 			['gender', 'string', 'max' => 1],

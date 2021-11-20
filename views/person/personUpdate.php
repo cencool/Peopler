@@ -88,6 +88,8 @@ if (Yii::$app->session->hasFlash('personAdded')) {
 			?>
 			<?= $form->field($personDetail, 'address') ?>
 			<?= $form->field($personDetail, 'note')->textarea(['rows' => 4,]) ?>
+
+			<?= Html::a(Yii::t('app', 'Upload'), ['site/upload', 'id' => $person->id]) ?>
 		</div>
 
 

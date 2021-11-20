@@ -11,6 +11,7 @@ class PersonDetail extends ActiveRecord {
     {
         return [
             [['marital_status', 'maiden_name','note','address'],'safe'],
+            [['marital_status', 'maiden_name','address'],'trim'],
             ['marital_status','string','max'=>1],
             ['marital_status', 'match', 'pattern' => '@\bm\b|\bs\b|\bd\b|\?@', 'message' => Yii::t('app', 'Unknown status')],
         ];

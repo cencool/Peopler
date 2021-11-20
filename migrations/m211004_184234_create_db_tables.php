@@ -129,6 +129,25 @@ class m211004_184234_create_db_tables extends Migration {
 			);
 
 
+			if (Yii::$app->db->getTableSchema('person_file', true) === null) {
+				$this->createTable('person_file', [
+					'id' => $this->primaryKey(),
+					'person_id' => $this->integer()->notNull(),
+					'file_tag' => $this->string(30),
+					'file_name' => $this->string(100)->notNull,
+				]);
+
+				$this->addForeignKey(
+					'person_file_fk1',
+					'person_file',
+					'person_id',
+					'person',
+					'id',
+					'CASCADE',
+					'CASCADE',
+				);
+			}
+
 			$this->batchInsert(
 				'relation_pair',
 				['gender_a', 'relation_ab', 'gender_b', 'relation_ba'],
@@ -164,10 +183,10 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'brother-in-law', 'm', 'brother-in-law'],
 					['m', 'brother-in-law', 'f', 'sister-in-law'],
 					['f', 'siter-in-law', 'f', 'sister-in-law'],
-					['f', 'niece','m','uncle'],
-					['f','niece','f','aunt'],
-					['m','nephew','m','uncle'],
-					['m','nephew','f','aunt'],
+					['f', 'niece', 'm', 'uncle'],
+					['f', 'niece', 'f', 'aunt'],
+					['m', 'nephew', 'm', 'uncle'],
+					['m', 'nephew', 'f', 'aunt'],
 				]
 
 			);
