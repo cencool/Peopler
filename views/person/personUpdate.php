@@ -44,7 +44,7 @@ if (Yii::$app->session->hasFlash('personAdded')) {
 		'fieldConfig' => [
 			'template' => "
         <div class='col-sm-3 text-right'>
-        {label}</div><div class='col-sm-6'>{input}</div>\n{error}{hint}",
+        {label}</div><div class='col-sm-8'>{input}</div>\n{error}{hint}",
 			'labelOptions' => ['class' => 'control-label'],
 		],
 	]);
@@ -89,7 +89,7 @@ if (Yii::$app->session->hasFlash('personAdded')) {
 			<?= $form->field($personDetail, 'address') ?>
 			<?= $form->field($personDetail, 'note')->textarea(['rows' => 4,]) ?>
 
-			<?= Html::a(Yii::t('app', 'Upload'), ['site/upload', 'id' => $person->id]) ?>
+			<?= Html::a(Yii::t('app', 'Attachments'), ['person/upload', 'id' => $person->id],['class'=>'btn btn-primary pull-right']) ?>
 		</div>
 
 
@@ -105,10 +105,10 @@ if (Yii::$app->session->hasFlash('relationDeleted')) {
 	]);
 }
 
-$addRelationClass = ($person->id != null) ? 'btn btn-primary pull-right' : 'disabled btn btn-primary pull-right';
+$addRelationClass = ($person->id != null) ? 'btn btn-primary pull-left' : 'disabled btn btn-primary pull-left';
 ?>
 <div class='row'>
-	<div class='col-xs-10'>
+	<div class='col-xs-2'>
 		<h4><b><?= Yii::t('app', 'Relations') ?></b></h3>
 	</div>
 	<div class='col-xs-2'>

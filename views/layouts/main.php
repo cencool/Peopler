@@ -33,9 +33,6 @@ $this->beginPage();
 					<li>
 						<?= Html::a(Yii::t('app', 'List'), ['person/index']) ?>
 					</li>
-					<li>
-						<?= Html::a(Yii::t('app', 'Upload'), ['site/upload']) ?>
-					</li>
 				</ul>
 				<ul class='nav navbar-nav navbar-right'>
 					<?php if (Yii::$app->user->isGuest) { ?>

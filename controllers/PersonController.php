@@ -9,9 +9,11 @@ use app\models\basic\Person;
 use app\models\basic\PersonSearch;
 use app\models\basic\PersonDetail;
 use app\models\basic\RelationSearch;
+use app\models\basic\UploadFile;
+use app\models\basic\PersonFile;
+use yii\web\UploadedFile;
 use app\models\basic\Undelete;
 use yii\filters\AccessControl;
-use app\models\basic\UploadForm;
 use Yii;
 
 class PersonController extends Controller {
@@ -130,6 +132,7 @@ class PersonController extends Controller {
 			return $this->redirect(['index']);
 		}
 	}
+
 	/**
 	 * deletes person from database,  related records deleted as cascade
 	 * @param integer $id person id to be deleted
@@ -155,6 +158,49 @@ class PersonController extends Controller {
 	public function actionUndelete() {
 		Undelete::undeletePerson();
 		return $this->redirect(['index']);
+	}
+
+	public function actionUpload($id) {
+		$uploadModel = new UploadFile();
+		$personFile = new PersonFile();
+		$fileGallery = PersonFile::find()->where(['person_id' => $id])->all();
+		$person = Person::findOne($id);
+		$session = Yii::$app->session;
+
+		if (Yii::$app->request->isPost) {
+			$uploadModel->imageFile = UploadedFile::getInstance($uploadModel, 'imageFile');
+			$timeStamp = (new \DateTime())->getTimestamp();
+			$fileBaseName = $person->surname .
+				'@@' .
+				$timeStamp .
+				'.' .
+				$uploadModel->imageFile->extension;
+			$fileName = '@app/uploads/' . $fileBaseName;
+			$personFile->load($_POST); // to load image caption
+			$personFile->person_id = $id;
+			$personFile->file_name = $fileBaseName;
+
+			if ($uploadModel->upload($fileName) && $personFile->save()) {
+				$session->setFlash('uploadSuccess', Yii::t('app', 'Upload Successful'));
+				$this->redirect(['upload', 'id' => $id]); // redirected to avoid re-submission on page reload (PostRedirectGet)
+			} else {
+				$session->setFlash('uploadError', Yii::t('app', 'Upload Failed'));
+				$this->redirect(['upload', 'id' => $id]); // redirected to avoid re-submission on page reload (PostRedirectGet)
+			}
+		}
+
+		return $this->render('uploadForm', ['uploadModel' => $uploadModel, 'personFile' => $personFile, 'fileGallery' => $fileGallery]);
+	}
+
+	public function actionShowFile($fileName) {
+		$prefix = Yii::getAlias('@app/uploads/');
+		$response =  Yii::$app->response->sendFile($prefix . $fileName);
+		return $response;
+	}
+
+	public function actionShowAttachment($id) {
+		$fileGallery = PersonFile::find()->where(['person_id' => $id])->all();
+		return $this->render('attachmentView', ['fileGallery' => $fileGallery]);
 	}
 }
 

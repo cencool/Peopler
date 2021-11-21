@@ -5,10 +5,6 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\basic\Login;
 use app\models\basic\User;
-use app\models\basic\UploadFile;
-use app\models\basic\PersonFile;
-use yii\web\UploadedFile;
-use app\models\basic\Person;
 use Yii;
 
 class SiteController extends Controller {
@@ -60,32 +56,4 @@ class SiteController extends Controller {
 		return $this->redirect(['site/login']);
 	}
 
-	public function actionUpload($id) {
-		$uploadModel = new UploadFile();
-		$personFile = new PersonFile;
-		$person = Person::findOne($id);
-		$session = Yii::$app->session;
-
-		if (Yii::$app->request->isPost) {
-			$uploadModel->imageFile = UploadedFile::getInstance($uploadModel, 'imageFile');
-			$timeStamp = (new \DateTime())->getTimestamp();
-			$fileBaseName = $person->surname.
-							'@@' .
-							$timeStamp .
-							'.' .
-							$uploadModel->imageFile->extension;
-			$fileName = '@app/uploads/' . $fileBaseName;
-
-			$personFile->person_id = $id;
-			$personFile->file_name = $fileBaseName;
-
-			if ($uploadModel->upload($fileName) && $personFile->save()) {
-				$session->setFlash('uploadSuccess', Yii::t('app', 'Upload Successful'));
-			} else {
-				$session->setFlash('uploadError', Yii::t('app', 'Upload Failed'));
-			}
-		}
-
-		return $this->render('uploadForm', ['model' => $uploadModel]);
-	}
 }

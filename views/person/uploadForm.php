@@ -2,6 +2,7 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Alert;
+use yii\helpers\Html;
 
 
 ?>
@@ -13,7 +14,7 @@ if (Yii::$app->session->hasFlash('uploadSuccess')) {
 		'options' => ['class' => 'alert-success'],
 		'body' => Yii::$app->session->getFlash('uploadSuccess'),
 	]);
-} 
+}
 
 if (Yii::$app->session->hasFlash('uploadError')) {
 	echo Alert::widget([
@@ -26,7 +27,11 @@ if (Yii::$app->session->hasFlash('uploadError')) {
 
 <?php $form = ActiveForm::begin() ?>
 
-<?= $form->field($model, 'imageFile')->fileInput() ?>
+<?= $form->field($personFile, 'file_caption')->textInput() ?>
+<?= $form->field($uploadModel, 'imageFile')->fileInput() ?>
 <button type='submit' class='btn btn-primary'>Submit</button>
-
+<p></p>
 <?php ActiveForm::end() ?>
+
+<?= $this->render('attachmentView',['fileGallery' => $fileGallery])?>
+

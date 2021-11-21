@@ -10,49 +10,49 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 ?>
 
 <div class='row'>
-    <div class='col-xs-6'>
-        <?php
-        echo DetailView::widget([
-            'model' => $model,
-            'options' => [
-                'class' => 'table table-bordered table-condensed detail-view',
-                'style' => 'width:50%;',
-            ],
-            'attributes' => [
-                [
-                    'attribute' => 'surname',
-                    'label' => Yii::t('app', 'Surname'),
-                    'captionOptions' => ['style' => 'width:20%;'],
-                ],
-                [
-                    'attribute' => 'name',
-                    'label' => Yii::t('app', 'Name'),
-                ],
-                [
-                    'attribute' => 'gender',
-                    'label' => Yii::t('app', 'Gender'),
-                ],
-                [
-                    'attribute' => 'place',
-                    'label' => Yii::t('app', 'Place'),
-                ],
+	<div class='col-xs-6'>
+		<?php
+		echo DetailView::widget([
+			'model' => $model,
+			'options' => [
+				'class' => 'table table-bordered table-condensed detail-view',
+				'style' => 'width:50%;',
+			],
+			'attributes' => [
+				[
+					'attribute' => 'surname',
+					'label' => Yii::t('app', 'Surname'),
+					'captionOptions' => ['style' => 'width:20%;'],
+				],
+				[
+					'attribute' => 'name',
+					'label' => Yii::t('app', 'Name'),
+				],
+				[
+					'attribute' => 'gender',
+					'label' => Yii::t('app', 'Gender'),
+				],
+				[
+					'attribute' => 'place',
+					'label' => Yii::t('app', 'Place'),
+				],
 
-            ],
+			],
 
-        ]);
-        ?>
-    </div>
-    <div class='col-xs-6'>
-        <?php
+		]);
+		?>
+	</div>
+	<div class='col-xs-6'>
+		<?php
 
-        if ($model->detail) {
+		if ($model->detail) {
 
-            echo DetailView::widget([
-                'model' => $model->detail,
-                'options' => [
-                 'class' => 'table table-bordered table-condensed detail-view',
-                    'style' => 'width:100%;',
-                ],
+			echo DetailView::widget([
+				'model' => $model->detail,
+				'options' => [
+					'class' => 'table table-bordered table-condensed detail-view',
+					'style' => 'width:100%;',
+				],
 				'attributes' => [
 					[
 						'attribute' => 'marital_status',
@@ -66,39 +66,40 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 					['attribute' => 'address'],
 				],
 
-            ]);
-        };
+			]);
+		};
 
-        ?>
+		?>
 
-    </div>
+		<?= Html::a(Yii::t('app', 'Attachments'), ['person/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+	</div>
 </div>
 
 <h4><b><?= Yii::t('app', 'Relations') ?></b></h3>
 
-    <?php
+	<?php
 
-    echo GridView::widget([
-        'dataProvider' => $provider,
-        'filterModel' => $searchModel,
-        'tableOptions' => [
-            'class' => 'table table-hover table-condensed table-bordered',
-        ],
-        'columns' => [
-            [
-                'attribute' => 'relation_id',
-                'label' => Yii::t('app','Relation ID'),
-            ],
-            [
-                'attribute' => 'relation',
-                'label' => Yii::t('app', 'Relation')
-            ],
-            [
-                'attribute' => 'relation_to_whom',
-                'label' => Yii::t('app', 'To Whom'),
-                'content' => function ($model) {
-                    return Html::a($model['relation_to_whom'], ['person/view', 'id' => $model['to_whom_id']]);
-                }
-            ],
-        ]
-    ]);
+	echo GridView::widget([
+		'dataProvider' => $provider,
+		'filterModel' => $searchModel,
+		'tableOptions' => [
+			'class' => 'table table-hover table-condensed table-bordered',
+		],
+		'columns' => [
+			[
+				'attribute' => 'relation_id',
+				'label' => Yii::t('app', 'Relation ID'),
+			],
+			[
+				'attribute' => 'relation',
+				'label' => Yii::t('app', 'Relation')
+			],
+			[
+				'attribute' => 'relation_to_whom',
+				'label' => Yii::t('app', 'To Whom'),
+				'content' => function ($model) {
+					return Html::a($model['relation_to_whom'], ['person/view', 'id' => $model['to_whom_id']]);
+				}
+			],
+		]
+	]);

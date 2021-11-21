@@ -178,7 +178,7 @@ class m211004_184234_create_db_tables extends Migration {
 			$this->createTable('person_file', [
 				'id' => $this->primaryKey(),
 				'person_id' => $this->integer()->notNull(),
-				'file_tag' => $this->string(30),
+				'file_caption' => $this->string(),
 				'file_name' => $this->string(100)->notNull(),
 			]);
 
