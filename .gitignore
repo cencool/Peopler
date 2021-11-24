@@ -48,7 +48,7 @@ db.php
 
 uploads/**
 
-!uploads/note.txt
+!uploads/info.txt
 
-
+!uploads/thumbnails/info.txt
 
