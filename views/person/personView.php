@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 
 		?>
 
-		<?= Html::a(Yii::t('app', 'Attachments'), ['person/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+		<?= Html::a(Yii::t('app', 'Attachments').'('.$attachmentCount.')', ['person/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
 	</div>
 </div>
 

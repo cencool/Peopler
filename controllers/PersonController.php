@@ -14,6 +14,7 @@ use app\models\basic\PersonFile;
 use yii\web\UploadedFile;
 use app\models\basic\Undelete;
 use yii\filters\AccessControl;
+use yii\data\Pagination;
 use Yii;
 
 class PersonController extends Controller {
@@ -69,8 +70,14 @@ class PersonController extends Controller {
 
 		$person = Person::findOne($id);
 		$searchModel = new RelationSearch();
+		$AttachmentCount = count(PersonFile::find()->where(['person_id' => $id])->all());
 		$provider = $searchModel->search(Yii::$app->request->get());
-		return $this->render('personView', ['model' => $person, 'provider' => $provider, 'searchModel' => $searchModel]);
+		return $this->render('personView', [
+			'model' => $person,
+			'provider' => $provider,
+			'attachmentCount' => $AttachmentCount,
+			'searchModel' => $searchModel
+		]);
 	}
 
 	public function actionNewPerson() {
@@ -97,6 +104,8 @@ class PersonController extends Controller {
 	}
 
 	public function actionUpdate($id = null) {
+		$AttachmentCount = count(PersonFile::find()->where(['person_id' => $id])->all());
+
 		if (($id != null) && ($person = Person::findOne($id))) {
 
 			if (!$personDetail = $person->detail) {
@@ -126,6 +135,7 @@ class PersonController extends Controller {
 				'personDetail' => $personDetail,
 				'searchModel' => $searchModel,
 				'provider' => $provider,
+				'attachmentCount'=>$AttachmentCount,
 			]);
 		} else {
 
@@ -161,9 +171,13 @@ class PersonController extends Controller {
 	}
 
 	public function actionUpload($id) {
+		$fileQuery = PersonFile::find()->where(['person_id' => $id]);
+		$countQuery = clone $fileQuery;
+		$pages = new Pagination(['totalCount'=>$countQuery->count(),'pageSize'=>8]);
+		$fileGallery = $fileQuery->offset($pages->offset)->limit($pages->limit)->all();
+
 		$uploadModel = new UploadFile();
 		$personFile = new PersonFile();
-		$fileGallery = PersonFile::find()->where(['person_id' => $id])->all();
 		$person = Person::findOne($id);
 		$session = Yii::$app->session;
 
@@ -171,6 +185,8 @@ class PersonController extends Controller {
 			$uploadModel->imageFile = UploadedFile::getInstance($uploadModel, 'imageFile');
 			$timeStamp = (new \DateTime())->getTimestamp();
 			$fileBaseName = $person->surname .
+				'@@' .
+				$person->name .
 				'@@' .
 				$timeStamp .
 				'.' .
@@ -183,24 +199,34 @@ class PersonController extends Controller {
 			if ($uploadModel->upload($fileName) && $personFile->save()) {
 				$session->setFlash('uploadSuccess', Yii::t('app', 'Upload Successful'));
 				$this->redirect(['upload', 'id' => $id]); // redirected to avoid re-submission on page reload (PostRedirectGet)
+				Yii::$app->end();
 			} else {
 				$session->setFlash('uploadError', Yii::t('app', 'Upload Failed'));
 				$this->redirect(['upload', 'id' => $id]); // redirected to avoid re-submission on page reload (PostRedirectGet)
+				Yii::$app->end();
 			}
 		}
 
-		return $this->render('uploadForm', ['uploadModel' => $uploadModel, 'personFile' => $personFile, 'fileGallery' => $fileGallery]);
+		return $this->render('uploadForm', [
+			'uploadModel' => $uploadModel,
+			'personFile' => $personFile,
+			'fileGallery' => $fileGallery,
+			'pages' => $pages
+		]);
 	}
 
-	public function actionShowFile($fileName) {
+	public function actionSendThumbnail($fileName) {
 		$prefix = Yii::getAlias('@app/uploads/');
 		$response =  Yii::$app->response->sendFile($prefix . $fileName);
 		return $response;
 	}
 
 	public function actionShowAttachment($id) {
-		$fileGallery = PersonFile::find()->where(['person_id' => $id])->all();
-		return $this->render('attachmentView', ['fileGallery' => $fileGallery]);
+		$fileQuery = PersonFile::find()->where(['person_id' => $id]);
+		$countQuery = clone $fileQuery;
+		$pages = new Pagination(['totalCount'=>$countQuery->count(),'pageSize'=>8]);
+		$fileGallery = $fileQuery->offset($pages->offset)->limit($pages->limit)->all();
+		return $this->render('attachmentView', ['fileGallery' => $fileGallery, 'pages' => $pages]);
 	}
 }
 
