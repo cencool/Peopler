@@ -174,8 +174,8 @@ class m211004_184234_create_db_tables extends Migration {
 			);
 		}
 
-		if (Yii::$app->db->getTableSchema('person_file', true) === null) {
-			$this->createTable('person_file', [
+		if (Yii::$app->db->getTableSchema('person_attachment', true) === null) {
+			$this->createTable('person_attachment', [
 				'id' => $this->primaryKey(),
 				'person_id' => $this->integer()->notNull(),
 				'file_caption' => $this->string(),
@@ -184,7 +184,7 @@ class m211004_184234_create_db_tables extends Migration {
 
 			$this->addForeignKey(
 				'person_file_fk1',
-				'person_file',
+				'person_attachment',
 				'person_id',
 				'person',
 				'id',

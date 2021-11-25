@@ -89,7 +89,7 @@ if (Yii::$app->session->hasFlash('personAdded')) {
 			<?= $form->field($personDetail, 'address') ?>
 			<?= $form->field($personDetail, 'note')->textarea(['rows' => 4,]) ?>
 
-		<?= Html::a(Yii::t('app', 'Attachments').'('.$attachmentCount.')', ['person/show-attachment', 'id' => $person->id], ['class' => 'btn btn-primary pull-right']) ?>
+		<?= Html::a(Yii::t('app', 'Attachments').'('.$attachmentCount.')', ['person/upload', 'id' => $person->id], ['class' => 'btn btn-primary pull-right']) ?>
 		</div>
 
 

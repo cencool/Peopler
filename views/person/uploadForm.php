@@ -26,18 +26,12 @@ if (Yii::$app->session->hasFlash('uploadError')) {
 ?>
 
 <?php $form = ActiveForm::begin([
-	'options' => ['autocomplete' => 'off'],
+	'options' => ['autocomplete' => 'off','class'=>'form-inline'],
 ]) ?>
 
 <?= $form->field($personFile, 'file_caption')->textInput() ?>
-<div class='row'>
-	<div class='col-xs-3'>
 		<?= $form->field($uploadModel, 'imageFile')->fileInput() ?>
-	</div>
-	<div class='col-xs-9 pull-left'>
-		<button type='submit' class='btn btn-primary'>Submit</button>
-	</div>
-</div>
+		<button type='submit' class='btn btn-primary pull-right'>Submit</button>
 <p></p>
 <?php ActiveForm::end() ?>
 

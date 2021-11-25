@@ -4,10 +4,10 @@ namespace app\models\basic;
 
 use yii\db\ActiveRecord;
 
-class PersonFile extends ActiveRecord {
+class PersonAttachment extends ActiveRecord {
 
 	public static function tableName() {
-	return 'person_file';
+	return 'person_attachment';
 }
 
 public function rules() {
