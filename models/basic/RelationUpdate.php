@@ -17,6 +17,5 @@ class RelationUpdate extends Model {
 			[['person_a_id', 'person_b_id', 'relation_ab_id', 'surname', 'name'], 'safe'],
 			[['person_a_id', 'person_b_id', 'relation_ab_id'], 'filter', 'filter' => 'intval'],
 		];
-	}  	
-
+	}
 }

@@ -12,7 +12,7 @@ class UploadFile extends Model {
 
 	public function rules() {
 		return [
-			[['imageFile'],'file','skipOnEmpty' => false, 'extensions' => 'png, jpg, bmp'],
+			[['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, bmp'],
 		];
 	}
 
@@ -21,11 +21,11 @@ class UploadFile extends Model {
 
 			$tempPath = $this->imageFile->tempName;
 			$uploadAlias = '@app/uploads/';
-			$baseFileName = substr($fileName,strlen($uploadAlias)-1);
+			$baseFileName = substr($fileName, strlen($uploadAlias) - 1);
 			$thumbImageDirectory = Yii::getAlias('@app/uploads/thumbnails/');
-			$thumbImageFileName = $thumbImageDirectory.$baseFileName;
+			$thumbImageFileName = $thumbImageDirectory . $baseFileName;
 
-			$thumbImage = Image::thumbnail($tempPath,400,null);
+			$thumbImage = Image::thumbnail($tempPath, 400, null);
 			$thumbImage->save($thumbImageFileName);
 			$this->imageFile->saveAs($fileName);
 			return true;
