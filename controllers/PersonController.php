@@ -84,6 +84,8 @@ class PersonController extends Controller {
 	public function actionNewPerson() {
 		$person = new Person;
 		$personDetail = new PersonDetail;
+		$AttachmentCount = 0;
+
 		if ($person->load($_POST) && $person->getDirtyAttributes() && $person->save()) {
 			if ($personDetail->load($_POST) && $personDetail->getDirtyAttributes()) {
 				$personDetail->link('person', $person);
@@ -101,6 +103,7 @@ class PersonController extends Controller {
 			'personDetail' => $personDetail,
 			'provider' => $provider,
 			'searchModel' => $searchModel,
+			'attachmentCount' => $AttachmentCount,
 		]);
 	}
 
@@ -136,7 +139,7 @@ class PersonController extends Controller {
 				'personDetail' => $personDetail,
 				'searchModel' => $searchModel,
 				'provider' => $provider,
-				'attachmentCount'=>$AttachmentCount,
+				'attachmentCount' => $AttachmentCount,
 			]);
 		} else {
 
@@ -174,7 +177,7 @@ class PersonController extends Controller {
 	public function actionUpload($id) {
 		$fileQuery = PersonAttachment::find()->where(['person_id' => $id]);
 		$countQuery = clone $fileQuery;
-		$pages = new Pagination(['totalCount'=>$countQuery->count(),'pageSize'=>8]);
+		$pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 8]);
 		$fileGallery = $fileQuery->offset($pages->offset)->limit($pages->limit)->all();
 
 		$uploadModel = new UploadFile();
@@ -203,7 +206,7 @@ class PersonController extends Controller {
 				Yii::$app->end();
 			} else {
 				$uploadError = $uploadModel->getFirstError('imageFile');
-				$session->setFlash('uploadError', Yii::t('app', 'Upload Failed'.':'.$uploadError));
+				$session->setFlash('uploadError', Yii::t('app', 'Upload Failed' . ':' . $uploadError));
 				$this->redirect(['upload', 'id' => $id]); // redirected to avoid re-submission on page reload (PostRedirectGet)
 				Yii::$app->end();
 			}
@@ -232,9 +235,8 @@ class PersonController extends Controller {
 	public function actionShowAttachment($id) {
 		$fileQuery = PersonAttachment::find()->where(['person_id' => $id]);
 		$countQuery = clone $fileQuery;
-		$pages = new Pagination(['totalCount'=>$countQuery->count(),'pageSize'=>8]);
+		$pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 8]);
 		$fileGallery = $fileQuery->offset($pages->offset)->limit($pages->limit)->all();
 		return $this->render('attachmentView', ['fileGallery' => $fileGallery, 'pages' => $pages]);
 	}
 }
-

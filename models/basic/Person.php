@@ -66,7 +66,7 @@ class Person extends ActiveRecord {
 			$relationRow['relation_id'] = $record->id;
 			$relationRow['to_whom_id'] = $record->person_a_id;
 			$relationRow['relation_to_whom'] = $record->person_a->surname . ' ' . $record->person_a->name;
-			$relationRow['relation'] = RelationPair::relationToComplement($personFromGender,$personToGender,$relationTo);
+			$relationRow['relation'] = RelationPair::relationComplement($personFromGender, $personToGender, $relationTo);
 
 			$relations[] = $relationRow;
 		}
@@ -77,5 +77,10 @@ class Person extends ActiveRecord {
 			$relations[$key] = $value;
 		}
 		return $relations;
+	}
+
+	public function computedRelations() {
+		$givenRelations = $this->relations();
+		$computedRelations = [];
 	}
 }
