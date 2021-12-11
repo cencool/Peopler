@@ -4,18 +4,16 @@ namespace app\models\basic;
 
 use yii\db\ActiveRecord;
 
-class RelationPair extends ActiveRecord
-{
-    public static function tableName()
-    {
-        return 'relation_pair';
-    }
+class RelationPair extends ActiveRecord {
+	public static function tableName() {
+		return 'relation_pair';
+	}
 
-    public function rules() {
-        return [
-            [['gender_a', 'gender_b', 'relation_ab','relation_ba'],'safe'],
-        ];
-    }
+	public function rules() {
+		return [
+			[['gender_a', 'gender_b', 'relation_ab', 'relation_ba'], 'safe'],
+		];
+	}
 
 	public static function relationsList($gender) {
 
@@ -53,50 +51,73 @@ class RelationPair extends ActiveRecord
 
 	public static function relationFromComplement($personFromGender, $personToGender, $relationFrom) {
 
-			$relationPairQuery = RelationPair::find();
-			$relationPairs = $relationPairQuery->where(
-				[
-					'or',
-					['gender_a' => $personToGender, 'gender_b' => $personFromGender],
-					['gender_a' => $personFromGender, 'gender_b' => $personToGender]
-				]
-			)->andWhere(
-				[
-					'or',
-					['gender_a' => $personToGender, 'relation_ba' => $relationFrom],
-					['gender_b' => $personToGender, 'relation_ab' => $relationFrom]
-				]
-			)
-				->asArray()->all();
+		$relationPairQuery = RelationPair::find();
+		$relationPairs = $relationPairQuery->where(
+			[
+				'or',
+				['gender_a' => $personToGender, 'gender_b' => $personFromGender],
+				['gender_a' => $personFromGender, 'gender_b' => $personToGender]
+			]
+		)->andWhere(
+			[
+				'or',
+				['gender_a' => $personToGender, 'relation_ba' => $relationFrom],
+				['gender_b' => $personToGender, 'relation_ab' => $relationFrom]
+			]
+		)
+			->asArray()->all();
 
-			$relationFromComplement= ($relationPairs[0]['relation_ab'] == $relationFrom) ?
-				$relationPairs[0]['relation_ba'] : $relationPairs[0]['relation_ab'];
+		$relationFromComplement = ($relationPairs[0]['relation_ab'] == $relationFrom) ?
+			$relationPairs[0]['relation_ba'] : $relationPairs[0]['relation_ab'];
 
-			return $relationFromComplement;
+		return $relationFromComplement;
 	}
 
 	public static function relationToComplement($personFromGender, $personToGender, $relationTo) {
 
-			$relationPairQuery = RelationPair::find();
-			$relationPairs = $relationPairQuery->where(
-				[
-					'or',
-					['gender_a' => $personToGender, 'gender_b' => $personFromGender],
-					['gender_a' => $personFromGender, 'gender_b' => $personToGender]
-				]
-			)->andWhere(
-				[
-					'or',
-					['gender_a' => $personToGender, 'relation_ab' => $relationTo],
-					['gender_b' => $personToGender, 'relation_ba' => $relationTo]
-				]
-			)
-				->asArray()->all();
+		$relationPairQuery = RelationPair::find();
+		$relationPairs = $relationPairQuery->where(
+			[
+				'or',
+				['gender_a' => $personToGender, 'gender_b' => $personFromGender],
+				['gender_a' => $personFromGender, 'gender_b' => $personToGender]
+			]
+		)->andWhere(
+			[
+				'or',
+				['gender_a' => $personToGender, 'relation_ab' => $relationTo],
+				['gender_b' => $personToGender, 'relation_ba' => $relationTo]
+			]
+		)
+			->asArray()->all();
 
-			$relationToComplement= ($relationPairs[0]['relation_ab'] == $relationTo) ?
-				$relationPairs[0]['relation_ba'] : $relationPairs[0]['relation_ab'];
+		$relationToComplement = ($relationPairs[0]['relation_ab'] == $relationTo) ?
+			$relationPairs[0]['relation_ba'] : $relationPairs[0]['relation_ab'];
 
-			return $relationToComplement;
+		return $relationToComplement;
 	}
 
+	public static function relationComplement($genderA, $genderB, $relation) {
+
+		$relationPairQuery = RelationPair::find();
+		$relationPairs = $relationPairQuery->where(
+			[
+				'or',
+				['gender_a' => $genderA, 'gender_b' => $genderB],
+				['gender_a' => $genderB, 'gender_b' => $genderA]
+			]
+		)->andWhere(
+			[
+				'or',
+				['relation_ba' => $relation],
+				['relation_ab' => $relation]
+			]
+		)
+			->asArray()->all();
+
+		$relationComplement = ($relationPairs[0]['relation_ab'] == $relation) ?
+			$relationPairs[0]['relation_ba'] : $relationPairs[0]['relation_ab'];
+
+		return $relationComplement;
+	}
 }
