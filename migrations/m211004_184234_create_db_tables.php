@@ -212,6 +212,7 @@ class m211004_184234_create_db_tables extends Migration {
 					['f', 'niece', 'f', 'aunt'],
 					['m', 'nephew', 'm', 'uncle'],
 					['m', 'nephew', 'f', 'aunt'],
+					['f', 'sister', 'f', 'sister'],
 				]
 
 			);

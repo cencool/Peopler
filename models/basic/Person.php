@@ -3,6 +3,9 @@
 namespace app\models\basic;
 
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
+use app\models\basic\RelationName;
+use phpDocumentor\Reflection\Types\Array_;
 use Yii;
 
 class Person extends ActiveRecord {
@@ -43,7 +46,7 @@ class Person extends ActiveRecord {
 	/**
 	 * @return array relations the person is involved in
 	 */
-	public function relations() {
+	public function givenRelations() {
 
 		$relationsFrom = $this->relationsFromPerson;
 		// $relations fields: relation_id, relation, to_whom, to_whom_id
@@ -80,7 +83,106 @@ class Person extends ActiveRecord {
 	}
 
 	public function computedRelations() {
-		$givenRelations = $this->relations();
+		$thisPersonRelations = $this->givenRelations();
 		$computedRelations = [];
+		$tokenChains = [
+			'child' => [
+				'child' => 'grandchild',
+				'sibling' => 'nephew',
+				'partner' => 'child',
+				'parent' => 'sibling'
+			],
+			'sibling' => [
+				'child' => 'child',
+				'sibling' => 'sibling',
+				'partner' => 'sibling-in-law',
+				'parent' => 'uncle',
+			],
+			'partner' => [
+				'child' => 'child-in-law',
+				'sibling' => 'sibling-in-law',
+				'partner' => 'partner',
+				'parent' => 'parent',
+			],
+			'parent' => [
+				'child' => 'partner',
+				'sibling' => 'parent',
+				'partner' => 'parent-in-law',
+				'parent' => 'grandparent',
+			],
+		];
+		$currentTokenChain = [];
+		$currentRelations = $thisPersonRelations;
+		do {
+			$newRelations = [];
+
+			foreach ($currentRelations as $relationA) {
+				$tokenA = RelationName::find()->where(
+					[
+						'and',
+						['gender' => $this->gender],
+						['relation_name' => $relationA['relation']]
+					]
+				)->one()->token;
+				$currentTokenChain[] = $tokenA;
+
+				$personBid = $relationA['to_whom_id'];
+				$personB = Person::find()->where(['id' => $personBid])->one();
+				$personBrelations = $personB->givenRelations();
+				foreach ($personBrelations as $relationB) {
+					if ($relationB['to_whom_id'] != $this->id) {
+						$tokenB = (RelationName::find()->where([
+							'and',
+							['relation_name' => $relationB['relation']],
+							['gender' => $personB->gender]
+						])->one())->token;
+						$currentTokenChain[] = $tokenB;
+						$index = $currentTokenChain[0] . '.' . $currentTokenChain[1];
+						if ($resultToken = ArrayHelper::getValue($tokenChains, $index)) {
+							$relation = RelationName::find()->where([
+								'and',
+								['token' => $resultToken],
+								['gender' => $this->gender]
+							])->one()['relation_name'];
+							$newRelations[] = [
+								'relation_id' => -1,
+								'to_whom_id' => $relationB['to_whom_id'],
+								'relation_to_whom' => $relationB['relation_to_whom'],
+								'relation' => $relation,
+							];
+							if ($this->checkRelationExists(end($newRelations), $thisPersonRelations)) {
+								array_pop($newRelations);
+							} else if ($this->checkRelationExists(end($newRelations), $computedRelations)) {
+								array_pop($newRelations);
+							} else {
+								$computedRelations[] = end($newRelations);
+							}
+						}
+						array_pop($currentTokenChain);
+					}
+				}
+				$currentTokenChain = [];
+			}
+			$currentRelations = $newRelations;
+		} while (count($newRelations) > 0);
+		return $computedRelations;
+	}
+
+	public function relations() {
+		$given =  $this->givenRelations();
+		$computed = $this->computedRelations();
+		return ArrayHelper::merge($given, $computed);
+	}
+
+	public function checkRelationExists(array $relationToCheck, array $relations) {
+		foreach ($relations as $relation) {
+			$a = $relationToCheck['to_whom_id'] == ArrayHelper::getValue($relation, 'to_whom_id');
+			$b = $relationToCheck['relation_to_whom'] == ArrayHelper::getValue($relation, 'relation_to_whom');
+			$c = $relationToCheck['relation'] == ArrayHelper::getValue($relation, 'relation');
+			if ($a && $b && $c) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
