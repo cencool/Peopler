@@ -43,6 +43,10 @@ class Person extends ActiveRecord {
 	public function getRelationsToPerson() {
 		return $this->hasMany(PersonRelation::class, ['person_b_id' => 'id']);
 	}
+
+	public function getPersonAttachments() {
+		return $this->hasMany(PersonAttachment::class, ['person_id' => 'id']);
+	}
 	/**
 	 * @return array relations the person is involved in
 	 */
@@ -74,11 +78,6 @@ class Person extends ActiveRecord {
 			$relations[] = $relationRow;
 		}
 
-		// translation of relations
-		foreach ($relations as $key => $value) {
-			$value['relation'] = $this->gender == 'm' ? Yii::t('app-m', $value['relation']) : Yii::t('app-f', $value['relation']);
-			$relations[$key] = $value;
-		}
 		return $relations;
 	}
 
@@ -171,15 +170,21 @@ class Person extends ActiveRecord {
 	public function relations() {
 		$given =  $this->givenRelations();
 		$computed = $this->computedRelations();
-		return ArrayHelper::merge($given, $computed);
+		$relations = ArrayHelper::merge($given, $computed);
+
+		// translation of relations
+		foreach ($relations as $key => $value) {
+			$value['relation'] = $this->gender == 'm' ? Yii::t('app-m', $value['relation']) : Yii::t('app-f', $value['relation']);
+			$relations[$key] = $value;
+		}
+		return $relations;
 	}
 
 	public function checkRelationExists(array $relationToCheck, array $relations) {
 		foreach ($relations as $relation) {
 			$a = $relationToCheck['to_whom_id'] == ArrayHelper::getValue($relation, 'to_whom_id');
-			$b = $relationToCheck['relation_to_whom'] == ArrayHelper::getValue($relation, 'relation_to_whom');
-			$c = $relationToCheck['relation'] == ArrayHelper::getValue($relation, 'relation');
-			if ($a && $b && $c) {
+			$b = $relationToCheck['relation'] == ArrayHelper::getValue($relation, 'relation');
+			if ($a && $b) {
 				return true;
 			}
 		}

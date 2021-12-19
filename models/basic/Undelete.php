@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use app\models\basic\Person;
 use app\models\basic\PersonRelation;
 use app\models\basic\PersonDetail;
+use yii\imagine\Image;
 use Yii;
 
 class Undelete {
@@ -66,6 +67,25 @@ class Undelete {
 			$undeleteRecord[] = ['relationTo' => $dataAttributes];
 		}
 
+		$attachments = $data->personAttachments;
+
+		foreach ($attachments as $attachment) {
+			$dataAttributes = [];
+			foreach ($attachment as $attr => $val) {
+				if ($attr != 'id' && $attr != 'person_id') {
+					$dataAttributes[$attr] = $val;
+				}
+			}
+			$pathFrom = Yii::getAlias('@app/uploads/');
+			$pathTo = Yii::getAlias('@app/uploads/delete/');
+			rename($pathFrom . $dataAttributes['file_name'], $pathTo . $dataAttributes['file_name']);
+			if (file_exists($pathFrom . 'thumbnails/' . $dataAttributes['file_name'])) {
+				unlink($pathFrom . 'thumbnails/' . $dataAttributes['file_name']);
+			}
+
+			$undeleteRecord[] = ['attachment' => $dataAttributes];
+		}
+
 
 		// this exercise with session is due fact that 
 		// can't insert array directly to session var when using session component
@@ -96,24 +116,35 @@ class Undelete {
 						$personDetail->person_id = $personId;
 						$personDetail->save();
 						break;
-					case('relationFrom'):
+					case ('relationFrom'):
 						// recover relationFrom
 						$personRelation = new PersonRelation;
 						$personRelation->attributes = $dataBlock['relationFrom'];
 						$personRelation->person_a_id = $personId;
 						$personRelation->save();
 						break;
-					case('relationTo'):
+					case ('relationTo'):
 						// recover relationTo
 						$personRelation = new PersonRelation;
 						$personRelation->attributes = $dataBlock['relationTo'];
 						$personRelation->person_b_id = $personId;
 						$personRelation->save();
 						break;
+					case ('attachment'):
+						// recover attachment
+						$personAttachment = new PersonAttachment();
+						$personAttachment->attributes = $dataBlock['attachment'];
+						$personAttachment->person_id = $personId;
+						$personAttachment->save();
+						$fileName = $personAttachment['file_name'];
+						$pathTo = Yii::getAlias('@app/uploads/');
+						$pathFrom = Yii::getAlias('@app/uploads/delete/');
+						rename($pathFrom . $fileName, $pathTo . $fileName);
+						$thumbnaiImage = Image::thumbnail($pathTo . $fileName, 400, null);
+						$thumbnaiImage->save($pathTo . 'thumbnails/' . $fileName);
+						break;
 				}
 			}
 		}
 	}
 }
-		
-
