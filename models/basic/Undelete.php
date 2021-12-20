@@ -136,12 +136,14 @@ class Undelete {
 						$personAttachment->attributes = $dataBlock['attachment'];
 						$personAttachment->person_id = $personId;
 						$personAttachment->save();
+
 						$fileName = $personAttachment['file_name'];
 						$pathTo = Yii::getAlias('@app/uploads/');
 						$pathFrom = Yii::getAlias('@app/uploads/delete/');
 						rename($pathFrom . $fileName, $pathTo . $fileName);
-						$thumbnaiImage = Image::thumbnail($pathTo . $fileName, 400, null);
-						$thumbnaiImage->save($pathTo . 'thumbnails/' . $fileName);
+
+						$thumbnailImage = Image::thumbnail($pathTo . $fileName, 400, null);
+						$thumbnailImage->save($pathTo . 'thumbnails/' . $fileName);
 						break;
 				}
 			}

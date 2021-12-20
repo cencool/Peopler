@@ -220,23 +220,38 @@ class PersonController extends Controller {
 		]);
 	}
 
-	public function actionSendThumbnail($fileName) {
+	public function actionSendThumbnail($fileId) {
 
+		$fileName = PersonAttachment::findOne($fileId)->file_name;
 		$thumbnailPrefix = Yii::getAlias('@app/uploads/thumbnails/');
-		$uploadlPrefix = Yii::getAlias('@app/uploads/');
+		$uploadPrefix = Yii::getAlias('@app/uploads/');
 		if (file_exists($thumbnailPrefix . $fileName)) {
 			$response =  Yii::$app->response->sendFile($thumbnailPrefix . $fileName);
 		} else {
-			$response =  Yii::$app->response->sendFile($uploadlPrefix . $fileName);
+			$response =  Yii::$app->response->sendFile($uploadPrefix . $fileName);
 		}
 		return $response;
 	}
 
 	public function actionShowAttachment($id) {
+
 		$fileQuery = PersonAttachment::find()->where(['person_id' => $id]);
 		$countQuery = clone $fileQuery;
 		$pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 8]);
 		$fileGallery = $fileQuery->offset($pages->offset)->limit($pages->limit)->all();
 		return $this->render('attachmentView', ['fileGallery' => $fileGallery, 'pages' => $pages]);
+	}
+
+	public function actionSendFile($fileId) {
+
+		$fileName = PersonAttachment::findOne($fileId)->file_name;
+		$thumbnailPrefix = Yii::getAlias('@app/uploads/thumbnails/');
+		$uploadPrefix = Yii::getAlias('@app/uploads/');
+		if (file_exists($uploadPrefix . $fileName)) {
+			$response =  Yii::$app->response->sendFile($uploadPrefix . $fileName);
+		} else {
+			$response =  Yii::$app->response->sendFile($thumbnailPrefix . $fileName);
+		}
+		return $response;
 	}
 }
