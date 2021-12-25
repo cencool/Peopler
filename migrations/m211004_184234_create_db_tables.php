@@ -51,10 +51,52 @@ class m211004_184234_create_db_tables extends Migration {
 				'id' => $this->primaryKey(),
 				'gender' => $this->char(1)->notNull(),
 				'relation_name' => $this->string(20)->notNull(),
+				'token' => $this->string(20)->notNull(),
 			]);
 
 			$this->execute(
 				'ALTER TABLE `relation_name` ADD CONSTRAINT unique_index UNIQUE (gender, relation_name)'
+			);
+
+			$this->batchInsert(
+				'relation_name',
+				['gender', 'relation_name', 'token'],
+				[
+					['f', 'acquaintance', 'acquaintance'],
+					['f', 'aunt', 'uncle'],
+					['f', 'classmate', 'classmate'],
+					['f', 'colleague', 'colleague'],
+					['f', 'daughter', 'child'],
+					['f', 'daughter-in-law', 'child-in-law'],
+					['f', 'friend', 'friend'],
+					['f', 'godmother', 'godmother'],
+					['f', 'granddaughter', 'grandchild'],
+					['f', 'grandmother', 'grandparent'],
+					['f', 'mother', 'parent'],
+					['f', 'niece', 'nephew'],
+					['f', 'sister', 'sibling'],
+					['f', 'sister-in-law', 'sibling-in-law'],
+					['f', 'wife', 'partner'],
+					['f', 'mother-in-law', 'parent-in-law'],
+					['m', 'acquaintance', 'acquaintance'],
+					['m', 'brother', 'sibling'],
+					['m', 'brother-in-law', 'sibling-in-law'],
+					['m', 'classmate', 'classmate'],
+					['m', 'colleague', 'colleague'],
+					['m', 'cousin', 'cousin'],
+					['f', 'cousin', 'cousin'],
+					['m', 'father', 'parent'],
+					['m', 'father-in-law', 'parent-in-law'],
+					['m', 'friend', 'friend'],
+					['m', 'godfather', 'godfather'],
+					['m', 'grandfather', 'grandparent'],
+					['m', 'grandson', 'grandchild'],
+					['m', 'husband', 'partner'],
+					['m', 'nephew', 'newphew'],
+					['m', 'son', 'child'],
+					['m', 'son-in-law', 'child-in-law'],
+					['m', 'uncle', 'uncle'],
+				]
 			);
 		}
 
@@ -151,6 +193,7 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'colleague', 'm', 'colleague'],
 					['m', 'cousin', 'f', 'cousin'],
 					['m', 'cousin', 'm', 'cousin'],
+					['f', 'cousin', 'f', 'cousin'],
 					['m', 'friend', 'f', 'friend'],
 					['m', 'friend', 'm', 'friend'],
 					['m', 'grandson', 'f', 'grandmother'],
@@ -169,6 +212,7 @@ class m211004_184234_create_db_tables extends Migration {
 					['f', 'niece', 'f', 'aunt'],
 					['m', 'nephew', 'm', 'uncle'],
 					['m', 'nephew', 'f', 'aunt'],
+					['f', 'sister', 'f', 'sister'],
 				]
 
 			);
@@ -190,48 +234,6 @@ class m211004_184234_create_db_tables extends Migration {
 				'id',
 				'CASCADE',
 				'CASCADE',
-			);
-		}
-
-		if (Yii::$app->db->getTableSchema('relation_name', true) === null) {
-		$this->batchInsert(
-			'relation_name',
-			['gender', 'relation_name'],
-			[
-				['f', 'acquaintance'],
-				['f', 'aunt'],
-				['f', 'classmate'],
-				['f', 'colleague'],
-				['f', 'daughter'],
-				['f', 'daughter-in-law'],
-				['f', 'friend'],
-				['f', 'godmother'],
-				['f', 'granddaughter'],
-				['f', 'grandmother'],
-				['f', 'mother'],
-				['f', 'niece'],
-				['f', 'sister'],
-				['f', 'sister-in-law'],
-				['f', 'wife'],
-				['f', 'mother-in-law'],
-				['m', 'acquaintance'],
-				['m', 'brother'],
-				['m', 'brother-in-law'],
-				['m', 'classmate'],
-				['m', 'colleague'],
-				['m', 'cousin'],
-				['m', 'father'],
-				['m', 'father-in-law'],
-				['m', 'friend'],
-				['m', 'godfather'],
-				['m', 'grandfather'],
-				['m', 'grandson'],
-				['m', 'husband'],
-				['m', 'nephew'],
-				['m', 'son'],
-				['m', 'son-in-law'],
-				['m', 'uncle'],
-			]
 			);
 		}
 	}

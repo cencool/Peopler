@@ -82,14 +82,14 @@ class RelationController extends Controller {
 		$model = new PersonRelation;
 		$success = false;
 
-			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+		if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-				$relationFromName = $model->relationName->relation_name;
-				$personBgender = $model->person_b->gender;
-				$relationToName = RelationPair::relationFromComplement($person->gender, $personBgender, $relationFromName);
-				$relationToId = RelationName::find()->where(['relation_name' => $relationToName, 'gender' => $personBgender])->all()[0]->id;
-				$duplicate = PersonRelation::find()
-					->where(['person_a_id' => $model->person_b_id, 'relation_ab_id' => $relationToId, 'person_b_id' => $id])->all();
+			$relationFromName = $model->relationName->relation_name;
+			$personBgender = $model->person_b->gender;
+			$relationToName = RelationPair::relationComplement($person->gender, $personBgender, $relationFromName);
+			$relationToId = RelationName::find()->where(['relation_name' => $relationToName, 'gender' => $personBgender])->all()[0]->id;
+			$duplicate = PersonRelation::find()
+				->where(['person_a_id' => $model->person_b_id, 'relation_ab_id' => $relationToId, 'person_b_id' => $id])->all();
 
 			if (!$duplicate) {
 
@@ -117,7 +117,7 @@ class RelationController extends Controller {
 			}
 		}
 
-		if ($e_msg=$model->getFirstError('person_b_id')) {
+		if ($e_msg = $model->getFirstError('person_b_id')) {
 			$session->setFlash('relationAddError', $e_msg);
 		}
 
@@ -165,7 +165,7 @@ class RelationController extends Controller {
 				$relationName = RelationName::find()->where(['id' => $model->relation_ab_id])->all()[0]->relation_name;
 				$genderFrom = $person->gender;
 				$genderTo = $personRelation->person_a->gender;
-				$relationName = RelationPair::relationFromComplement($genderFrom, $genderTo, $relationName);
+				$relationName = RelationPair::relationComplement($genderFrom, $genderTo, $relationName);
 				$relationId = RelationName::find()->where(['relation_name' => $relationName])->all()[0]->id;
 				$personRelation->relation_ab_id = $relationId;
 			}

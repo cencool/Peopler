@@ -6,6 +6,10 @@ use yii\base\Model;
 use yii\data\ArrayDataProvider;
 use app\models\basic\Person;
 
+/**
+ * provides search model for grid view displaying relations table
+ *  
+ * */
 class RelationSearch extends Model {
 
 	public $relation_id;
@@ -20,7 +24,7 @@ class RelationSearch extends Model {
 	}
 
 	public function search($params = null) {
-		$relations_out=[];
+		$relations_out = [];
 		if ($params) {
 			$personId = $params['id'];
 			$person = Person::findOne($personId);

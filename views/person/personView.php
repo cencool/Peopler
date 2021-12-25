@@ -10,8 +10,8 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 ?>
 
 <div class='row'>
-	<div class='col-xs-6'>
-		<?php
+    <div class='col-xs-6'>
+        <?php
 		echo DetailView::widget([
 			'model' => $model,
 			'options' => [
@@ -41,9 +41,9 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 
 		]);
 		?>
-	</div>
-	<div class='col-xs-6'>
-		<?php
+    </div>
+    <div class='col-xs-6'>
+        <?php
 
 		if ($model->detail) {
 
@@ -71,13 +71,13 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 
 		?>
 
-		<?= Html::a(Yii::t('app', 'Attachments').'('.$attachmentCount.')', ['person/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
-	</div>
+        <?= Html::a(Yii::t('app', 'Attachments') . ' (' . $attachmentCount . ')', ['person/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+    </div>
 </div>
 
 <h4><b><?= Yii::t('app', 'Relations') ?></b></h3>
 
-	<?php
+    <?php
 
 	echo GridView::widget([
 		'dataProvider' => $provider,
