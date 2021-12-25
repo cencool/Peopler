@@ -16,7 +16,6 @@ use app\models\basic\Undelete;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
 use Yii;
-use yii\imagine\Image;
 
 class PersonController extends Controller {
 
@@ -216,7 +215,8 @@ class PersonController extends Controller {
 			'uploadModel' => $uploadModel,
 			'personFile' => $personFile,
 			'fileGallery' => $fileGallery,
-			'pages' => $pages
+			'pages' => $pages,
+			'person' => $person,
 		]);
 	}
 
@@ -239,7 +239,7 @@ class PersonController extends Controller {
 		$countQuery = clone $fileQuery;
 		$pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 8]);
 		$fileGallery = $fileQuery->offset($pages->offset)->limit($pages->limit)->all();
-		return $this->render('attachmentView', ['fileGallery' => $fileGallery, 'pages' => $pages]);
+		return $this->render('attachmentView', ['fileGallery' => $fileGallery, 'pages' => $pages, 'id' => $id]);
 	}
 
 	public function actionSendFile($fileId) {

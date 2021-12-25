@@ -126,7 +126,7 @@ $addRelationClass = ($person->id != null) ? 'btn btn-primary pull-left' : 'disab
 		'columns' => [
 			[
 				'attribute' => 'relation_id',
-				'label' => 'Rel. ID',
+				'label' => Yii::t('app', 'Relation ID'),
 			],
 			[
 				'class' => '\yii\grid\ActionColumn',

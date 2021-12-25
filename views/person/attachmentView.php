@@ -3,26 +3,40 @@
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use app\assets\ShowAttachmentAsset;
+use app\models\basic\Person;
+use Yii;
 
 ShowAttachmentAsset::register($this);
+if (isset($id)) {
+    $person = Person::findOne($id);
+    $this->params['breadcrumbs'][] = ['label' => $person->surname . ' ' . $person->name, 'url' => ['person/view', 'id' => $id]];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Attachments')];
+}
 ?>
 <div class='row'>
     <?php if ($fileGallery) {
-		foreach ($fileGallery as $person_file) { ?>
+        foreach ($fileGallery as $person_file) { ?>
     <div class='col-xs-3  h-25'>
         <?php $fileId = $person_file->id;
-				echo Html::img(['person/send-thumbnail', 'fileId' => $fileId], ['class' => 'img-responsive img-thumbnail']);
-				echo $person_file->file_caption == "" ? Html::tag('p', "_") : Html::tag('p', $person_file->file_caption);
-				echo "<button id=$fileId class='btn btn-sm' data-toggle='modal' data-target='#imgModal'><i class='glyphicon glyphicon-fullscreen'></i></button>";
-				?>
+                echo Html::img(
+                    ['person/send-thumbnail', 'fileId' => $fileId],
+                    [
+                        'class' => 'img-responsive img-thumbnail',
+                        'data' => ['toggle' => 'modal', 'target' => '#imgModal'],
+                        'name' => $fileId,
+                    ]
+                );
+                echo $person_file->file_caption == "" ? Html::tag('p', " ") : Html::tag('p', $person_file->file_caption);
+                echo "<button name=$fileId class='btn btn-sm' data-toggle='modal' data-target='#imgModal'><i class='glyphicon glyphicon-fullscreen'></i></button>";
+                ?>
     </div>
-    <?php	}
-	}
-	?>
+    <?php    }
+    }
+    ?>
 </div>
 
 <?= LinkPager::widget([
-	'pagination' => $pages,
+    'pagination' => $pages,
 ]) ?>
 
 <!-- Modal -->

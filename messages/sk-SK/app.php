@@ -1,10 +1,9 @@
 <?php
 
 return [
-	'a primitive Database Viewer for purpose of learning yii' => 'primitívny prehliadač databáz na skúšanie yii',
-	'Login'=>'Prihlásiť',
+	'Login' => 'Prihlásiť',
 	'Logout' => 'Odhlásiť ',
-	'Select Db'=> 'Vybrať Db',
+	'Select Db' => 'Vybrať Db',
 	'Select Table' => 'Vybrať Tabuľku',
 	'Home' => 'Domov',
 	'Surname' => 'Priezvisko',
@@ -33,7 +32,7 @@ return [
 	'List' => 'Zoznam',
 	'Relation was added' => 'Vzťah pridaný',
 	'Language' => 'Jazyk',
-	'Relation updated'=> 'Vzťah upravený',
+	'Relation updated' => 'Vzťah upravený',
 	'to' => 'k',
 	'deleted' => 'vymazaný',
 	'Relation ID' => 'ID Vzťahu',
@@ -46,8 +45,13 @@ return [
 	'Password' => 'Heslo',
 	'You have to login first!' => 'Najprv sa musíš prihlásiť !',
 	'Incorrect credentials' => 'Nesprávne údaje',
-	
+	'Attachments' => 'Prílohy',
+	'File' => 'Súbor',
+	'Caption' => 'Popis',
+	'Submit' => 'Poslať',
+	'Attachment upload' => 'Nahratie príloh',
 
 
-]
-?>
+
+
+];

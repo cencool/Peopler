@@ -9,6 +9,9 @@ use yii\helpers\Html;
 
 <?php
 
+$this->params['breadcrumbs'][] = ['label' => $person->surname . ' ' . $person->name, 'url' => ['person/update', 'id' => $person->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Attachment upload')];
+
 if (Yii::$app->session->hasFlash('uploadSuccess')) {
 	echo Alert::widget([
 		'options' => ['class' => 'alert-success'],
@@ -26,13 +29,12 @@ if (Yii::$app->session->hasFlash('uploadError')) {
 ?>
 
 <?php $form = ActiveForm::begin([
-	'options' => ['autocomplete' => 'off','class'=>'form-inline'],
+	'options' => ['autocomplete' => 'off', 'class' => 'form-inline'],
 ]) ?>
-
-<?= $form->field($personFile, 'file_caption')->textInput() ?>
-		<?= $form->field($uploadModel, 'imageFile')->fileInput() ?>
-		<button type='submit' class='btn btn-primary pull-right'>Submit</button>
+<?= $form->field($personFile, 'file_caption')->textInput()->label(Yii::t('app', 'Caption')) ?>
+<?= $form->field($uploadModel, 'imageFile')->fileInput()->label(Yii::t('app', 'File')) ?>
+<button type='submit' class='btn btn-primary pull-right'><?= Yii::t('app', 'Submit') ?></button>
 <p></p>
 <?php ActiveForm::end() ?>
 
-<?= $this->render('attachmentView', ['fileGallery' => $fileGallery, 'pages'=>$pages]) ?>
+<?= $this->render('attachmentView', ['fileGallery' => $fileGallery, 'pages' => $pages]) ?>
