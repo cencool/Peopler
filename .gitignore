@@ -50,5 +50,6 @@ uploads/**
 
 !uploads/info.txt
 
-!uploads/*/thumbnails/info.txt
+!uploads/thumbnails/info.txt
+!uploads/delete/info.txt
 
