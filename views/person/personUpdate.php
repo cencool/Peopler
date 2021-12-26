@@ -125,11 +125,8 @@ $addRelationClass = ($person->id != null) ? 'btn btn-primary pull-left' : 'disab
 		],
 		'columns' => [
 			[
-				'attribute' => 'relation_id',
-				'label' => Yii::t('app', 'Relation ID'),
-			],
-			[
 				'class' => '\yii\grid\ActionColumn',
+				'header' => Yii::t('app', 'Action'),
 				'template' => '{update} {delete}',
 				'visibleButtons' => [
 					'update' => function ($model, $key, $index) {
@@ -162,7 +159,10 @@ $addRelationClass = ($person->id != null) ? 'btn btn-primary pull-left' : 'disab
 			],
 			[
 				'attribute' => 'relation',
-				'label' => Yii::t('app', 'Relation')
+				'label' => Yii::t('app', 'Relation'),
+				'content' => function ($model) {
+					return $model['relation_id'] != -1 ? $model['relation'] : '<code>' . $model['relation'] . '</code>';
+				}
 			],
 			[
 				'attribute' => 'relation_to_whom',

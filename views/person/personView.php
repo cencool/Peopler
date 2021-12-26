@@ -87,12 +87,11 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 		],
 		'columns' => [
 			[
-				'attribute' => 'relation_id',
-				'label' => Yii::t('app', 'Relation ID'),
-			],
-			[
 				'attribute' => 'relation',
-				'label' => Yii::t('app', 'Relation')
+				'label' => Yii::t('app', 'Relation'),
+				'content' => function ($model) {
+					return $model['relation_id'] != -1 ? $model['relation'] : '<code>' . $model['relation'] . '</code>';
+				}
 			],
 			[
 				'attribute' => 'relation_to_whom',
