@@ -19,18 +19,21 @@ class UploadFile extends Model {
 	public function upload(string $fileName) {
 		if ($this->validate()) {
 
-			$tempPath = $this->imageFile->tempName;
 			$uploadAlias = '@app/uploads/';
 			$baseFileName = substr($fileName, strlen($uploadAlias) - 1);
-			$thumbImageDirectory = Yii::getAlias('@app/uploads/thumbnails/');
-			$thumbImageFileName = $thumbImageDirectory . $baseFileName;
-
-			$thumbImage = Image::thumbnail($tempPath, 400, null);
-			$thumbImage->save($thumbImageFileName);
+			$this->uploadThumbnail($baseFileName);
 			$this->imageFile->saveAs($fileName);
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	public function uploadThumbnail(string $baseFileName) {
+
+		$thumbImageDirectory = Yii::getAlias('@app/uploads/thumbnails/');
+		$thumbImageFileName = $thumbImageDirectory . $baseFileName;
+		$thumbImage = Image::thumbnail($this->imageFile->tempName, 400, null);
+		$thumbImage->save($thumbImageFileName);
 	}
 }
