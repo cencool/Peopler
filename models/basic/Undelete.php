@@ -78,6 +78,9 @@ class Undelete {
 			}
 			$pathFrom = Yii::getAlias('@app/uploads/');
 			$pathTo = Yii::getAlias('@app/uploads/delete/');
+			if (!file_exists($pathTo) || !is_dir($pathTo)) {
+				mkdir($pathTo);
+			}
 			rename($pathFrom . $dataAttributes['file_name'], $pathTo . $dataAttributes['file_name']);
 			if (file_exists($pathFrom . 'thumbnails/' . $dataAttributes['file_name'])) {
 				unlink($pathFrom . 'thumbnails/' . $dataAttributes['file_name']);

@@ -20,6 +20,10 @@ class UploadFile extends Model {
 		if ($this->validate()) {
 
 			$uploadAlias = '@app/uploads/';
+			$uploadDir = Yii::getAlias($uploadAlias);
+			if (!file_exists($uploadDir) || !is_dir($uploadDir)) {
+				mkdir($uploadDir);
+			}
 			$baseFileName = substr($fileName, strlen($uploadAlias) - 1);
 			$this->uploadThumbnail($baseFileName);
 			$this->imageFile->saveAs($fileName);
@@ -31,7 +35,11 @@ class UploadFile extends Model {
 
 	public function uploadThumbnail(string $baseFileName) {
 
-		$thumbImageDirectory = Yii::getAlias('@app/uploads/thumbnails/');
+		$thumbAlias = '@app/uploads/thumbnails/';
+		$thumbImageDirectory = Yii::getAlias($thumbAlias);
+		if (!file_exists($thumbImageDirectory) || !is_dir($thumbImageDirectory)) {
+			mkdir($thumbImageDirectory);
+		}
 		$thumbImageFileName = $thumbImageDirectory . $baseFileName;
 		$thumbImage = Image::thumbnail($this->imageFile->tempName, 400, null);
 		$thumbImage->save($thumbImageFileName);
