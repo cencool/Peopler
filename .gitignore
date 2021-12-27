@@ -46,19 +46,6 @@ db.php
 
 .vimspector.json
 
-uploads/thumbnails/*
-
-!uploads/thumbnails/info.txt
-
-uploads/delete/*
-
-!uploads/delete/info.txt
-
-uploads/*.jpg
-uploads/*.png
-uploads/*.bmp
-
-!uploads/info.txt
-
+uploads/
 
 
