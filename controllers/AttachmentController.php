@@ -136,4 +136,19 @@ class AttachmentController extends Controller {
         }
         return $response;
     }
+    public function actionDeleteAttachment($fileId) {
+        $attachmentRecord = PersonAttachment::findOne($fileId);
+        $thumbnailPrefix = Yii::getAlias('@app/uploads/thumbnails/');
+        $uploadPrefix = Yii::getAlias('@app/uploads/');
+        $fileNameUpload = $uploadPrefix . $attachmentRecord->file_name;
+        $fileNameThumbnail = $thumbnailPrefix . $attachmentRecord->file_name;
+        if (file_exists($fileNameThumbnail)) {
+            unlink($fileNameThumbnail);
+        }
+        if (file_exists($fileNameUpload)) {
+            unlink($fileNameUpload);
+        }
+        $attachmentRecord->delete();
+        $this->redirect(['show-attachment', 'id' => Yii::$app->request->get('id')]);
+    }
 }

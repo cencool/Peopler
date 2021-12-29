@@ -18,6 +18,7 @@ if (isset($id)) {
         foreach ($fileGallery as $person_file) { ?>
     <div class='col-xs-3  h-25'>
         <?php $fileId = $person_file->id;
+                $id = $person_file->person_id;
                 echo Html::img(
                     ['attachment/send-thumbnail', 'fileId' => $fileId],
                     [
@@ -27,7 +28,8 @@ if (isset($id)) {
                     ]
                 );
                 echo $person_file->file_caption == "" ? Html::tag('p', " ") : Html::tag('p', $person_file->file_caption);
-                echo "<button name=$fileId class='btn btn-sm' data-toggle='modal' data-target='#imgModal'><i class='glyphicon glyphicon-fullscreen'></i></button>";
+                echo "<button name=$fileId class='btn btn-sm' data-toggle='modal' data-target='#imgModal'><span class='glyphicon glyphicon-fullscreen'></span></button>";
+                echo Html::a("<span class='glyphicon glyphicon-trash'></span>", ['attachment/delete-attachment', 'fileId' => $fileId, 'id' => $id]);
                 ?>
     </div>
     <?php    }
