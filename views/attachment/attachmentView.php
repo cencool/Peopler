@@ -12,6 +12,7 @@ if (isset($id)) {
     $this->params['breadcrumbs'][] = ['label' => $person->surname . ' ' . $person->name, 'url' => ['person/view', 'id' => $id]];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Attachments')];
 }
+$this->registerJsVar('deleteMessage', Yii::t('app', 'Really delete the file ?'));
 ?>
 <div class='row'>
     <?php if ($fileGallery) {
@@ -28,8 +29,8 @@ if (isset($id)) {
                     ]
                 );
                 echo $person_file->file_caption == "" ? Html::tag('p', " ") : Html::tag('p', $person_file->file_caption);
-                echo "<button name=$fileId class='btn btn-sm' data-toggle='modal' data-target='#imgModal'><span class='glyphicon glyphicon-fullscreen'></span></button>";
-                echo Html::a("<span class='glyphicon glyphicon-trash'></span>", ['attachment/delete-attachment', 'fileId' => $fileId, 'id' => $id]);
+                echo "<button name=$fileId class='btn btn-sm btn-primary' data-toggle='modal' data-target='#imgModal'><span class='glyphicon glyphicon-fullscreen'></span></button>";
+                echo Html::a("<span class='glyphicon glyphicon-trash'></span>", ['attachment/delete-attachment', 'fileId' => $fileId, 'id' => $id], ['class' => 'delete', 'id' => $fileId]);
                 ?>
     </div>
     <?php    }

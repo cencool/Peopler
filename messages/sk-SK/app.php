@@ -50,6 +50,7 @@ return [
 	'Caption' => 'Popis',
 	'Submit' => 'Poslať',
 	'Attachment upload' => 'Nahratie príloh',
+	'Really delete the file ?' => 'Naozaj vymazať súbor ?',
 
 
 
