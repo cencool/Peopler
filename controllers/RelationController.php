@@ -51,17 +51,11 @@ class RelationController extends Controller {
 		return true;
 	}
 
-	public function actionIndex() {
-		$searchModel = new PersonSearch();
-		$provider = $searchModel->search(Yii::$app->request->get(), 10);
-
-
-		return $this->render('index', ['provider' => $provider, 'searchModel' => $searchModel]);
-	}
 
 	public function actionAddRelation($id) {
 
 		$person = Person::findOne($id);
+
 		$session = Yii::$app->session;
 
 		$relationsListAr = RelationName::find()
@@ -135,78 +129,89 @@ class RelationController extends Controller {
 
 		$model = new RelationUpdate;
 		$personRelation = PersonRelation::findOne($relation_id);
+		$ownershipCheck = $personRelation->checkOwnership();
 		$person = Person::findOne($id);
+		$userId = Yii::$app->user->id;
 
-		// select proper name, surname of 'TO' person
-		if ($personRelation->person_a_id != $id) {
-			$model->surname = $personRelation->person_a->surname;
-			$model->name = $personRelation->person_a->name;
-		} else {
-			$model->surname = $personRelation->person_b->surname;
-			$model->name = $personRelation->person_b->name;
-		}
+		if ((($userId == $person->owner) || ($userId == 'admin')) && $ownershipCheck) {
 
-
-		// create list of relations to choose from
-		$relationsListAr = RelationName::find()
-			->where(['gender' => $person->gender])
-			->all();
-		$relationsList = [];
-		foreach ($relationsListAr as $row) {
-			$relationsList[$row['id']] = $person->gender == 'm' ?
-				Yii::t('app-m', $row['relation_name']) : Yii::t('app-f', $row['relation_name']);
-		}
-
-		if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-			if ($personRelation->person_a_id == $id) {
-				$personRelation->relation_ab_id = $model->relation_ab_id;
+			// select proper name, surname of 'TO' person
+			if ($personRelation->person_a_id != $id) {
+				$model->surname = $personRelation->person_a->surname;
+				$model->name = $personRelation->person_a->name;
 			} else {
-				$relationName = RelationName::find()->where(['id' => $model->relation_ab_id])->all()[0]->relation_name;
-				$genderFrom = $person->gender;
-				$genderTo = $personRelation->person_a->gender;
-				$relationName = RelationPair::relationComplement($genderFrom, $genderTo, $relationName);
-				$relationId = RelationName::find()->where(['relation_name' => $relationName])->all()[0]->id;
-				$personRelation->relation_ab_id = $relationId;
+				$model->surname = $personRelation->person_b->surname;
+				$model->name = $personRelation->person_b->name;
 			}
 
-			$session = Yii::$app->session;
-			try {
-				if (
-					$personRelation->validate()
-					&& $personRelation->getDirtyAttributes()
-					&& $personRelation->save()
-				) {
-					$session->setFlash('relationUpdated', Yii::t('app', 'Relation updated'));
+
+			// create list of relations to choose from
+			$relationsListAr = RelationName::find()
+				->where(['gender' => $person->gender])
+				->all();
+			$relationsList = [];
+			foreach ($relationsListAr as $row) {
+				$relationsList[$row['id']] = $person->gender == 'm' ?
+					Yii::t('app-m', $row['relation_name']) : Yii::t('app-f', $row['relation_name']);
+			}
+
+			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+				if ($personRelation->person_a_id == $id) {
+					$personRelation->relation_ab_id = $model->relation_ab_id;
+				} else {
+					$relationName = RelationName::find()->where(['id' => $model->relation_ab_id])->all()[0]->relation_name;
+					$genderFrom = $person->gender;
+					$genderTo = $personRelation->person_a->gender;
+					$relationName = RelationPair::relationComplement($genderFrom, $genderTo, $relationName);
+					$relationId = RelationName::find()->where(['relation_name' => $relationName])->all()[0]->id;
+					$personRelation->relation_ab_id = $relationId;
 				}
-			} catch (\Exception $ex) {
-				$session->setFlash('relationUpdateError', $ex->getMessage());
+
+				$session = Yii::$app->session;
+				try {
+					if (
+						$personRelation->validate()
+						&& $personRelation->getDirtyAttributes()
+						&& $personRelation->save()
+					) {
+						$session->setFlash('relationUpdated', Yii::t('app', 'Relation updated'));
+					}
+				} catch (\Exception $ex) {
+					$session->setFlash('relationUpdateError', $ex->getMessage());
+				}
 			}
+
+
+			return $this->render('relationUpdate', [
+				'person' => $person,
+				'model' => $model,
+				'relationsList' => $relationsList,
+			]);
+		} else {
+			return $this->redirect(['person/index']);
 		}
-
-
-		return $this->render('relationUpdate', [
-			'person' => $person,
-			'model' => $model,
-			'relationsList' => $relationsList,
-		]);
 	}
 
 	public function actionDelete($id, $relation_id) {
 
-		$personRelation = PersonRelation::findOne($relation_id);
 
-		$relation = $personRelation->relationName->relation_name;
-		$relation = $personRelation->person_a->gender == 'm' ?
-			Yii::t('app-m', $relation) : Yii::t('app-f', $relation);
-		$nameTo = $personRelation->person_b->name . ' ' . $personRelation->person_b->surname;
-		$nameFrom = $personRelation->person_a->name . ' ' . $personRelation->person_a->surname;
-		if ($personRelation->delete()) {
-			Yii::$app->session->setFlash(
-				'relationDeleted',
-				Yii::t('app', 'Relation') . ': "' . $relation . '" '
-					. ' ' . $nameFrom . ' ' . Yii::t('app', 'to') . ' ' . $nameTo . ' ' . Yii::t('app', 'deleted')
-			);
+		$personRelation = PersonRelation::findOne($relation_id);
+		$ownershipCheck = $personRelation->checkOwnership();
+		if ($ownershipCheck) {
+
+			$relation = $personRelation->relationName->relation_name;
+			$relation = $personRelation->person_a->gender == 'm' ?
+				Yii::t('app-m', $relation) : Yii::t('app-f', $relation);
+			$nameTo = $personRelation->person_b->name . ' ' . $personRelation->person_b->surname;
+			$nameFrom = $personRelation->person_a->name . ' ' . $personRelation->person_a->surname;
+			if ($personRelation->delete()) {
+				Yii::$app->session->setFlash(
+					'relationDeleted',
+					Yii::t('app', 'Relation') . ': "' . $relation . '" '
+						. ' ' . $nameFrom . ' ' . Yii::t('app', 'to') . ' ' . $nameTo . ' ' . Yii::t('app', 'deleted')
+				);
+			}
 		}
 		return $this->redirect(['person/update', 'id' => $id]);
 	}

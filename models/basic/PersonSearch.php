@@ -4,29 +4,31 @@ namespace app\models\basic;
 
 use yii\data\ActiveDataProvider;
 use yii\base\Model;
+use Yii;
 
 
 
-class PersonSearch  extends Model
-{
+class PersonSearch  extends Model {
     public $id;
     public $name;
     public $surname;
     public $place;
     public $gender;
 
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'surname', 'place', 'gender'], 'safe'],
         ];
     }
 
 
-    public function search($params,$pageLines)
-    {
+    public function search($params, $pageLines) {
 
         $query = Person::find();
+
+        if (Yii::$app->user->id != 'admin') {
+            $query = $query->where(['owner' => Yii::$app->user->id]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

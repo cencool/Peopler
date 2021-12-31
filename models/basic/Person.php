@@ -11,7 +11,7 @@ use Yii;
 class Person extends ActiveRecord {
 	public function rules() {
 		return [
-			[['name', 'surname', 'place', 'gender'], 'safe'],
+			[['name', 'surname', 'place', 'gender', 'owner'], 'safe'],
 			[['name', 'surname', 'place', 'gender'], 'trim'],
 			[['surname', 'gender'], 'required'],
 			[['name', 'surname', 'place'], 'string', 'max' => 20],
@@ -36,24 +36,56 @@ class Person extends ActiveRecord {
 		return $this->hasOne(PersonDetail::class, ['person_id' => 'id']);
 	}
 
-	public function getRelationsFromPerson() {
+	public function getRelationsFromPersonRaw() {
 		return $this->hasMany(PersonRelation::class, ['person_a_id' => 'id']);
 	}
 
-	public function getRelationsToPerson() {
+	public function getRelationsToPersonRaw() {
 		return $this->hasMany(PersonRelation::class, ['person_b_id' => 'id']);
 	}
 
 	public function getPersonAttachments() {
 		return $this->hasMany(PersonAttachment::class, ['person_id' => 'id']);
 	}
+	public function getRelationsFromPerson() {
+		$rawRelations = $this->relationsFromPersonRaw;
+		$filteredRelations = [];
+		$userId = Yii::$app->user->id;
+		foreach ($rawRelations as $record) {
+			$ownerA = Person::findOne($record->person_a_id)->owner;
+			$ownerB = Person::findOne($record->person_b_id)->owner;
+			$conditionA = ($ownerA == $userId);
+			$conditionB = ($ownerB == $userId);
+			if (($conditionA && $conditionB) || ($userId == 'admin')) {
+				$filteredRelations[] = $record;
+			}
+		}
+		return $filteredRelations;
+	}
+
+	public function getRelationsToPerson() {
+		$rawRelations = $this->relationsToPersonRaw;
+		$filteredRelations = [];
+		$userId = Yii::$app->user->id;
+		foreach ($rawRelations as $record) {
+			$ownerA = Person::findOne($record->person_a_id)->owner;
+			$ownerB = Person::findOne($record->person_b_id)->owner;
+			$conditionA = ($ownerA == $userId);
+			$conditionB = ($ownerB == $userId);
+			if (($conditionA && $conditionB) || ($userId == 'admin')) {
+				$filteredRelations[] = $record;
+			}
+		}
+		return $filteredRelations;
+	}
+
 	/**
 	 * @return array relations the person is involved in
 	 */
 	public function givenRelations() {
 
 		$relationsFrom = $this->relationsFromPerson;
-		// $relations fields: relation_id, relation, to_whom, to_whom_id
+		// $relations keys: relation_id, relation, to_whom, to_whom_id
 		$relations = [];
 
 		foreach ($relationsFrom as $record) {

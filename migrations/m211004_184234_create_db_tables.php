@@ -19,6 +19,7 @@ class m211004_184234_create_db_tables extends Migration {
 				'name' => $this->string(20),
 				'place' => $this->string(20),
 				'gender' => $this->char(1)->notNull(),
+				'owner' => $this->string(100)->notNull(),
 			]);
 		}
 

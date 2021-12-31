@@ -69,19 +69,22 @@ class PersonController extends Controller {
 	public function actionView($id) {
 
 		$person = Person::findOne($id);
-		$searchModel = new RelationSearch();
-		$AttachmentCount = count(PersonAttachment::find()->where(['person_id' => $id])->all());
-		$provider = $searchModel->search(Yii::$app->request->get());
-		return $this->render('personView', [
-			'model' => $person,
-			'provider' => $provider,
-			'attachmentCount' => $AttachmentCount,
-			'searchModel' => $searchModel
-		]);
+		if (($person->owner == Yii::$app->user->id) || (Yii::$app->user->id == 'admin')) {
+			$searchModel = new RelationSearch();
+			$AttachmentCount = count(PersonAttachment::find()->where(['person_id' => $id])->all());
+			$provider = $searchModel->search(Yii::$app->request->get());
+			return $this->render('personView', [
+				'model' => $person,
+				'provider' => $provider,
+				'attachmentCount' => $AttachmentCount,
+				'searchModel' => $searchModel
+			]);
+		} else $this->redirect(['index']);
 	}
 
 	public function actionNewPerson() {
 		$person = new Person;
+		$person->owner = Yii::$app->user->id;
 		$personDetail = new PersonDetail;
 		$AttachmentCount = 0;
 
@@ -108,8 +111,9 @@ class PersonController extends Controller {
 
 	public function actionUpdate($id = null) {
 		$AttachmentCount = count(PersonAttachment::find()->where(['person_id' => $id])->all());
+		$userId = Yii::$app->user->id;
 
-		if (($id != null) && ($person = Person::findOne($id))) {
+		if (($id != null) && ($person = Person::findOne($id)) && (($person->owner == $userId) || $userId == 'admin')) {
 
 			if (!$personDetail = $person->detail) {
 				$personDetail = new PersonDetail;
@@ -154,18 +158,23 @@ class PersonController extends Controller {
 	public function actionDelete($id) {
 
 		$person = Person::findOne($id);
-		$session = Yii::$app->session;
+		$userId = Yii::$app->user->id;
+		if (($person->owner == $userId) || ($userId == 'admin')) {
+			$session = Yii::$app->session;
 
-		Undelete::addUndeleteRecord($person);
+			Undelete::addUndeleteRecord($person);
 
-		try {
-			$person->delete();
-			Yii::$app->session->setFlash('personDeleted', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'deleted'));
-		} catch (\Exception $ex) {
+			try {
+				$person->delete();
+				Yii::$app->session->setFlash('personDeleted', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'deleted'));
+			} catch (\Exception $ex) {
 
-			$session->setFlash('personDeleteError', $ex->getMessage());
+				$session->setFlash('personDeleteError', $ex->getMessage());
+			}
+			return $this->redirect(['index']);
+		} else {
+			return $this->redirect(['index']);
 		}
-		return $this->redirect(['index']);
 	}
 
 	public function actionUndelete() {

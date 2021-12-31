@@ -59,6 +59,11 @@ if (Yii::$app->session->hasFlash('personAdded')) {
             <?= $form->field($person, 'name') ?>
             <?= $form->field($person, 'gender') ?>
             <?= $form->field($person, 'place') ?>
+            <?= Html::activeHiddenInput(
+				$person,
+				'owner',
+				['value' => Yii::$app->user->id != $person->owner ? $person->owner : Yii::$app->user->id]
+			) ?>
         </div>
 
 

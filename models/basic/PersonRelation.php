@@ -36,4 +36,16 @@ class PersonRelation extends ActiveRecord {
     public function getRelationName() {
         return $this->hasOne(RelationName::class, ['id' => 'relation_ab_id']);
     }
+
+    public function checkOwnership() {
+        $userId = Yii::$app->user->id;
+        $ownerA = $this->person_a->owner;
+        $ownerB = $this->person_b->owner;
+        $conditionA = ($userId == $ownerA);
+        $conditionB = ($userId == $ownerB);
+        if (($conditionA && $conditionB) || ($userId == 'admin')) {
+            return true;
+        }
+        return false;
+    }
 }
