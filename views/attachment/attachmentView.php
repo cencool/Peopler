@@ -17,7 +17,7 @@ $this->registerJsVar('deleteMessage', Yii::t('app', 'Really delete the file ?'))
 <div class='row'>
     <?php if ($fileGallery) {
         foreach ($fileGallery as $person_file) { ?>
-    <div class='col-xs-3  h-25'>
+    <div class='col-sm-3  h-25'>
         <?php $fileId = $person_file->id;
                 $id = $person_file->person_id;
                 echo Html::img(

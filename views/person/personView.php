@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 ?>
 
 <div class='row'>
-    <div class='col-xs-6'>
+    <div class='col-sm-6'>
         <?php
 		echo DetailView::widget([
 			'model' => $model,
@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->na
 		]);
 		?>
     </div>
-    <div class='col-xs-6'>
+    <div class='col-sm-6'>
         <?php
 
 		if ($model->detail) {

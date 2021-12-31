@@ -192,6 +192,7 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'classmate', 'm', 'classmate'],
 					['m', 'colleague', 'f', 'colleague'],
 					['m', 'colleague', 'm', 'colleague'],
+					['f', 'colleague', 'f', 'colleague'],
 					['m', 'cousin', 'f', 'cousin'],
 					['m', 'cousin', 'm', 'cousin'],
 					['f', 'cousin', 'f', 'cousin'],

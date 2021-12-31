@@ -23,10 +23,10 @@ $undeleteButtonClass = Yii::$app->session['undelete'] != null ?   'btn btn-prima
 
 ?>
 <div class='row'>
-    <div class='col-xs-6 text-left'>
+    <div class='col-sm-6 text-left'>
         <?= Html::a(Yii::t('app', 'New Item'), ['person/new-person', 'id' => null], ['class' => 'btn btn-primary']) ?>
     </div>
-    <div class='col-xs-6 text-right'>
+    <div class='col-sm-6 text-right'>
         <?= Html::a(Yii::t('app', 'Undelete'), ['person/undelete'], ['class' => $undeleteButtonClass]) ?>
     </div>
 </div>

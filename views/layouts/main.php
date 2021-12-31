@@ -18,6 +18,13 @@ $this->beginPage();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= Html::encode($this->title) ?></title>
+    <style>
+    @media screen and (min-width:700px) {
+        #collapse-button {
+            display: none;
+        }
+    }
+    </style>
     <?php $this->head() ?>
 </head>
 
@@ -29,39 +36,45 @@ $this->beginPage();
                 <div class='navbar-header'>
                     <a href=<?= Url::to(['site/index']) ?> class='navbar-brand'><img src='/icicle.png' width='25'
                             height='25'></a>
+                    <button id='collapse-button' type="button" class='btn btn-primary navbar-btn' data-toggle="collapse"
+                        data-target="#myNavbar">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    </button>
                 </div>
-                <ul class='nav navbar-nav'>
-                    <li>
-                        <?= Html::a(Yii::t('app', 'List'), ['person/index']) ?>
-                    </li>
-                </ul>
-                <ul class='nav navbar-nav navbar-right'>
-                    <?php if (Yii::$app->user->isGuest) { ?>
-                    <li>
-                        <?= Html::a(Yii::t('app', 'Login'), ['site/login']) ?>
-                    </li>
-                    <?php } else { ?>
-                    <li>
-                        <?= Html::a(Yii::t('app', 'Logout') . ': ' . Yii::$app->user->id, ['site/logout']) ?>
-                    </li>
-                    <?php } ?>
-                    <li class='dropdown'>
-                        <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
-                            <?= Yii::t('app', 'Language') . ' ' ?><span class='caret'></span></a>
-                        <ul class='dropdown-menu dropdown-menu-right'>
-                            <li><a href=<?= Url::current(['lng' => 'sk']) ?>>SK</a></li>
-                            <li><a href=<?= Url::current(['lng' => 'en']) ?>>EN</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                <div class='collapse navbar-collapse' id='myNavbar'>
+                    <ul class='nav navbar-nav'>
+                        <li>
+                            <?= Html::a(Yii::t('app', 'List'), ['person/index']) ?>
+                        </li>
+                    </ul>
+                    <ul class='nav navbar-nav navbar-right'>
+                        <?php if (Yii::$app->user->isGuest) { ?>
+                        <li>
+                            <?= Html::a(Yii::t('app', 'Login'), ['site/login']) ?>
+                        </li>
+                        <?php } else { ?>
+                        <li>
+                            <?= Html::a(Yii::t('app', 'Logout') . ': ' . Yii::$app->user->id, ['site/logout']) ?>
+                        </li>
+                        <?php } ?>
+                        <li class='dropdown'>
+                            <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                                <?= Yii::t('app', 'Language') . ' ' ?><span class='caret'></span></a>
+                            <ul class='dropdown-menu dropdown-menu-right'>
+                                <li><a href=<?= Url::current(['lng' => 'sk']) ?>>SK</a></li>
+                                <li><a href=<?= Url::current(['lng' => 'en']) ?>>EN</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
     <div class='container'>
         <?= Breadcrumbs::widget([
-			'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-			'homeLink' => false,
-		]) ?>
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'homeLink' => false,
+        ]) ?>
 
         <div class='content'>
             <?= $content ?>
