@@ -85,7 +85,7 @@ class RelationController extends Controller {
 			$duplicate = PersonRelation::find()
 				->where(['person_a_id' => $model->person_b_id, 'relation_ab_id' => $relationToId, 'person_b_id' => $id])->all();
 
-			if (!$duplicate) {
+			if (!$duplicate && ($model->person_a_id != $model->person_b_id)) {
 
 				try {
 					if ($model->save()) {
@@ -105,6 +105,9 @@ class RelationController extends Controller {
 						'success' => $success,
 					]);
 				}
+			} elseif ($model->person_a_id == $model->person_b_id) {
+				$success = false;
+				$session->setFlash('relationDuplicate', Yii::t('app', "Can't define relation to same person!"));
 			} else {
 				$success = false;
 				$session->setFlash('relationDuplicate', Yii::t('app', 'Relation already exists!'));

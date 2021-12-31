@@ -51,7 +51,7 @@ return [
 	'Submit' => 'Poslať',
 	'Attachment upload' => 'Nahratie príloh',
 	'Really delete the file ?' => 'Naozaj vymazať súbor ?',
-
+	"Can't define relation to same person!" => 'Nemožno zadať vzťah k tej istej osobe!',
 
 
 

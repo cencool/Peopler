@@ -27,6 +27,7 @@ if (Yii::$app->session->hasFlash('relationDuplicate')) {
 		'options' => ['class' => 'alert-info'],
 		'body' => Yii::$app->session->getFlash('relationDuplicate'),
 	]);
+	$model->person_b_id = null;
 }
 if (Yii::$app->session->hasFlash('relationAddError')) {
 	echo Alert::widget([
@@ -47,22 +48,22 @@ $form = ActiveForm::begin([
 
 ?>
 <div class='row'>
-	<div class='col-xs-3'>
-		<?php
+    <div class='col-xs-3'>
+        <?php
 		echo $form->field($model, 'relation_ab_id')->dropDownList($relationsList, ['prompt' => Yii::t('app', 'Select')]);
 		echo Html::activeHiddenInput($model, 'person_b_id');
 		echo Html::activeHiddenInput($model, 'person_a_id', ['value' => strval($person->id)]);
 		?>
-	</div>
-	<div class='col-xs-4'>
-		<p><b><?= Yii::t('app', 'To Whom') . ':' ?></b></p>
-		<h3 id='selected-name'></h3>
-	</div>
+    </div>
+    <div class='col-xs-4'>
+        <p><b><?= Yii::t('app', 'To Whom') . ':' ?></b></p>
+        <h3 id='selected-name'></h3>
+    </div>
 </div>
 
 
 <div class='form-group'>
-	<?= Html::submitButton(Yii::t('app', 'Add Relation'), ['class' => 'btn btn-primary']) ?>
+    <?= Html::submitButton(Yii::t('app', 'Add Relation'), ['class' => 'btn btn-primary']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>
@@ -106,17 +107,17 @@ echo GridView::widget([
 		[
 			'class' => 'yii\grid\ActionColumn',
 			'header' => Yii::t('app', 'Action'),
-			'urlCreator'=> function($action, $model) {
-				switch ($action) { 
-				case 'view':
-					return Url::to(['person/view','id'=>$model->id]);
-					break;
-				case 'update':
-					return Url::to(['person/update','id'=>$model->id]);
-					break;
-				case 'delete':
-					return Url::to(['person/delete','id'=>$model->id]);
-					break;
+			'urlCreator' => function ($action, $model) {
+				switch ($action) {
+					case 'view':
+						return Url::to(['person/view', 'id' => $model->id]);
+						break;
+					case 'update':
+						return Url::to(['person/update', 'id' => $model->id]);
+						break;
+					case 'delete':
+						return Url::to(['person/delete', 'id' => $model->id]);
+						break;
 				}
 			}
 		],
