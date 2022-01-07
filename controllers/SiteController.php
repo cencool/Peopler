@@ -41,7 +41,7 @@ class SiteController extends Controller {
 		$post = Yii::$app->request->post();
 		if ($model->load($post)) {
 			if (($identity = User::findIdentity($model->IdInput)) && ($identity->validateAuthKey($model->PwdInput))) {
-				Yii::$app->user->login($identity);
+				Yii::$app->user->login($identity, 600);
 				return $this->redirect(Yii::$app->user->returnUrl);
 			} else {
 				$session = Yii::$app->session;
@@ -55,5 +55,4 @@ class SiteController extends Controller {
 		Yii::$app->user->logout();
 		return $this->redirect(['site/login']);
 	}
-
 }

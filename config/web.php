@@ -49,9 +49,10 @@ $config = [
 			'enableStrictParsing' => false,
 			'cache' => null,
 		],
-		'user'=> [
+		'user' => [
 			'identityClass' => 'app\models\basic\User',
-			'loginUrl' => ['site/login','required'=>true],
+			'loginUrl' => ['site/login', 'required' => true],
+			'enableAutoLogin' => 'true',
 		],
 
 	],

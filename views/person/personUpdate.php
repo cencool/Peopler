@@ -37,69 +37,69 @@ if (Yii::$app->session->hasFlash('personAdded')) {
 
 
 <div class='row'>
-    <?php
+	<?php
 
 	$form = ActiveForm::begin([
 		'layout' => 'horizontal',
 		'fieldConfig' => [
 			'template' => "
-        <div class='col-sm-3 text-right'>
+        <div class='col-sm-3 text-left'>
         {label}</div><div class='col-sm-8'>{input}</div>\n{error}{hint}",
 			'labelOptions' => ['class' => 'control-label'],
 		],
 	]);
 	?>
-    <div class='col-sm-4'>
-        <p><b><?= Yii::t('app', 'Basic Information') ?></b></p>
-        <hr>
+	<div class='col-xs-4'>
+		<p><b><?= Yii::t('app', 'Basic Information') ?></b></p>
+		<hr>
 
-        <div class='form-group'>
+		<div class='form-group'>
 
-            <?= $form->field($person, 'surname') ?>
-            <?= $form->field($person, 'name') ?>
-            <?= $form->field($person, 'gender') ?>
-            <?= $form->field($person, 'place') ?>
-            <?= Html::activeHiddenInput(
+			<?= $form->field($person, 'surname') ?>
+			<?= $form->field($person, 'name') ?>
+			<?= $form->field($person, 'gender') ?>
+			<?= $form->field($person, 'place') ?>
+			<?= Html::activeHiddenInput(
 				$person,
 				'owner',
 				['value' => Yii::$app->user->id != $person->owner ? $person->owner : Yii::$app->user->id]
 			) ?>
-        </div>
+		</div>
 
 
 
-    </div>
-    <div class='col-sm-8'>
-        <div class='row'>
-            <div class='col-sm-10'>
-                <p><b><?= Yii::t('app', 'Detail Information') ?></b></p>
-                <hr>
-            </div>
-            <div class='col-sm-2'>
-                <div class='form-group'>
-                    <?= Html::submitButton(Yii::t('app', 'Update'), ['class' => 'btn  btn-primary pull-right']) ?>
-                </div>
-            </div>
-        </div>
+	</div>
+	<div class='col-xs-8'>
+		<div class='row'>
+			<div class='col-xs-10'>
+				<p><b><?= Yii::t('app', 'Detail Information') ?></b></p>
+				<hr>
+			</div>
+			<div class='col-xs-2'>
+				<div class='form-group'>
+					<?= Html::submitButton(Yii::t('app', 'Update'), ['class' => 'btn  btn-primary pull-right']) ?>
+				</div>
+			</div>
+		</div>
 
-        <div class='form-group'>
+		<div class='form-group'>
 
-            <?= $form->field($personDetail, 'marital_status') ?>
+			<?= $form->field($personDetail, 'marital_status') ?>
 
-            <?php
+			<?php
 			if ($person->gender == null || $person->gender === 'f') {
 				echo $form->field($personDetail, 'maiden_name');
 			}
 			?>
-            <?= $form->field($personDetail, 'address') ?>
-            <?= $form->field($personDetail, 'note')->textarea(['rows' => 4,]) ?>
+			<?= $form->field($personDetail, 'address') ?>
+			<?= $form->field($personDetail, 'note')->textarea(['rows' => 4,]) ?>
 
-            <?= Html::a(Yii::t('app', 'Attachments') . '(' . $attachmentCount . ')', ['attachment/upload', 'id' => $person->id], ['class' => 'btn btn-primary pull-right']) ?>
-        </div>
+			<?= Html::a(Yii::t('app', 'Attachments') . '(' . $attachmentCount . ')', ['attachment/upload', 'id' => $person->id], ['class' => 'btn btn-primary pull-right']) ?>
+		</div>
 
 
-        <?php ActiveForm::end() ?>
-    </div>
+		<?php ActiveForm::end() ?>
+	</div>
 </div>
 
 <?php
@@ -113,15 +113,15 @@ if (Yii::$app->session->hasFlash('relationDeleted')) {
 $addRelationClass = ($person->id != null) ? 'btn btn-primary pull-left' : 'disabled btn btn-primary pull-left';
 ?>
 <div class='row'>
-    <div class='col-sm-2'>
-        <h4><b><?= Yii::t('app', 'Relations') ?></b></h3>
-    </div>
-    <div class='col-sm-2'>
-        <?= Html::a(Yii::t('app', 'Add Relation'), ['relation/add-relation', 'id' => $person->id], ['class' => $addRelationClass])  ?>
-    </div>
+	<div class='col-xs-2'>
+		<h4><b><?= Yii::t('app', 'Relations') ?></b></h3>
+	</div>
+	<div class='col-xs-2'>
+		<?= Html::a(Yii::t('app', 'Add Relation'), ['relation/add-relation', 'id' => $person->id], ['class' => $addRelationClass])  ?>
+	</div>
 </div>
 <div class='row'>
-    <?php
+	<?php
 	echo GridView::widget([
 		'dataProvider' => $provider,
 		'filterModel' => $searchModel,
