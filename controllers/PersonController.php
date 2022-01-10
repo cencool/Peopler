@@ -1,6 +1,10 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This controller is related to actions performed on Person.
+ */
+
 
 namespace app\controllers;
 
@@ -9,12 +13,9 @@ use app\models\basic\Person;
 use app\models\basic\PersonSearch;
 use app\models\basic\PersonDetail;
 use app\models\basic\RelationSearch;
-use app\models\basic\UploadFile;
 use app\models\basic\PersonAttachment;
-use yii\web\UploadedFile;
 use app\models\basic\Undelete;
 use yii\filters\AccessControl;
-use yii\data\Pagination;
 use Yii;
 
 class PersonController extends Controller {
@@ -34,7 +35,9 @@ class PersonController extends Controller {
 			]
 		];
 	}
-
+	/**
+	 * Managing correct language selection
+	 */
 	public function beforeAction($action) {
 
 		$session = Yii::$app->session;
@@ -57,7 +60,10 @@ class PersonController extends Controller {
 		}
 		return true;
 	}
-
+	/**
+	 * Starting page of application.
+	 * Displays table of persons visible for particular user (after login)
+	 */
 	public function actionIndex() {
 		$searchModel = new PersonSearch();
 		$provider = $searchModel->search(Yii::$app->request->get(), 10);

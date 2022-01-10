@@ -52,7 +52,7 @@ class m211004_184234_create_db_tables extends Migration {
 				'id' => $this->primaryKey(),
 				'gender' => $this->char(1)->notNull(),
 				'relation_name' => $this->string(20)->notNull(),
-				'token' => $this->string(20)->notNull(),
+				'token' => $this->string(20)->notNull(), // for computed relationships
 			]);
 
 			$this->execute(
