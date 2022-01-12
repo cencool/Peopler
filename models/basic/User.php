@@ -3,32 +3,26 @@
 namespace app\models\basic;
 
 use yii\web\IdentityInterface;
+use yii\db\ActiveRecord;
 use Yii;
 
-class User implements IdentityInterface {
+class User extends ActiveRecord implements IdentityInterface {
 
-
-	private $_id;
-
-	function __construct($id) {
-		$this->_id = $id;
-	}
 
 	public static function findIdentity($id) {
-		$identities = Yii::$app->params['identities'];
-		return array_key_exists($id, $identities) ? new self($id) : null;
+		$user = User::find()->where(['user_id' => $id])->one();
+		return $user;
 	}
 
 	public function getId() {
-		return $this->_id;
+		return $this->user_id;
 	}
 
 	public static function findIdentityByAccessToken($token, $type = null) {
 	}
 
 	public function getAuthKey() {
-		$identities = Yii::$app->params['identities'];
-		return $identities[$this->_id];
+		return $this->password;
 	}
 
 	public function validateAuthKey($authKey) {

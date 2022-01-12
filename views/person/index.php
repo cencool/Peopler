@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Alert;
+use yii\helpers\BaseHtml;
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 
@@ -65,6 +66,26 @@ $undeleteButtonClass = Yii::$app->session['undelete'] != null ?   'btn btn-prima
 		[
 			'class' => 'yii\grid\ActionColumn',
 			'header' => Yii::t('app', 'Action'),
+
+			'buttons' => [
+				'delete' => function ($url, $model, $key) {
+					return Html::a(
+						"<span class='glyphicon glyphicon-trash'></span>",
+						$url,
+						[
+							'data' => [
+								'confirm' => 'Are you sure ?',
+								'method' => 'post',
+								'params' => [
+									'_csrf' => Yii::$app->request->getCsrfToken()
+								]
+							]
+						]
+					);
+				}
+
+			]
+
 		],
 
 

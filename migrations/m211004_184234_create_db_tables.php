@@ -238,6 +238,22 @@ class m211004_184234_create_db_tables extends Migration {
 				'CASCADE',
 			);
 		}
+		if (Yii::$app->db->getTableSchema('user', true) === null) {
+			$this->createTable('user', [
+				'id' => $this->primaryKey(),
+				'user_id' => $this->string()->notNull(),
+				'password' => $this->string()->notNull(),
+			]);
+		}
+		$this->batchInsert(
+			'user',
+			['user_id', 'password'],
+			[
+				['admin', 'admin'],
+				['user', 'user'],
+				['demo', 'demo'],
+			]
+		);
 	}
 
 
@@ -246,6 +262,12 @@ class m211004_184234_create_db_tables extends Migration {
 	 */
 	public function safeDown() {
 		//echo "m211004_184234_create_db_tables cannot be reverted.\n";
+		if (Yii::$app->db->getTableSchema('user', true)) {
+			$this->dropTable('user');
+		}
+		if (Yii::$app->db->getTableSchema('person_attachment', true)) {
+			$this->dropTable('person_attachment');
+		}
 		if (Yii::$app->db->getTableSchema('person_relation', true)) {
 			$this->dropTable('person_relation');
 		}
