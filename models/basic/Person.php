@@ -48,35 +48,39 @@ class Person extends ActiveRecord {
 		return $this->hasMany(PersonAttachment::class, ['person_id' => 'id']);
 	}
 	public function getRelationsFromPerson() {
-		$rawRelations = $this->relationsFromPersonRaw;
-		$filteredRelations = [];
-		$userId = Yii::$app->user->id;
-		foreach ($rawRelations as $record) {
-			$ownerA = Person::findOne($record->person_a_id)->owner;
-			$ownerB = Person::findOne($record->person_b_id)->owner;
-			$conditionA = ($ownerA == $userId);
-			$conditionB = ($ownerB == $userId);
-			if (($conditionA && $conditionB) || ($userId == 'admin')) {
-				$filteredRelations[] = $record;
-			}
-		}
-		return $filteredRelations;
+		$sql = <<<SQL
+		select pa.owner as a_owner,pb.owner as b_owner,pr.id as relation_id,
+		rn.relation_name as relation,pb.id as to_whom_id,
+		concat(pb.surname,' ',pb.name) as relation_to_whom
+		from person pa
+		left join person_relation pr on pr.person_a_id = pa.id
+		left join person pb on pb.id = pr.person_b_id
+		left join relation_name rn on rn.id = pr.relation_ab_id
+		where pr.person_a_id = :id
+		SQL;
+		$relationsDirect = Yii::$app->db->createCommand($sql, [':id' => $this->id])->queryAll();
+
+		return $relationsDirect;
 	}
 
 	public function getRelationsToPerson() {
-		$rawRelations = $this->relationsToPersonRaw;
-		$filteredRelations = [];
-		$userId = Yii::$app->user->id;
-		foreach ($rawRelations as $record) {
-			$ownerA = Person::findOne($record->person_a_id)->owner;
-			$ownerB = Person::findOne($record->person_b_id)->owner;
-			$conditionA = ($ownerA == $userId);
-			$conditionB = ($ownerB == $userId);
-			if (($conditionA && $conditionB) || ($userId == 'admin')) {
-				$filteredRelations[] = $record;
-			}
-		}
-		return $filteredRelations;
+		$sql = <<<SQL
+		select
+		pa.owner as a_owner, pb.owner as b_owner, pr.id as relation_id, 
+		case when rp.relation_ab = rn.relation_name then rp.relation_ba else rp.relation_ab end as relation,
+		pb.id as to_whom_id, 
+		concat(pb.surname,' ',pb.name) as relation_to_whom
+		from person pa
+		left join person_relation pr on pa.id = pr.person_b_id
+		left join person pb on pb.id = pr.person_a_id
+		left join relation_name rn on rn.id = pr.relation_ab_id
+		left join relation_pair rp on (rp.relation_ab = rn.relation_name or rp.relation_ba = rn.relation_name)
+		where (pa.id = :id 
+		and ((pa.gender = rp.gender_a and pb.gender = rp.gender_b) or (pa.gender = rp.gender_b and pb.gender = rp.gender_a)))
+		SQL;
+		$relationsIndirect = Yii::$app->db->createCommand($sql, [':id' => $this->id])->queryAll();
+
+		return $relationsIndirect;
 	}
 
 	/**
@@ -85,32 +89,10 @@ class Person extends ActiveRecord {
 	public function givenRelations() {
 
 		$relationsFrom = $this->relationsFromPerson;
-		// $relations keys: relation_id, relation, to_whom, to_whom_id
-		$relations = [];
-
-		foreach ($relationsFrom as $record) {
-			$relationRow['relation_id'] = $record->id;
-			$relationRow['relation'] = $record->relationName->relation_name;
-			$relationRow['to_whom_id'] = $record->person_b_id;
-			$relationRow['relation_to_whom'] = $record->person_b->surname . ' ' . $record->person_b->name;
-			$relations[] = $relationRow;
-		}
-
-		unset($relationRow);
 		$relationsTo = $this->relationsToPerson;
-		$personFromGender = $this->gender;
-		foreach ($relationsTo as $record) {
-			$personToGender = $record->person_a->gender;
-			$relationTo = $record->relationName->relation_name;
-			$relationRow['relation_id'] = $record->id;
-			$relationRow['to_whom_id'] = $record->person_a_id;
-			$relationRow['relation_to_whom'] = $record->person_a->surname . ' ' . $record->person_a->name;
-			$relationRow['relation'] = RelationPair::relationComplement($personFromGender, $personToGender, $relationTo);
+		// $relations keys: a_owner, b_owner, relation_id, relation, to_whom_id, relation_to_whom
 
-			$relations[] = $relationRow;
-		}
-
-		return $relations;
+		return ArrayHelper::merge($relationsFrom, $relationsTo);
 	}
 
 	public function computedRelations() {

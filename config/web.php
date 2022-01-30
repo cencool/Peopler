@@ -54,10 +54,6 @@ $config = [
 			'loginUrl' => ['site/login', 'required' => true],
 			'enableAutoLogin' => 'true',
 		],
-		'authManager' => [
-			'class' => 'yii\rbac\PhpManager',
-		],
-
 	],
 	'params' => $params,
 
