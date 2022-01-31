@@ -93,7 +93,7 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'grandfather', 'grandparent'],
 					['m', 'grandson', 'grandchild'],
 					['m', 'husband', 'partner'],
-					['m', 'nephew', 'newphew'],
+					['m', 'nephew', 'nephew'],
 					['m', 'son', 'child'],
 					['m', 'son-in-law', 'child-in-law'],
 					['m', 'uncle', 'uncle'],
