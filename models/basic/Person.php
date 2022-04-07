@@ -5,7 +5,6 @@ namespace app\models\basic;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use app\models\basic\RelationName;
-use phpDocumentor\Reflection\Types\Array_;
 use Yii;
 
 class Person extends ActiveRecord {
