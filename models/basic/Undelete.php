@@ -41,7 +41,7 @@ class Undelete {
 		$undeleteRecord[] = ['detail' => $dataAttributes];
 
 		// extract and store person's relations From attributes
-		$relations = $data->relationsFromPerson;
+		$relations = $data->relationsFromPersonRaw;
 
 		foreach ($relations as $relation) {
 			$dataAttributes = [];
@@ -55,7 +55,7 @@ class Undelete {
 
 
 		// extract and store person's relations from attributes
-		$relations = $data->relationsToPerson;
+		$relations = $data->relationsToPersonRaw;
 
 		foreach ($relations as $relation) {
 			$dataAttributes = [];
@@ -99,6 +99,7 @@ class Undelete {
 	public static function undeletePerson() {
 
 		$session = Yii::$app->session;
+		$personId = -1;
 		if ($undeleteRecord = $session['undelete']) {
 
 			$session->remove('undelete');
