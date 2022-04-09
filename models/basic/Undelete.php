@@ -125,14 +125,14 @@ class Undelete {
 						$personRelation = new PersonRelation;
 						$personRelation->attributes = $dataBlock['relationFrom'];
 						$personRelation->person_a_id = $personId;
-						$personRelation->save();
+						if (!$personRelation->save()) Yii::error('Relation "From" undelete failed',__METHOD__);
 						break;
 					case ('relationTo'):
 						// recover relationTo
 						$personRelation = new PersonRelation;
 						$personRelation->attributes = $dataBlock['relationTo'];
 						$personRelation->person_b_id = $personId;
-						$personRelation->save();
+						if(!$personRelation->save()) Yii::error('Relation "To" undelete failed',__METHOD__);
 						break;
 					case ('attachment'):
 						// recover attachment

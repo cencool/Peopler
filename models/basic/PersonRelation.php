@@ -13,7 +13,8 @@ class PersonRelation extends ActiveRecord {
     public function rules() {
         return [
             [['person_a_id', 'person_b_id', 'relation_ab_id'], 'safe'],
-            [['person_a_id', 'person_b_id', 'relation_ab_id'], 'required', 'message' => Yii::t('app', 'Second person missing')],
+            [['person_a_id', 'person_b_id'], 'required', 'message' => Yii::t('app', 'Second person missing')],
+            [['relation_ab_id'], 'required', 'message' => Yii::t('app', 'Select relation !')],
             [['person_a_id', 'person_b_id'], 'filter', 'filter' => 'intval'],
         ];
     }

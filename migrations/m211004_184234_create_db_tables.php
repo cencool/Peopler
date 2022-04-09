@@ -197,6 +197,7 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'cousin', 'm', 'cousin'],
 					['f', 'cousin', 'f', 'cousin'],
 					['m', 'friend', 'f', 'friend'],
+					['f', 'friend', 'f', 'friend'],
 					['m', 'friend', 'm', 'friend'],
 					['m', 'grandson', 'f', 'grandmother'],
 					['m', 'grandson', 'm', 'grandfather'],
