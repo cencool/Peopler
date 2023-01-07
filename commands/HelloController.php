@@ -11,7 +11,6 @@ namespace app\commands;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\console\widgets\Table;
-use app\models\basic\Person;
 use app\models\basic\PersonAttachment;
 use yii\helpers\FileHelper;
 
