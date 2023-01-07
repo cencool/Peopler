@@ -7,7 +7,8 @@ use yii\bootstrap\Alert;
 $form = ActiveForm::begin([
 	'options' => ['class' => 'form-horizontal'],
 	'action' => ['site/login'],
-])
+]);
+$this->title = Yii::t('app','Login');
 ?>
 
 <div class='row'>

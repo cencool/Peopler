@@ -4,7 +4,7 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-	'id' => 'ydba',
+	'id' => 'peopler',
 	'basePath' => dirname(__DIR__),
 	'bootstrap' => ['log'],
 	'aliases' => [
@@ -19,7 +19,7 @@ $config = [
 			// !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
 			'cookieValidationKey' => 'QlJXFYMvTcg47A7JMG9ID3k23pixne-p',
 			'enableCookieValidation' => true,
-			'enableCsrfValidation' => false,
+			'enableCsrfValidation' => true,
 		],
 		'log' => [
 			'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -49,11 +49,11 @@ $config = [
 			'enableStrictParsing' => false,
 			'cache' => null,
 		],
-		'user'=> [
+		'user' => [
 			'identityClass' => 'app\models\basic\User',
-			'loginUrl' => ['site/login','required'=>true],
+			'loginUrl' => ['site/login', 'required' => true],
+			'enableAutoLogin' => 'true',
 		],
-
 	],
 	'params' => $params,
 

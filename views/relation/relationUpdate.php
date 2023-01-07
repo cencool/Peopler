@@ -9,6 +9,7 @@ use yii\bootstrap\Alert;
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $person->surname . ', ' . $person->name, 'url' => ['person/update', 'id' => $person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Update Relation')];
+$this->title=Yii::t('app','Update Relation');
 
 if (Yii::$app->session->hasFlash('relationUpdated')) {
 	echo Alert::widget([

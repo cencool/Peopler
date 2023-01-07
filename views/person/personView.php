@@ -6,6 +6,7 @@ use yii\helpers\Html;
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->name];
+$this->title=Yii::t('app','Person');
 
 ?>
 

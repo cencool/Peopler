@@ -41,7 +41,7 @@ class Undelete {
 		$undeleteRecord[] = ['detail' => $dataAttributes];
 
 		// extract and store person's relations From attributes
-		$relations = $data->relationsFromPerson;
+		$relations = $data->relationsFromPersonRaw;
 
 		foreach ($relations as $relation) {
 			$dataAttributes = [];
@@ -55,7 +55,7 @@ class Undelete {
 
 
 		// extract and store person's relations from attributes
-		$relations = $data->relationsToPerson;
+		$relations = $data->relationsToPersonRaw;
 
 		foreach ($relations as $relation) {
 			$dataAttributes = [];
@@ -99,6 +99,7 @@ class Undelete {
 	public static function undeletePerson() {
 
 		$session = Yii::$app->session;
+		$personId = -1;
 		if ($undeleteRecord = $session['undelete']) {
 
 			$session->remove('undelete');
@@ -124,14 +125,14 @@ class Undelete {
 						$personRelation = new PersonRelation;
 						$personRelation->attributes = $dataBlock['relationFrom'];
 						$personRelation->person_a_id = $personId;
-						$personRelation->save();
+						if (!$personRelation->save()) Yii::error('Relation "From" undelete failed',__METHOD__);
 						break;
 					case ('relationTo'):
 						// recover relationTo
 						$personRelation = new PersonRelation;
 						$personRelation->attributes = $dataBlock['relationTo'];
 						$personRelation->person_b_id = $personId;
-						$personRelation->save();
+						if(!$personRelation->save()) Yii::error('Relation "To" undelete failed',__METHOD__);
 						break;
 					case ('attachment'):
 						// recover attachment

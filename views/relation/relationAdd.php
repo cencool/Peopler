@@ -14,6 +14,7 @@ AddRelationAsset::register($this);
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $person->surname . ', ' . $person->name, 'url' => ['person/update', 'id' => $person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Add Relation')];
+$this->title = Yii::t('app','Add Relation');
 
 
 if (Yii::$app->session->hasFlash('relationAdded')) {

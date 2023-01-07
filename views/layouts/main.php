@@ -19,7 +19,7 @@ $this->beginPage();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= Html::encode($this->title) ?></title>
     <style>
-    @media screen and (min-width:700px) {
+    @media screen and (min-width:800px) {
         #collapse-button {
             display: none;
         }

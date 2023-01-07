@@ -52,7 +52,9 @@ return [
 	'Attachment upload' => 'Nahratie príloh',
 	'Really delete the file ?' => 'Naozaj vymazať súbor ?',
 	"Can't define relation to same person!" => 'Nemožno zadať vzťah k tej istej osobe!',
-
-
+	'Really delete the record ?' => 'Naozaj vymazať záznam ?',
+	'Select relation !' => 'Vyber vzťah !',
+    'Edit' => 'Upraviť',
 
 ];
+

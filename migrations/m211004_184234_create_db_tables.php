@@ -52,7 +52,7 @@ class m211004_184234_create_db_tables extends Migration {
 				'id' => $this->primaryKey(),
 				'gender' => $this->char(1)->notNull(),
 				'relation_name' => $this->string(20)->notNull(),
-				'token' => $this->string(20)->notNull(),
+				'token' => $this->string(20)->notNull(), // for computed relationships
 			]);
 
 			$this->execute(
@@ -93,7 +93,7 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'grandfather', 'grandparent'],
 					['m', 'grandson', 'grandchild'],
 					['m', 'husband', 'partner'],
-					['m', 'nephew', 'newphew'],
+					['m', 'nephew', 'nephew'],
 					['m', 'son', 'child'],
 					['m', 'son-in-law', 'child-in-law'],
 					['m', 'uncle', 'uncle'],
@@ -197,6 +197,7 @@ class m211004_184234_create_db_tables extends Migration {
 					['m', 'cousin', 'm', 'cousin'],
 					['f', 'cousin', 'f', 'cousin'],
 					['m', 'friend', 'f', 'friend'],
+					['f', 'friend', 'f', 'friend'],
 					['m', 'friend', 'm', 'friend'],
 					['m', 'grandson', 'f', 'grandmother'],
 					['m', 'grandson', 'm', 'grandfather'],
@@ -238,6 +239,22 @@ class m211004_184234_create_db_tables extends Migration {
 				'CASCADE',
 			);
 		}
+		if (Yii::$app->db->getTableSchema('user', true) === null) {
+			$this->createTable('user', [
+				'id' => $this->primaryKey(),
+				'user_id' => $this->string()->notNull(),
+				'password' => $this->string()->notNull(),
+			]);
+		}
+		$this->batchInsert(
+			'user',
+			['user_id', 'password'],
+			[
+				['admin', 'admin'],
+				['user', 'user'],
+				['demo', 'demo'],
+			]
+		);
 	}
 
 
@@ -246,6 +263,12 @@ class m211004_184234_create_db_tables extends Migration {
 	 */
 	public function safeDown() {
 		//echo "m211004_184234_create_db_tables cannot be reverted.\n";
+		if (Yii::$app->db->getTableSchema('user', true)) {
+			$this->dropTable('user');
+		}
+		if (Yii::$app->db->getTableSchema('person_attachment', true)) {
+			$this->dropTable('person_attachment');
+		}
 		if (Yii::$app->db->getTableSchema('person_relation', true)) {
 			$this->dropTable('person_relation');
 		}
