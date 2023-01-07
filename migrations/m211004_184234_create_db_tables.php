@@ -243,7 +243,6 @@ class m211004_184234_create_db_tables extends Migration {
 			$this->createTable('user', [
 				'id' => $this->primaryKey(),
 				'user_id' => $this->string()->notNull(),
-				'password' => $this->string(),
 				'pwd_hash' => $this->string()->notNull(),
 			]);
 		}

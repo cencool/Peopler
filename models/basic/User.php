@@ -4,9 +4,10 @@ namespace app\models\basic;
 
 use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
-use Yii;
 
 class User extends ActiveRecord implements IdentityInterface {
+
+    public $authKey = '';
 
 
     public static function findIdentity($id) {
@@ -22,12 +23,12 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     public function getAuthKey() {
-        return $this->pwd_hash;
+        return $this->authKey;
     }
 
     public function validateAuthKey($authKey) {
-        if (\Yii::$app->getSecurity()->validatePassword($authKey, $this->authKeyHash)) {
-            //$this->authKey = $authKey;
+        if (\Yii::$app->getSecurity()->validatePassword($authKey, $this->pwd_hash)) {
+            $this->authKey = $authKey; // password has to be stored for auth. check, cookie ?
             return true;
         } else return false;
     }
