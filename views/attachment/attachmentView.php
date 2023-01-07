@@ -14,6 +14,7 @@ if (isset($id)) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Attachments')];
 }
 $this->registerJsVar('deleteMessage', Yii::t('app', 'Really delete the file ?'));
+$this->title = Yii::t('app','Attachments');
 ?>
 <div class='row'>
     <?php if ($fileGallery) {

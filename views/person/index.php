@@ -6,6 +6,7 @@ use yii\bootstrap\Alert;
 use yii\helpers\BaseHtml;
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
+$this->title=Yii::t('app','List');
 
 if (Yii::$app->session->hasFlash('personDeleted')) {
 	echo Alert::widget([

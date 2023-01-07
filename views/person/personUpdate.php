@@ -19,6 +19,7 @@ use yii\bootstrap\Alert;
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $person->surname . ', ' . $person->name];
+$this->title=Yii::t('app','Edit');
 
 if (Yii::$app->session->hasFlash('personUpdated')) {
 	echo Alert::widget([
