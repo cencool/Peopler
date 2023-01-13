@@ -102,7 +102,6 @@ class Undelete {
 		$personId = -1;
 		if ($undeleteRecord = $session['undelete']) {
 
-			$session->remove('undelete');
 
 			foreach ($undeleteRecord as $dataBlock) {
 				switch (key($dataBlock)) {
@@ -125,14 +124,14 @@ class Undelete {
 						$personRelation = new PersonRelation;
 						$personRelation->attributes = $dataBlock['relationFrom'];
 						$personRelation->person_a_id = $personId;
-						if (!$personRelation->save()) Yii::error('Relation "From" undelete failed',__METHOD__);
+						if (!$personRelation->save()) Yii::error('Relation "From" undelete failed', __METHOD__);
 						break;
 					case ('relationTo'):
 						// recover relationTo
 						$personRelation = new PersonRelation;
 						$personRelation->attributes = $dataBlock['relationTo'];
 						$personRelation->person_b_id = $personId;
-						if(!$personRelation->save()) Yii::error('Relation "To" undelete failed',__METHOD__);
+						if (!$personRelation->save()) Yii::error('Relation "To" undelete failed', __METHOD__);
 						break;
 					case ('attachment'):
 						// recover attachment
@@ -151,6 +150,7 @@ class Undelete {
 						break;
 				}
 			}
+			$session->remove('undelete'); // remove session after successful recovery
 		}
 	}
 }
