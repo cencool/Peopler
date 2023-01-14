@@ -54,10 +54,10 @@ class ItemController extends Controller {
         $userId = Yii::$app->user->id;
         $personOwner = Person::findOne($id)->owner;
         if (($userId == $personOwner) || ($userId == 'admin')) {
-            $dataProvider = new ActiveDataProvider([
+            $itemsDataProvider = new ActiveDataProvider([
                 'query'=>Items::find()->where(['person_id'=>$id]),
             ]);
-            return $this->render('itemView',['dataProvider'=>$dataProvider]);
+            return $this->render('itemView',['itemsDataProvider'=>$itemsDataProvider]);
         } else $this->redirect(['person/index']);
     }
 }

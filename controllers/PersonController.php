@@ -14,8 +14,10 @@ use app\models\basic\PersonSearch;
 use app\models\basic\PersonDetail;
 use app\models\basic\RelationSearch;
 use app\models\basic\PersonAttachment;
+use app\models\basic\Items;
 use app\models\basic\Undelete;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 use Yii;
 
 class PersonController extends Controller {
@@ -118,6 +120,7 @@ class PersonController extends Controller {
 	public function actionUpdate($id = null) {
 		$AttachmentCount = count(PersonAttachment::find()->where(['person_id' => $id])->all());
 		$userId = Yii::$app->user->id;
+        $itemModel = new Items();
 
 		if (($id != null) && ($person = Person::findOne($id)) && (($person->owner == $userId) || $userId == 'admin')) {
 
@@ -139,8 +142,19 @@ class PersonController extends Controller {
 				$personDetail->link('person', $person);
 			}
 
+            if ($itemModel->load($_POST)) {
+                $itemModel->person_id = $person->id;
+                if($itemModel->save()) {
+					Yii::$app->session->setFlash('itemAdded', 'Item added');
+
+                }
+            }
+
 			$searchModel = new RelationSearch();
 			$provider = $searchModel->search(Yii::$app->request->get());
+            $itemsDataProvider = new ActiveDataProvider([
+                'query'=>Items::find()->where(['person_id'=>$id])
+            ]);
 
 
 			return $this->render('personUpdate', [
@@ -149,6 +163,8 @@ class PersonController extends Controller {
 				'searchModel' => $searchModel,
 				'provider' => $provider,
 				'attachmentCount' => $AttachmentCount,
+                'itemsDataProvider'=> $itemsDataProvider,
+                'itemModel' => $itemModel,
 			]);
 		} else {
 
