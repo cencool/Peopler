@@ -72,6 +72,7 @@ $this->title=Yii::t('app','Person');
 
 		?>
 
+        <?= Html::a(Yii::t('app', 'Items') , ['item/show-items', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
         <?= Html::a(Yii::t('app', 'Attachments') . ' (' . $attachmentCount . ')', ['attachment/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
     </div>
 </div>

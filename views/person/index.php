@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Alert;
-use yii\helpers\BaseHtml;
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->title=Yii::t('app','List');

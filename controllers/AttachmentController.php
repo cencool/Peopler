@@ -4,13 +4,9 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use app\models\basic\Person;
-use app\models\basic\PersonSearch;
-use app\models\basic\PersonDetail;
-use app\models\basic\RelationSearch;
 use app\models\basic\UploadFile;
 use app\models\basic\PersonAttachment;
 use yii\web\UploadedFile;
-use app\models\basic\Undelete;
 use yii\filters\AccessControl;
 use yii\data\Pagination;
 use Yii;
