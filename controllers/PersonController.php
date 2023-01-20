@@ -95,6 +95,7 @@ class PersonController extends Controller {
 		$person->owner = Yii::$app->user->id;
 		$personDetail = new PersonDetail;
 		$AttachmentCount = 0;
+		$itemModel = new Items;
 
 		if ($person->load($_POST) && $person->getDirtyAttributes() && $person->save()) {
 			if ($personDetail->load($_POST) && $personDetail->getDirtyAttributes()) {
@@ -107,6 +108,9 @@ class PersonController extends Controller {
 
 		$searchModel = new RelationSearch();
 		$provider = $searchModel->search(Yii::$app->request->get());
+		$itemsDataProvider = new ActiveDataProvider([
+			'query'=>Items::find()->where(['person_id'=>-1])
+		]);
 
 		return $this->render('personUpdate', [
 			'person' => $person,
@@ -114,6 +118,8 @@ class PersonController extends Controller {
 			'provider' => $provider,
 			'searchModel' => $searchModel,
 			'attachmentCount' => $AttachmentCount,
+			'itemModel' => $itemModel,
+			'itemsDataProvider' => $itemsDataProvider
 		]);
 	}
 

@@ -10,6 +10,7 @@ class Items extends ActiveRecord {
     public function rules() {
         return [
             [['person_id','item'],'safe'],
+            [['person_id','item'],'required']
         ];
     }
 
