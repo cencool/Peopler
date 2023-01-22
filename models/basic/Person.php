@@ -27,6 +27,18 @@ class Person extends ActiveRecord {
 		];
 	}
 
+	/* 
+	 * overriding find() to check ownership
+	 * find() is also used by findOne()
+	 */
+	public static function find() {
+		$userId = Yii::$app->user->id;
+		if ($userId == 'admin')
+			return parent::find();
+		else
+			return parent::find()->andWhere(['owner'=>$userId]);
+	}
+
 	public static function tableName() {
 		return 'person';
 	}
@@ -139,7 +151,8 @@ class Person extends ActiveRecord {
 				$currentTokenChain[] = $tokenA;
 
 				$personBid = $relationA['to_whom_id'];
-				$personB = Person::find()->where(['id' => $personBid])->one();
+				$personB = Person::findOne($personBid);
+				if (!$personB) continue; // if person B has different owner or not exist skip
 				$personBrelations = $personB->givenRelations();
 				foreach ($personBrelations as $relationB) {
 					if ($relationB['to_whom_id'] != $this->id) {

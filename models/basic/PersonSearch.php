@@ -26,10 +26,6 @@ class PersonSearch  extends Model {
 
         $query = Person::find();
 
-        if (Yii::$app->user->id != 'admin') {
-            $query = $query->where(['owner' => Yii::$app->user->id]);
-        }
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [

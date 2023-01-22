@@ -51,9 +51,8 @@ class ItemController extends Controller {
     }
 
     public function actionShowItems($id) {
-        $userId = Yii::$app->user->id;
-        $personOwner = Person::findOne($id)->owner;
-        if (($userId == $personOwner) || ($userId == 'admin')) {
+        $person = Person::findOne($id);
+        if ($person) {
             $itemsDataProvider = new ActiveDataProvider([
                 'query'=>Items::find()->where(['person_id'=>$id]),
             ]);

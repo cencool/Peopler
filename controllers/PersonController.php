@@ -77,7 +77,7 @@ class PersonController extends Controller {
 	public function actionView($id) {
 
 		$person = Person::findOne($id);
-		if (($person->owner == Yii::$app->user->id) || (Yii::$app->user->id == 'admin')) {
+		if ($person) {
 			$searchModel = new RelationSearch();
 			$AttachmentCount = count(PersonAttachment::find()->where(['person_id' => $id])->all());
 			$provider = $searchModel->search(Yii::$app->request->get());
@@ -125,10 +125,9 @@ class PersonController extends Controller {
 
 	public function actionUpdate($id = null) {
 		$AttachmentCount = count(PersonAttachment::find()->where(['person_id' => $id])->all());
-		$userId = Yii::$app->user->id;
         $itemModel = new Items();
 
-		if (($id != null) && ($person = Person::findOne($id)) && (($person->owner == $userId) || $userId == 'admin')) {
+		if (($id != null) && ($person = Person::findOne($id)) ) {
 
 			if (!$personDetail = $person->detail) {
 				$personDetail = new PersonDetail;
@@ -186,8 +185,7 @@ class PersonController extends Controller {
 	public function actionDelete($id) {
 
 		$person = Person::findOne($id);
-		$userId = Yii::$app->user->id;
-		if (($person->owner == $userId) || ($userId == 'admin')) {
+		if ($person) {
 			$session = Yii::$app->session;
 
 			Undelete::addUndeleteRecord($person);

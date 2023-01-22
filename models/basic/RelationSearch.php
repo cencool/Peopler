@@ -25,9 +25,7 @@ class RelationSearch extends Model {
 
 	public function search($params = null) {
 		$relations_out = [];
-		if ($params) {
-			$personId = $params['id'];
-			$person = Person::findOne($personId);
+		if (isset($params['id']) && ($person=Person::findOne($params['id'])) ) {
 			$relations = $person->relations();
 			$relations_out = [];
 			$this->load($params);

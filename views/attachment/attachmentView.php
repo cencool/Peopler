@@ -7,8 +7,7 @@ use app\models\basic\Person;
 use Yii;
 
 ShowAttachmentAsset::register($this);
-if (isset($id)) {
-    $person = Person::findOne($id);
+if (isset($id) && ($person = Person::findOne($id))) {
     $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
     $this->params['breadcrumbs'][] = ['label' => $person->surname . ' ' . $person->name, 'url' => ['person/view', 'id' => $id]];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Attachments')];

@@ -10,7 +10,7 @@ return [
 	'Name' => 'Meno',
 	'Place' => 'Miesto',
 	'Gender' => 'Pohlavie',
-	'New Item' => 'Nový záznam',
+	'New Record' => 'Nový záznam',
 	'Gender undefined' => 'Neznámy rod',
 	'Record updated' => 'Záznam aktualizovaný',
 	'Unknown status' => 'Neznámy stav',

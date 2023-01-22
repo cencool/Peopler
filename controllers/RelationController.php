@@ -11,6 +11,7 @@ use app\models\basic\RelationName;
 use app\models\basic\RelationPair;
 use yii\filters\AccessControl;
 use Yii;
+use yii\web\NotFoundHttpException;
 
 class RelationController extends Controller {
 
@@ -55,6 +56,9 @@ class RelationController extends Controller {
 	public function actionAddRelation($id) {
 
 		$person = Person::findOne($id);
+		if (!$person) {
+			throw new NotFoundHttpException();
+		}
 
 		$session = Yii::$app->session;
 
@@ -134,9 +138,8 @@ class RelationController extends Controller {
 		$personRelation = PersonRelation::findOne($relation_id);
 		$ownershipCheck = $personRelation->checkOwnership();
 		$person = Person::findOne($id);
-		$userId = Yii::$app->user->id;
 
-		if ((($userId == $person->owner) || ($userId == 'admin')) && $ownershipCheck) {
+		if ($person && $ownershipCheck) {
 
 			// select proper name, surname of 'TO' person
 			if ($personRelation->person_a_id != $id) {
