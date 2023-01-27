@@ -221,7 +221,7 @@ if (Yii::$app->session->hasFlash('itemAdded')) {
                 <?php ActiveForm::end() ?>
             </div>
         </div>
-        <?= $this->render('//item/itemView', ['itemsDataProvider' => $itemsDataProvider, 'itemModel'=>$itemModel]); ?>
+        <?= $this->render('//item/itemUpdate', ['itemsDataProvider' => $itemsDataProvider, 'itemSearch' => $itemSearch, 'itemModel'=>$itemModel]); ?>
         <?= Html::a(Yii::t('app', 'Attachments') . '(' . $attachmentCount . ')', ['attachment/upload', 'id' => $person->id], ['class' => 'btn btn-primary']) ?>
 
 

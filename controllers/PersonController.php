@@ -18,6 +18,7 @@ use app\models\basic\Items;
 use app\models\basic\Undelete;
 use yii\filters\AccessControl;
 use yii\data\ActiveDataProvider;
+use app\models\basic\ItemSearch;
 use Yii;
 
 class PersonController extends Controller {
@@ -157,9 +158,8 @@ class PersonController extends Controller {
 
 			$searchModel = new RelationSearch();
 			$provider = $searchModel->search(Yii::$app->request->get());
-            $itemsDataProvider = new ActiveDataProvider([
-                'query'=>Items::find()->where(['person_id'=>$id])
-            ]);
+			$itemSearchModel = new ItemSearch();
+			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(),$id, 20);
 
 
 			return $this->render('personUpdate', [
@@ -169,6 +169,7 @@ class PersonController extends Controller {
 				'provider' => $provider,
 				'attachmentCount' => $AttachmentCount,
                 'itemsDataProvider'=> $itemsDataProvider,
+				'itemSearch' => $itemSearchModel,
                 'itemModel' => $itemModel,
 			]);
 		} else {

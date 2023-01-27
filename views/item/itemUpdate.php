@@ -3,8 +3,6 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\Url;
-use app\models\basic\Items;
 
 if (isset($itemModel)) {
 	$itemForm = ActiveForm::begin();
@@ -14,13 +12,10 @@ if (isset($itemModel)) {
 <?php
 	ActiveForm::end();
 }
-?>
 
-
-<?php
-if (isset($itemsDataProvider))
-	echo GridView::widget([
-		'dataProvider' => $itemsDataProvider,
+echo GridView::widget([
+	'dataProvider' => $itemsDataProvider,
+	'filterModel' => $itemSearch,
 		'columns' => [
 			[
 				'class' => '\yii\grid\ActionColumn',
@@ -29,7 +24,5 @@ if (isset($itemsDataProvider))
 			],
 			['attribute' => 'item'],
 
-		]
-	]);
-?>
-
+	]
+]);
