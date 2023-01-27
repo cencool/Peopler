@@ -4,7 +4,6 @@ namespace app\models\basic;
 
 use yii\data\ActiveDataProvider;
 use yii\base\Model;
-use Yii;
 
 
 
