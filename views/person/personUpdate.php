@@ -41,6 +41,20 @@ if (Yii::$app->session->hasFlash('itemAdded')) {
     ]);
 }
 
+if (Yii::$app->session->hasFlash('itemDeleted')) {
+    echo Alert::widget([
+        'options' => ['class' => 'alert-success'],
+        'body' => Yii::$app->session->getFlash('itemDeleted'),
+    ]);
+}
+
+if (Yii::$app->session->hasFlash('itemDeleteError')) {
+    echo Alert::widget([
+        'options' => ['class' => 'alert-warning'],
+        'body' => Yii::$app->session->getFlash('itemDeleteError'),
+    ]);
+}
+
 ?>
 
 <ul class='nav nav-tabs'>

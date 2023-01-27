@@ -55,11 +55,23 @@ class ItemController extends Controller {
 		$person = Person::findOne($id);
 		if ($person) {
 			$searchModel = new ItemSearch();
-			$itemsDataProvider = $searchModel->search(Yii::$app->request->get(),$id, 20);
-			return $this->render('itemView', ['itemsDataProvider' => $itemsDataProvider, 'itemSearch'=>$searchModel]);
+			$itemsDataProvider = $searchModel->search(Yii::$app->request->get(), $id, 20);
+			return $this->render('itemView', ['itemsDataProvider' => $itemsDataProvider, 'itemSearch' => $searchModel]);
 		} else $this->redirect(['person/index']);
 	}
 
-	public function actionDeleteItem($itemId) {
+	public function actionDeleteItem($personId, $itemId) {
+		if (Person::findOne($personId)) {
+			$session = Yii::$app->session;
+			$model = Items::findOne($itemId);
+			try {
+				$model->delete();
+				$session->setFlash('itemDeleted', Yii::t('app', 'Item') . ' ' . $itemId . ' ' . Yii::t('app', 'deleted'));
+				$this->redirect(['person/update','id'=>$personId]); 
+			} catch (\Exception $ex) {
+
+				$session->setFlash('itemDeleteError', $ex->getMessage());
+			}
+		}
 	}
 }
