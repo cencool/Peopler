@@ -70,6 +70,9 @@ class PersonController extends Controller {
 	public function actionIndex() {
 		$searchModel = new PersonSearch();
 		$provider = $searchModel->search(Yii::$app->request->get(), 10);
+		if (Yii::$app->request->isPjax) {
+			return $this->renderPartial('_index', ['provider' => $provider, 'searchModel' => $searchModel]);
+		}
 
 
 		return $this->render('index', ['provider' => $provider, 'searchModel' => $searchModel]);
@@ -110,7 +113,7 @@ class PersonController extends Controller {
 		$searchModel = new RelationSearch();
 		$provider = $searchModel->search(Yii::$app->request->get());
 		$itemSearchModel = new ItemSearch();
-		$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(),isset($person->id)? $person->id: -1, 20);
+		$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), isset($person->id) ? $person->id : -1, 20);
 
 		return $this->render('personUpdate', [
 			'person' => $person,
@@ -119,16 +122,16 @@ class PersonController extends Controller {
 			'searchModel' => $searchModel,
 			'attachmentCount' => $AttachmentCount,
 			'itemModel' => $itemModel,
-			'itemsDataProvider'=> $itemsDataProvider,
+			'itemsDataProvider' => $itemsDataProvider,
 			'itemSearch' => $itemSearchModel,
 		]);
 	}
 
 	public function actionUpdate($id = null) {
 		$AttachmentCount = count(PersonAttachment::find()->where(['person_id' => $id])->all());
-        $itemModel = new Items();
+		$itemModel = new Items();
 
-		if (($id != null) && ($person = Person::findOne($id)) ) {
+		if (($id != null) && ($person = Person::findOne($id))) {
 
 			if (!$personDetail = $person->detail) {
 				$personDetail = new PersonDetail;
@@ -148,18 +151,17 @@ class PersonController extends Controller {
 				$personDetail->link('person', $person);
 			}
 
-            if ($itemModel->load($_POST)) {
-                $itemModel->person_id = $person->id;
-                if($itemModel->save()) {
-					Yii::$app->session->setFlash('success', 'Item #'.$itemModel->id.' added');
-
-                }
-            }
+			if ($itemModel->load($_POST)) {
+				$itemModel->person_id = $person->id;
+				if ($itemModel->save()) {
+					Yii::$app->session->setFlash('success', 'Item #' . $itemModel->id . ' added');
+				}
+			}
 
 			$searchModel = new RelationSearch();
 			$provider = $searchModel->search(Yii::$app->request->get());
 			$itemSearchModel = new ItemSearch();
-			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(),$id, 20);
+			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), $id, 20);
 
 
 			return $this->render('personUpdate', [
@@ -168,9 +170,9 @@ class PersonController extends Controller {
 				'searchModel' => $searchModel,
 				'provider' => $provider,
 				'attachmentCount' => $AttachmentCount,
-                'itemsDataProvider'=> $itemsDataProvider,
+				'itemsDataProvider' => $itemsDataProvider,
 				'itemSearch' => $itemSearchModel,
-                'itemModel' => $itemModel,
+				'itemModel' => $itemModel,
 			]);
 		} else {
 

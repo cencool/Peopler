@@ -1,27 +1,11 @@
 <?php
 
+
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\widgets\Alert;
 use yii\widgets\Pjax;
 
-$this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
-$this->title = Yii::t('app', 'List');
-
-echo Alert::widget();
-
-$undeleteButtonClass = Yii::$app->session['undelete'] != null ?   'btn btn-primary' : 'btn btn-primary disabled';
-
 ?>
-<div class='row'>
-	<div class='col-sm-6 text-left'>
-		<?= Html::a(Yii::t('app', 'New Record'), ['person/new-person', 'id' => null], ['class' => 'btn btn-primary']) ?>
-	</div>
-	<div class='col-sm-6 text-right'>
-		<?= Html::a(Yii::t('app', 'Undelete'), ['person/undelete'], ['class' => $undeleteButtonClass]) ?>
-	</div>
-</div>
-
 <?php Pjax::begin([
 	'id' => 'person-list',
 	'timeout' => 5000,
@@ -94,6 +78,4 @@ $undeleteButtonClass = Yii::$app->session['undelete'] != null ?   'btn btn-prima
 
 	],
 ]);
-
-?>
-<?php Pjax::end() ?>
+Pjax::end();

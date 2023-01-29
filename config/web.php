@@ -15,6 +15,10 @@ $config = [
 	'language' => 'sk-SK',
 
 	'components' => [
+		'assetManager' => [
+			'class' => 'yii\web\AssetManager',
+			'forceCopy' => true,
+		],
 		'request' => [
 			// !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
 			'cookieValidationKey' => 'QlJXFYMvTcg47A7JMG9ID3k23pixne-p',
