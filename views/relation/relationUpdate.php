@@ -4,25 +4,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use yii\bootstrap\Alert;
+use app\widgets\Alert;
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $person->surname . ', ' . $person->name, 'url' => ['person/update', 'id' => $person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Update Relation')];
 $this->title=Yii::t('app','Update Relation');
 
-if (Yii::$app->session->hasFlash('relationUpdated')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-success'],
-		'body' => Yii::$app->session->getFlash('relationUpdated'),
-	]);
-}
-if (Yii::$app->session->hasFlash('relationUpdateError')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-danger'],
-		'body' => Yii::$app->session->getFlash('relationUpdateError'),
-	]);
-}
+echo Alert::widget();
 ?>
 
 <h3><?= $person->name . ' ' . $person->surname .' '.Yii::t('app','is').' :' ?> </h3>

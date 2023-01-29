@@ -94,11 +94,11 @@ class RelationController extends Controller {
 				try {
 					if ($model->save()) {
 						$success = true;
-						$session->setFlash('relationAdded', Yii::t('app', 'Relation was added'));
+						$session->setFlash('success', Yii::t('app', 'Relation was added'));
 					}
 				} catch (\Exception $ex) {
 
-					$session->setFlash('relationAddError', $ex->getMessage());
+					$session->setFlash('danger', $ex->getMessage());
 
 					return $this->render('relationAdd', [
 						'person' => $person,
@@ -111,15 +111,15 @@ class RelationController extends Controller {
 				}
 			} elseif ($model->person_a_id == $model->person_b_id) {
 				$success = false;
-				$session->setFlash('relationDuplicate', Yii::t('app', "Can't define relation to same person!"));
+				$session->setFlash('warning', Yii::t('app', "Can't define relation to same person!"));
 			} else {
 				$success = false;
-				$session->setFlash('relationDuplicate', Yii::t('app', 'Relation already exists!'));
+				$session->setFlash('warning', Yii::t('app', 'Relation already exists!'));
 			}
 		}
 
 		if ($e_msg = $model->getFirstError('person_b_id')) {
-			$session->setFlash('relationAddError', $e_msg);
+			$session->setFlash('danger', $e_msg);
 		}
 
 		return $this->render('relationAdd', [
@@ -181,10 +181,10 @@ class RelationController extends Controller {
 						&& $personRelation->getDirtyAttributes()
 						&& $personRelation->save()
 					) {
-						$session->setFlash('relationUpdated', Yii::t('app', 'Relation updated'));
+						$session->setFlash('success', Yii::t('app', 'Relation updated'));
 					}
 				} catch (\Exception $ex) {
-					$session->setFlash('relationUpdateError', $ex->getMessage());
+					$session->setFlash('danger', $ex->getMessage());
 				}
 			}
 
@@ -213,7 +213,7 @@ class RelationController extends Controller {
 			$nameFrom = $personRelation->person_a->name . ' ' . $personRelation->person_a->surname;
 			if ($personRelation->delete()) {
 				Yii::$app->session->setFlash(
-					'relationDeleted',
+					'info',
 					Yii::t('app', 'Relation') . ': "' . $relation . '" '
 						. ' ' . $nameFrom . ' ' . Yii::t('app', 'to') . ' ' . $nameTo . ' ' . Yii::t('app', 'deleted')
 				);

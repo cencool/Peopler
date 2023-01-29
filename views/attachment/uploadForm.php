@@ -1,8 +1,10 @@
 <?php
 
 use yii\bootstrap\ActiveForm;
-use yii\bootstrap\Alert;
 use yii\helpers\Html;
+use app\widgets\Alert;
+
+
 
 
 ?>
@@ -12,19 +14,7 @@ use yii\helpers\Html;
 $this->params['breadcrumbs'][] = ['label' => $person->surname . ' ' . $person->name, 'url' => ['person/update', 'id' => $person->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Attachment upload')];
 
-if (Yii::$app->session->hasFlash('uploadSuccess')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-success'],
-		'body' => Yii::$app->session->getFlash('uploadSuccess'),
-	]);
-}
-
-if (Yii::$app->session->hasFlash('uploadError')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-danger'],
-		'body' => Yii::$app->session->getFlash('uploadError'),
-	]);
-}
+echo Alert::widget();
 
 ?>
 

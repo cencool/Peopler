@@ -103,15 +103,14 @@ class PersonController extends Controller {
 				$personDetail->link('person', $person);
 			}
 
-			Yii::$app->session->setFlash('personAdded', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'added'));
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'added'));
 			return $this->redirect(['update', 'id' => $person->id]);
 		};
 
 		$searchModel = new RelationSearch();
 		$provider = $searchModel->search(Yii::$app->request->get());
-		$itemsDataProvider = new ActiveDataProvider([
-			'query'=>Items::find()->where(['person_id'=>-1])
-		]);
+		$itemSearchModel = new ItemSearch();
+		$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(),isset($person->id)? $person->id: -1, 20);
 
 		return $this->render('personUpdate', [
 			'person' => $person,
@@ -120,7 +119,8 @@ class PersonController extends Controller {
 			'searchModel' => $searchModel,
 			'attachmentCount' => $AttachmentCount,
 			'itemModel' => $itemModel,
-			'itemsDataProvider' => $itemsDataProvider
+			'itemsDataProvider'=> $itemsDataProvider,
+			'itemSearch' => $itemSearchModel,
 		]);
 	}
 
@@ -138,20 +138,20 @@ class PersonController extends Controller {
 			if ($person->load($_POST) && $person->getDirtyAttributes()) {
 
 				if ($person->save()) {
-					Yii::$app->session->setFlash('personUpdated', 'Person ' . $person->name . ',' . $person->surname . ' updated');
+					Yii::$app->session->setFlash('success', 'Person ' . $person->name . ',' . $person->surname . ' updated');
 				}
 			};
 
 			// if change in detail save it using 'link' method for relation
 			if ($personDetail->load($_POST) && $personDetail->getDirtyAttributes()) {
-				Yii::$app->session->setFlash('personUpdated', 'Person ' . $person->name . ',' . $person->surname . ' updated');
+				Yii::$app->session->setFlash('success', 'Person ' . $person->name . ',' . $person->surname . ' updated');
 				$personDetail->link('person', $person);
 			}
 
             if ($itemModel->load($_POST)) {
                 $itemModel->person_id = $person->id;
                 if($itemModel->save()) {
-					Yii::$app->session->setFlash('itemAdded', 'Item added');
+					Yii::$app->session->setFlash('success', 'Item #'.$itemModel->id.' added');
 
                 }
             }
@@ -193,10 +193,10 @@ class PersonController extends Controller {
 
 			try {
 				$person->delete();
-				Yii::$app->session->setFlash('personDeleted', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'deleted'));
+				Yii::$app->session->setFlash('info', Yii::t('app', 'Person') . ' ' . $person->name . ' ' . $person->surname . ' ' . Yii::t('app', 'deleted'));
 			} catch (\Exception $ex) {
 
-				$session->setFlash('personDeleteError', $ex->getMessage());
+				$session->setFlash('danger', $ex->getMessage());
 			}
 			return $this->redirect(['index']);
 		} else {

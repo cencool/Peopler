@@ -66,11 +66,11 @@ class ItemController extends Controller {
 			$model = Items::findOne($itemId);
 			try {
 				$model->delete();
-				$session->setFlash('itemDeleted', Yii::t('app', 'Item') . ' ' . $itemId . ' ' . Yii::t('app', 'deleted'));
+				$session->setFlash('info', Yii::t('app', 'Item') . ' #' . $itemId . ' ' . Yii::t('app', 'deleted'));
 				$this->redirect(['person/update','id'=>$personId]); 
 			} catch (\Exception $ex) {
 
-				$session->setFlash('itemDeleteError', $ex->getMessage());
+				$session->setFlash('danger', $ex->getMessage());
 			}
 		}
 	}

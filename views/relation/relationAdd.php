@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use app\assets\AddRelationAsset;
-use yii\bootstrap\Alert;
+use app\widgets\Alert;
 
 
 AddRelationAsset::register($this);
@@ -17,25 +17,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Add Relation')];
 $this->title = Yii::t('app','Add Relation');
 
 
-if (Yii::$app->session->hasFlash('relationAdded')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-success'],
-		'body' => Yii::$app->session->getFlash('relationAdded'),
-	]);
-}
-if (Yii::$app->session->hasFlash('relationDuplicate')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-info'],
-		'body' => Yii::$app->session->getFlash('relationDuplicate'),
-	]);
-	$model->person_b_id = null;
-}
-if (Yii::$app->session->hasFlash('relationAddError')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-danger'],
-		'body' => Yii::$app->session->getFlash('relationAddError'),
-	]);
-}
+echo Alert::widget();
 
 ?>
 

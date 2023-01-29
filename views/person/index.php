@@ -2,23 +2,12 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\bootstrap\Alert;
+use app\widgets\Alert;
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->title=Yii::t('app','List');
 
-if (Yii::$app->session->hasFlash('personDeleted')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-info'],
-		'body' => Yii::$app->session->getFlash('personDeleted'),
-	]);
-}
-if (Yii::$app->session->hasFlash('personDeleteError')) {
-	echo Alert::widget([
-		'options' => ['class' => 'alert-danger'],
-		'body' => Yii::$app->session->getFlash('personDeleteError'),
-	]);
-}
+echo Alert::widget();
 
 $undeleteButtonClass = Yii::$app->session['undelete'] != null ?   'btn btn-primary' : 'btn btn-primary disabled';
 
@@ -48,12 +37,12 @@ $undeleteButtonClass = Yii::$app->session['undelete'] != null ?   'btn btn-prima
 			'attribute' => 'id',
 		],
 		[
-			'attribute' => 'name',
-			'label' => Yii::t('app', 'Name'),
-		],
-		[
 			'attribute' => 'surname',
 			'label' => Yii::t('app', 'Surname'),
+		],
+		[
+			'attribute' => 'name',
+			'label' => Yii::t('app', 'Name'),
 		],
 		[
 			'attribute' => 'place',

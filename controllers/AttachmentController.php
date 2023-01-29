@@ -80,12 +80,12 @@ class AttachmentController extends Controller {
                 $personFile->file_name = $fileBaseName;
 
                 if ($uploadModel->upload($fileName) && $personFile->save()) {
-                    $session->setFlash('uploadSuccess', Yii::t('app', 'Upload Successful'));
+                    $session->setFlash('success', Yii::t('app', 'Upload Successful'));
                     $this->redirect(['upload', 'id' => $id]); // redirected to avoid re-submission on page reload (PostRedirectGet)
                     Yii::$app->end();
                 } else {
                     $uploadError = $uploadModel->getFirstError('imageFile');
-                    $session->setFlash('uploadError', Yii::t('app', 'Upload Failed' . ':' . $uploadError));
+                    $session->setFlash('danger', Yii::t('app', 'Upload Failed' . ':' . $uploadError));
                     $this->redirect(['upload', 'id' => $id]); // redirected to avoid re-submission on page reload (PostRedirectGet)
                     Yii::$app->end();
                 }

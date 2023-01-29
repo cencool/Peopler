@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\grid\GridView;
 use yii\helpers\Url;
-use yii\bootstrap\Alert;
+use app\widgets\Alert;
 
 /** 
  *
@@ -20,40 +20,6 @@ use yii\bootstrap\Alert;
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $person->surname . ', ' . $person->name];
 $this->title = Yii::t('app', 'Edit');
-
-if (Yii::$app->session->hasFlash('personUpdated')) {
-    echo Alert::widget([
-        'options' => ['class' => 'alert-success'],
-        'body' => Yii::$app->session->getFlash('personUpdated'),
-    ]);
-}
-if (Yii::$app->session->hasFlash('personAdded')) {
-    echo Alert::widget([
-        'options' => ['class' => 'alert-success'],
-        'body' => Yii::$app->session->getFlash('personAdded'),
-    ]);
-}
-
-if (Yii::$app->session->hasFlash('itemAdded')) {
-    echo Alert::widget([
-        'options' => ['class' => 'alert-success'],
-        'body' => Yii::$app->session->getFlash('itemAdded'),
-    ]);
-}
-
-if (Yii::$app->session->hasFlash('itemDeleted')) {
-    echo Alert::widget([
-        'options' => ['class' => 'alert-success'],
-        'body' => Yii::$app->session->getFlash('itemDeleted'),
-    ]);
-}
-
-if (Yii::$app->session->hasFlash('itemDeleteError')) {
-    echo Alert::widget([
-        'options' => ['class' => 'alert-warning'],
-        'body' => Yii::$app->session->getFlash('itemDeleteError'),
-    ]);
-}
 
 ?>
 
@@ -105,12 +71,7 @@ if (Yii::$app->session->hasFlash('itemDeleteError')) {
         <hr>
 
         <?php
-        if (Yii::$app->session->hasFlash('relationDeleted')) {
-            echo Alert::widget([
-                'options' => ['class' => 'alert-success'],
-                'body' => Yii::$app->session->getFlash('relationDeleted'),
-            ]);
-        }
+            echo Alert::widget();
 
         $addRelationClass = ($person->id != null) ? 'btn btn-primary pull-left' : 'disabled btn btn-primary pull-left';
         ?>
@@ -235,7 +196,7 @@ if (Yii::$app->session->hasFlash('itemDeleteError')) {
                 <?php ActiveForm::end() ?>
             </div>
         </div>
-        <?= $this->render('//item/itemUpdate', ['itemsDataProvider' => $itemsDataProvider, 'itemSearch' => $itemSearch, 'itemModel'=>$itemModel]); ?>
+        <?= $this->render('//item/itemUpdate', ['itemsDataProvider' => $itemsDataProvider, 'itemSearch' => $itemSearch, 'itemModel'=>$itemModel,'person'=>$person]); ?>
         <?= Html::a(Yii::t('app', 'Attachments') . '(' . $attachmentCount . ')', ['attachment/upload', 'id' => $person->id], ['class' => 'btn btn-primary']) ?>
 
 

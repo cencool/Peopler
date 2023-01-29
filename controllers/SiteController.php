@@ -45,7 +45,7 @@ class SiteController extends Controller {
 				return $this->redirect(Yii::$app->user->returnUrl);
 			} else {
 				$session = Yii::$app->session;
-				$session->setFlash('loginIncorrect', Yii::t('app', 'Incorrect credentials'));
+				$session->setFlash('warning', Yii::t('app', 'Incorrect credentials'));
 			}
 		}
 		return $this->render('loginForm', ['model' => $model, 'required' => $required]);
