@@ -55,19 +55,31 @@ class ItemController extends Controller {
 		$person = Person::findOne($id);
 		if ($person) {
 			$searchModel = new ItemSearch();
-			$itemsDataProvider = $searchModel->search(Yii::$app->request->get(), $id, 20);
+			$itemsDataProvider = $searchModel->search(Yii::$app->request->get(), $id, 10);
 			return $this->render('itemView', ['itemsDataProvider' => $itemsDataProvider, 'itemSearch' => $searchModel]);
 		} else $this->redirect(['person/index']);
 	}
 
-	public function actionDeleteItem($personId, $itemId) {
-		if (Person::findOne($personId)) {
+	public function actionDelete($personId, $itemId) {
+		$person = Person::findOne($personId);
+		if ($person) {
 			$session = Yii::$app->session;
 			$model = Items::findOne($itemId);
+
+			$itemSearchModel = new ItemSearch();
+			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), $personId, 10);
+			$itemModel = new Items();
+
 			try {
 				$model->delete();
 				$session->setFlash('info', Yii::t('app', 'Item') . ' #' . $itemId . ' ' . Yii::t('app', 'deleted'));
-				$this->redirect(['person/update','id'=>$personId]); 
+				return $this->renderPartial('//item/itemUpdate', [
+					'person' => $person,
+					'itemsDataProvider' => $itemsDataProvider,
+					'itemSearch' => $itemSearchModel,
+					'itemModel' => $itemModel,
+				]);
+				//	$this->redirect(['person/update','id'=>$personId]); 
 			} catch (\Exception $ex) {
 
 				$session->setFlash('danger', $ex->getMessage());

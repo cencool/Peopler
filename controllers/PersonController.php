@@ -151,18 +151,28 @@ class PersonController extends Controller {
 				$personDetail->link('person', $person);
 			}
 
-			if ($itemModel->load($_POST)) {
+			// taking data from item add form
+
+			if ($itemModel->load($_POST) ) {
 				$itemModel->person_id = $person->id;
 				if ($itemModel->save()) {
-					Yii::$app->session->setFlash('success', 'Item #' . $itemModel->id . ' added');
+					Yii::$app->session->setFlash('success', 'Added item #' . $itemModel->id . ': '.$itemModel->item);
 				}
 			}
 
 			$searchModel = new RelationSearch();
 			$provider = $searchModel->search(Yii::$app->request->get());
 			$itemSearchModel = new ItemSearch();
-			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), $id, 20);
+			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), $id, 10);
 
+			if (Yii::$app->request->isPjax ) {
+				return $this->renderPartial('//item/itemUpdate', [
+					'person' => $person,
+					'itemsDataProvider' => $itemsDataProvider,
+					'itemSearch' => $itemSearchModel,
+					'itemModel' => $itemModel,
+				]);
+			}
 
 			return $this->render('personUpdate', [
 				'person' => $person,
@@ -203,6 +213,33 @@ class PersonController extends Controller {
 			return $this->redirect(['index']);
 		} else {
 			return $this->redirect(['index']);
+		}
+	}
+
+	public function actionDeleteItem($personId, $itemId) {
+		$person = Person::findOne($personId);
+		if ($person) {
+			$session = Yii::$app->session;
+			$model = Items::findOne($itemId);
+
+			$itemSearchModel = new ItemSearch();
+			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), $personId, 10);
+			$itemModel = new Items();
+
+			try {
+				$model->delete();
+				$session->setFlash('info', Yii::t('app', 'Item') . ' #' . $itemId . ' ' . Yii::t('app', 'deleted'));
+				return $this->renderPartial('//item/itemUpdate', [
+					'person' => $person,
+					'itemsDataProvider' => $itemsDataProvider,
+					'itemSearch' => $itemSearchModel,
+					'itemModel' => $itemModel,
+				]);
+				//	$this->redirect(['person/update','id'=>$personId]); 
+			} catch (\Exception $ex) {
+
+				$session->setFlash('danger', $ex->getMessage());
+			}
 		}
 	}
 

@@ -4,18 +4,31 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
+use app\widgets\Alert;
+
+
+Pjax::begin([
+	'options' => ['id' => 'item-add',],
+	'timeout' => 5000
+]);
+
+echo Alert::widget();
 
 if (isset($itemModel)) {
-	$itemForm = ActiveForm::begin();
+	$itemForm = ActiveForm::begin([
+		'id' => 'add-item',
+		'options' => ['data-pjax' => ''], //needed attribute to include form into pjax
+	]);
 ?>
 <?= $itemForm->field($itemModel, 'item') ?>
 <?= Html::submitButton('Add Item', ['class' => 'btn btn-primary', 'disabled' => isset($person->id) ? false : true]) ?>
 <?php
 	ActiveForm::end();
-	$a = (new \yii\grid\ActionColumn())->icons['trash'];
 }
 
 echo GridView::widget([
+	'id' => 'item-list',
 	'dataProvider' => $itemsDataProvider,
 	'filterModel' => $itemSearch,
 	'columns' => [
@@ -27,7 +40,7 @@ echo GridView::widget([
 				if ($action == 'delete') {
 					return Url::toRoute(
 						[
-							'item/delete-item',
+							'item/delete',
 							'itemId' => $model->id,
 							'personId' => $model->person_id,
 						]
@@ -68,3 +81,4 @@ echo GridView::widget([
 
 	]
 ]);
+Pjax::end();
