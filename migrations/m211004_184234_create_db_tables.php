@@ -248,11 +248,11 @@ class m211004_184234_create_db_tables extends Migration {
 		}
 
 		if (Yii::$app->db->getTableSchema('items', true) === null) {
-			$this->createTable('user', [
+			$this->createTable('items', [
 				'id' => $this->primaryKey(),
 				'person_id' => $this->string()->notNull(),
 				'item' => $this->string()->notNull(),
-				'item_ling' => $this->string(),
+				'item_link' => $this->string(),
 			]);
 
 			$this->addForeignKey(
