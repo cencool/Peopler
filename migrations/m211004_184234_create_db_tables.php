@@ -246,15 +246,25 @@ class m211004_184234_create_db_tables extends Migration {
 				'pwd_hash' => $this->string()->notNull(),
 			]);
 		}
-		$this->batchInsert(
-			'user',
-			['user_id', 'password'],
-			[
-				['admin', 'admin'],
-				['user', 'user'],
-				['demo', 'demo'],
-			]
-		);
+
+		if (Yii::$app->db->getTableSchema('items', true) === null) {
+			$this->createTable('user', [
+				'id' => $this->primaryKey(),
+				'person_id' => $this->string()->notNull(),
+				'item' => $this->string()->notNull(),
+				'item_ling' => $this->string(),
+			]);
+
+			$this->addForeignKey(
+				'person_id_fk1',
+				'items',
+				'person_id',
+				'person',
+				'id',
+				'CASCADE',
+				'CASCADE',
+			);
+		}
 	}
 
 
