@@ -86,4 +86,29 @@ class ItemController extends Controller {
 			}
 		}
 	}
+
+	public function actionUpdate() {
+		$itemModel = new Items();
+
+			// taking data from item add form
+
+			if ($itemModel->load($_POST) ) {
+				if ($itemModel->save()) {
+					Yii::$app->session->setFlash('success', 'Added item #' . $itemModel->id . ': '.$itemModel->item);
+				}
+				$person = Person::findOne($itemModel->person_id);
+			}
+
+			$itemSearchModel = new ItemSearch();
+			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), $person->id, 10);
+
+			if (Yii::$app->request->isPjax ) {
+				return $this->renderPartial('//item/itemUpdate', [
+					'person' => $person,
+					'itemsDataProvider' => $itemsDataProvider,
+					'itemSearch' => $itemSearchModel,
+					'itemModel' => $itemModel,
+				]);
+			}
+	}
 }

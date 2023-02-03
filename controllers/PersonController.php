@@ -165,6 +165,8 @@ class PersonController extends Controller {
 			$itemSearchModel = new ItemSearch();
 			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), $id, 10);
 
+			/*
+
 			if (Yii::$app->request->isPjax ) {
 				return $this->renderPartial('//item/itemUpdate', [
 					'person' => $person,
@@ -173,6 +175,7 @@ class PersonController extends Controller {
 					'itemModel' => $itemModel,
 				]);
 			}
+			 */
 
 			return $this->render('personUpdate', [
 				'person' => $person,
