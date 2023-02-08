@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace app\models\basic;
 
@@ -9,31 +9,32 @@ use app\models\basic\Items;
 class ItemSearch extends Model {
 	public $item;
 
-    public function rules() {
-        return [
-            [['item'], 'safe'],
-        ];
-    }
+	public function rules() {
+		return [
+			[['item'], 'safe'],
+		];
+	}
 
 
-    public function search($params, $personId, $pageLines) {
+	public function search($params, $personId, $pageLines) {
 
-        $query = Items::find()->andWhere(['person_id'=>$personId]);
+		$query = Items::find()->andWhere(['person_id' => $personId]);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => $pageLines,
-            ]
-        ]);
+		$dataProvider = new ActiveDataProvider([
+			'query' => $query,
+			'pagination' => [
+				'pageSize' => $pageLines,
+				'route' => 'item/edit-items',
+			],
+			'sort'=>['route'=>'item/edit-items'],
+		]);
 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
+		if (!($this->load($params) && $this->validate())) {
+			return $dataProvider;
+		}
 
-        $query->andFilterWhere(['like', 'item', $this->item]);
+		$query->andFilterWhere(['like', 'item', $this->item]);
 
-        return $dataProvider;
-    }
+		return $dataProvider;
+	}
 }
-?>

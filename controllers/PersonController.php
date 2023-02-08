@@ -153,10 +153,10 @@ class PersonController extends Controller {
 
 			// taking data from item add form
 
-			if ($itemModel->load($_POST) ) {
+			if ($itemModel->load($_POST)) {
 				$itemModel->person_id = $person->id;
 				if ($itemModel->save()) {
-					Yii::$app->session->setFlash('success', 'Added item #' . $itemModel->id . ': '.$itemModel->item);
+					Yii::$app->session->setFlash('success', 'Added item #' . $itemModel->id . ': ' . $itemModel->item);
 				}
 			}
 
@@ -165,17 +165,7 @@ class PersonController extends Controller {
 			$itemSearchModel = new ItemSearch();
 			$itemsDataProvider = $itemSearchModel->search(Yii::$app->request->get(), $id, 10);
 
-			/*
 
-			if (Yii::$app->request->isPjax ) {
-				return $this->renderPartial('//item/itemUpdate', [
-					'person' => $person,
-					'itemsDataProvider' => $itemsDataProvider,
-					'itemSearch' => $itemSearchModel,
-					'itemModel' => $itemModel,
-				]);
-			}
-			 */
 
 			return $this->render('personUpdate', [
 				'person' => $person,
