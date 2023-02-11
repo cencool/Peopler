@@ -6,13 +6,13 @@ use yii\helpers\Html;
 
 $this->params['breadcrumbs'][] = ['label' => 'Index', 'url' => ['person/index']];
 $this->params['breadcrumbs'][] = ['label' => $model->surname . ', ' . $model->name];
-$this->title=Yii::t('app','Person');
+$this->title = Yii::t('app', 'Person');
 
 ?>
 
 <div class='row'>
-    <div class='col-sm-6'>
-        <?php
+	<div class='col-sm-6'>
+		<?php
 		echo DetailView::widget([
 			'model' => $model,
 			'options' => [
@@ -42,9 +42,9 @@ $this->title=Yii::t('app','Person');
 
 		]);
 		?>
-    </div>
-    <div class='col-sm-6'>
-        <?php
+	</div>
+	<div class='col-sm-6'>
+		<?php
 
 		if ($model->detail) {
 
@@ -71,15 +71,14 @@ $this->title=Yii::t('app','Person');
 		};
 
 		?>
-
-        <?= Html::a(Yii::t('app', 'Items') , ['item/view-items', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
-        <?= Html::a(Yii::t('app', 'Attachments') . ' (' . $attachmentCount . ')', ['attachment/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
-    </div>
+		<?= Html::a(Yii::t('app', 'Items'), ['item/view-items', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+		<?= Html::a(Yii::t('app', 'Attachments') . ' (' . $attachmentCount . ')', ['attachment/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+	</div>
 </div>
 
 <h4><b><?= Yii::t('app', 'Relations') ?></b></h3>
 
-    <?php
+	<?php
 
 	echo GridView::widget([
 		'dataProvider' => $provider,
