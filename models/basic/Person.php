@@ -58,6 +58,11 @@ class Person extends ActiveRecord {
 	public function getPersonAttachments() {
 		return $this->hasMany(PersonAttachment::class, ['person_id' => 'id']);
 	}
+
+	public function getPersonItems() {
+		return $this->hasMany(Items::class, ['person_id'=> 'id']);
+	}
+
 	public function getRelationsFromPerson() {
 		$sql = <<<SQL
 		select pa.owner as a_owner,pb.owner as b_owner,pr.id as relation_id,

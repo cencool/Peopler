@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use app\models\basic\Person;
 use app\models\basic\PersonRelation;
 use app\models\basic\PersonDetail;
+use app\models\basic\Items;
 use yii\imagine\Image;
 use Yii;
 
@@ -89,6 +90,19 @@ class Undelete {
 			$undeleteRecord[] = ['attachment' => $dataAttributes];
 		}
 
+		$items = $data->personItems;
+
+		foreach ($items as $item) {
+			$dataAttributes = [];
+			foreach ($item as $attr => $val) {
+				if ($attr != 'id' && $attr != 'person_id') {
+					$dataAttributes[$attr] = $val;
+				}
+			}
+
+			$undeleteRecord[] = ['item' => $dataAttributes];
+		}
+
 
 		// this exercise with session is due fact that 
 		// can't insert array directly to session var when using session component
@@ -148,6 +162,12 @@ class Undelete {
 						$thumbnailImage = Image::thumbnail($pathTo . $fileName, 400, null);
 						$thumbnailImage->save($pathTo . 'thumbnails/' . $fileName);
 						break;
+					case ('item'):
+						//recover items
+						$personItem = new Items();
+						$personItem->attributes = $dataBlock['item'];
+						$personItem->person_id = $personId;
+						if (!$personItem->save()) Yii::error('Item undelete failed', __METHOD__);
 				}
 			}
 			$session->remove('undelete'); // remove session after successful recovery
