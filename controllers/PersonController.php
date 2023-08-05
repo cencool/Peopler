@@ -19,6 +19,7 @@ use app\models\basic\Undelete;
 use yii\filters\AccessControl;
 use yii\data\ActiveDataProvider;
 use app\models\basic\ItemSearch;
+use app\models\basic\PhotoUpload;
 use Yii;
 
 class PersonController extends Controller {

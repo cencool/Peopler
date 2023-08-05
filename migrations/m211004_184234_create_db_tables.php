@@ -239,6 +239,7 @@ class m211004_184234_create_db_tables extends Migration {
 				'CASCADE',
 			);
 		}
+
 		if (Yii::$app->db->getTableSchema('user', true) === null) {
 			$this->createTable('user', [
 				'id' => $this->primaryKey(),

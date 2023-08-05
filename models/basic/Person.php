@@ -5,6 +5,7 @@ namespace app\models\basic;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use app\models\basic\RelationName;
+use app\models\basic\PersonPhoto;
 use Yii;
 
 class Person extends ActiveRecord {
@@ -62,6 +63,10 @@ class Person extends ActiveRecord {
 	public function getPersonItems() {
 		return $this->hasMany(Items::class, ['person_id'=> 'id']);
 	}
+
+    public function getPersonPhoto() {
+        return $this->hasOne(PersonPhoto::class, ['person_id'=>'id']);
+    }
 
 	public function getRelationsFromPerson() {
 		$sql = <<<SQL
