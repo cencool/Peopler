@@ -13,6 +13,7 @@ use app\models\basic\Person;
 use yii\filters\AccessControl;
 use app\models\basic\PersonPhoto;
 use app\models\basic\PhotoUpload;
+use app\models\basic\UploadFile;
 use yii\web\UploadedFile;
 
 use Yii;
@@ -104,12 +105,56 @@ class PhotoController extends Controller {
                 $defaultPhoto = Yii::getAlias('@app/web/') . 'avatar.svg';
                 $response =  Yii::$app->response->sendFile($defaultPhoto);
             }
-            // retrieve file name from db i.e. active record
-            //construct complete path to file to be sent
-            //create sendfile response
         } else {
             $defaultPhoto = Yii::getAlias('@app/web/') . 'avatar.svg';
             $response =  Yii::$app->response->sendFile($defaultPhoto);
+        }
+    }
+
+    public function actionReceive() {
+        $model = new PhotoUpload();
+        $id = Yii::$app->request->post('id');
+        $person = Person::findOne($id);
+        if ($person) {
+            $personPhoto = PersonPhoto::find()->where(['person_id' => $id])->one();
+            if (!$personPhoto) {
+                $personPhoto = new PersonPhoto();
+                $personPhoto->person_id = $person->id;
+                $personPhoto->file_name = 'default';
+                $personPhoto->save();
+            }
+            $file = UploadedFile::getInstanceByName('subor');
+            $timeStamp = (new \DateTime())->getTimestamp();
+            $fileName = $person->name . '@@' . $person->surname . '@@' . $timeStamp . '.' . $file->extension;
+            $model->imageFile = $file;
+            if ($model->upload($fileName)) {
+                $uploadDirAlias = '@app/uploads/person_photo/';
+                $uploadDir = Yii::getAlias($uploadDirAlias);
+                if (file_exists($uploadDir . $personPhoto->file_name)) {
+                    unlink($uploadDir . $personPhoto->file_name);
+                }
+                $personPhoto->file_name = $fileName;
+                $personPhoto->save();
+                Yii::$app->response->content = 'ulozene';
+                //$this->redirect(['person/update', 'id' => $id]);
+            }
+            /*
+            Yii::info($id, __METHOD__);
+            $uploadDirAlias = '@app/uploads/person_photo/';
+            $uploadDir = Yii::getAlias($uploadDirAlias);
+            $finfo = finfo_open();
+            $info = finfo_file($finfo, $file->tempName);
+            Yii::info($info, __METHOD__);
+            Yii::info($file->name, __METHOD__);
+            if ($model->validate()) {
+                Yii::$app->response->content = 'overene';
+            } else {
+                Yii::$app->response->content = 'neoverene';
+            }
+            $file->saveAs($uploadDir . 'pokus');
+             */
+        } else {
+            Yii::$app->response->content = 'invalid person id';
         }
     }
 }

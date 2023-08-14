@@ -11,7 +11,7 @@ class PhotoUpload extends Model {
 
     public function rules() {
         return [
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, bmp'],
+            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions'=>'png,jpg,jpeg,bmp,svg' ],
         ];
     }
 
@@ -23,7 +23,7 @@ class PhotoUpload extends Model {
             if (!file_exists($uploadDir) || !is_dir($uploadDir)) {
                 mkdir($uploadDir);
             }
-            $this->imageFile->saveAs($uploadDir.$fileName);
+            $this->imageFile->saveAs($uploadDir . $fileName);
             return true;
         } else {
             return false;
