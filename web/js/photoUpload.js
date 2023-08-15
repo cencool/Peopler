@@ -99,8 +99,9 @@ function uploadPhoto() {
   })
     .then((response) => {
       if (response.redirected) {
-        console.log("response: "+response.url);
-        throw new Error("request redirected");
+        console.log("response: " + response.url);
+        window.location.href = response.url;
+        //throw new Error("request redirected");
       } else {
         return response.text();
       }

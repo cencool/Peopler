@@ -135,8 +135,8 @@ class PhotoController extends Controller {
                 }
                 $personPhoto->file_name = $fileName;
                 $personPhoto->save();
-                Yii::$app->response->content = 'ulozene';
-                //$this->redirect(['person/update', 'id' => $id]);
+                //Yii::$app->response->content = 'ulozene';
+                $this->redirect(['person/update', 'id' => $id]);
             }
             /*
             Yii::info($id, __METHOD__);

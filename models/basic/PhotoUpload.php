@@ -11,7 +11,7 @@ class PhotoUpload extends Model {
 
     public function rules() {
         return [
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions'=>'png,jpg,jpeg,bmp,svg' ],
+            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png,jpg,jpeg,bmp'],
         ];
     }
 
