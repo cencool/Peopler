@@ -98,18 +98,21 @@ function uploadPhoto() {
     redirect: "follow",
   })
     .then((response) => {
-      if (response.redirected) {
-        console.log("response: " + response.url);
-        window.location.href = response.url;
-        //throw new Error("request redirected");
+      if (!response.ok) {
+        throw new Error("Response not OK ");
       } else {
         return response.text();
       }
     })
     .then((text) => {
-      console.log(text);
+      console.log("response: " + text);
+      if (text === "success") {
+        window.location.href = window.location.origin + "/person/update" + "?id=" + id;
+      } else {
+        window.location.href = window.location.origin + "/person/index";
+      }
     })
     .catch((e) => {
-      console.log("Mame tu chybu :" + e);
+      console.log("Error in FETCH:" + e);
     });
 }

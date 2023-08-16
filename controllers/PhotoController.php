@@ -136,25 +136,15 @@ class PhotoController extends Controller {
                 $personPhoto->file_name = $fileName;
                 $personPhoto->save();
                 //Yii::$app->response->content = 'ulozene';
-                $this->redirect(['person/update', 'id' => $id]);
+                Yii::$app->session->setFlash('info', 'Person photo updated!');
+                Yii::$app->response->content = 'success';
+
+                //return $this->render(['person/update', 'id' => $id]);
             }
-            /*
-            Yii::info($id, __METHOD__);
-            $uploadDirAlias = '@app/uploads/person_photo/';
-            $uploadDir = Yii::getAlias($uploadDirAlias);
-            $finfo = finfo_open();
-            $info = finfo_file($finfo, $file->tempName);
-            Yii::info($info, __METHOD__);
-            Yii::info($file->name, __METHOD__);
-            if ($model->validate()) {
-                Yii::$app->response->content = 'overene';
-            } else {
-                Yii::$app->response->content = 'neoverene';
-            }
-            $file->saveAs($uploadDir . 'pokus');
-             */
         } else {
-            Yii::$app->response->content = 'invalid person id';
+            Yii::$app->session->setFlash('error', 'Incorrect person ID provided!');
+            Yii::$app->response->content = 'failure';
+            //return $this->render(['person/index']);
         }
     }
 }

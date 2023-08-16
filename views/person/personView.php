@@ -43,8 +43,8 @@ $this->title = Yii::t('app', 'Person');
         ]);
         ?>
     </div>
-    <div id='personPhoto' class='col-sm-2' style="border:solid 1px blue;height:9em;">
-        <?= Html::img(['photo/send-photo','personId'=>$model->id],['style'=>'height:100%;width:100%;']) ?>
+    <div id='personPhoto' class='col-sm-2' style="border:solid 1px blue;height:9em;overflow:scroll;">
+        <?= Html::img(['photo/send-photo', 'personId' => $model->id], ['style' => 'height:100%;width:auto;']) ?>
     </div>
     <div class='col-sm-6'>
         <?php
@@ -74,7 +74,8 @@ $this->title = Yii::t('app', 'Person');
         };
 
         ?>
-        <?= Html::a(Yii::t('app', 'Items'), ['item/view-items', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+        <?= Html::a(Yii::t('app', 'Modify'), ['person/update', 'id' => $model->id], ['class' => 'btn btn-primary pull-left']) ?>
+        <?= Html::a(Yii::t('app', 'Items') . ' (' . $itemsCount . ')', ['item/view-items', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
         <?= Html::a(Yii::t('app', 'Attachments') . ' (' . $attachmentCount . ')', ['attachment/show-attachment', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
     </div>
 

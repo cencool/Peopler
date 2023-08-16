@@ -67,7 +67,7 @@ $this->title = Yii::t('app', 'Edit');
                     ) ?>
                 </div>
             </div>
-            <div id='personPhoto' class='col-xs-3' style='border:solid 1px blue;height:14em;'><?= Html::img(['photo/send-photo', 'personId' => $person->id], ['style' => 'height:100%;width:100%;']) ?></div>
+            <div id='personPhoto' class='col-xs-3' style='border:solid 1px blue;height:14em;overflow:scroll;'><?= Html::img(['photo/send-photo', 'personId' => $person->id], ['style' => 'height:100%;width:auto']) ?></div>
             <div class='col-xs-3'>
                 <?= Html::a('Change Photo', ['photo/upload', 'id' => $person->id], ['class' => 'btn btn-primary']) ?>
             </div>

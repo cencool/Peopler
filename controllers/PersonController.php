@@ -85,11 +85,13 @@ class PersonController extends Controller {
         if ($person) {
             $searchModel = new RelationSearch();
             $AttachmentCount = count(PersonAttachment::find()->where(['person_id' => $id])->all());
+            $itemsCount = count(Items::find()->where(['person_id' => $id])->all());
             $provider = $searchModel->search(Yii::$app->request->get());
             return $this->render('personView', [
                 'model' => $person,
                 'provider' => $provider,
                 'attachmentCount' => $AttachmentCount,
+                'itemsCount' => $itemsCount,
                 'searchModel' => $searchModel
             ]);
         } else $this->redirect(['index']);
