@@ -15,8 +15,9 @@ use app\models\basic\PersonPhoto;
 use app\models\basic\PhotoUpload;
 use app\models\basic\UploadFile;
 use yii\web\UploadedFile;
-
 use Yii;
+
+
 
 class PhotoController extends Controller {
 
@@ -112,6 +113,7 @@ class PhotoController extends Controller {
     }
 
     public function actionReceive() {
+
         $model = new PhotoUpload();
         $id = Yii::$app->request->post('id');
         $person = Person::findOne($id);

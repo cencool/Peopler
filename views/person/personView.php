@@ -44,7 +44,21 @@ $this->title = Yii::t('app', 'Person');
         ?>
     </div>
     <div id='personPhoto' class='col-sm-2' style="border:solid 1px blue;height:9em;overflow:scroll;">
-        <?= Html::img(['photo/send-photo', 'personId' => $model->id], ['style' => 'height:100%;width:auto;']) ?>
+        <?= Html::a(Html::img(['photo/send-photo', 'personId' => $model->id], ['style' => 'height:100%;width:auto;']), '#', ['id' => 'photoAnchor', 'data-toggle' => 'modal', 'data-target' => '#photoModal']) ?>
+
+        <!-- Photo Modal -->
+        <div class='modal fade' id='photoModal'>
+            <div class='modal-dialog '>
+                <div class='modal-content'>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span >&times;</span></button>
+                    </div>
+                    <div class='modal-body'>
+                        <?= Html::img(['photo/send-photo', 'personId' => $model->id], ['style' => 'height:100%;width:auto;', 'class' => 'img-responsive']) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class='col-sm-6'>
         <?php

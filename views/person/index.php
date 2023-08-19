@@ -66,6 +66,14 @@ $undeleteButtonClass = Yii::$app->session['undelete'] != null ?   'btn btn-prima
 			}
 		],
 		[
+			'attribute' => 'personItem',
+			'label' => Yii::t('app', 'Items'),
+			'content' => function ($model, $key, $index, $coumn) {
+				$count = count($model->personItems);
+				return Html::a('<b>' . $count . '</b>', ['item/view-items', 'id' => $model->id]);
+			}
+		],
+		[
 			'class' => 'yii\grid\ActionColumn',
 			'header' => Yii::t('app', 'Action'),
 
