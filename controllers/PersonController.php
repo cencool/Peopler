@@ -201,4 +201,8 @@ class PersonController extends Controller {
         Undelete::undeletePerson();
         return $this->redirect(['index']);
     }
+
+    public function actionSearch() {
+        return $this->render('detailSearch');
+    }
 }

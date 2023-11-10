@@ -5,6 +5,7 @@ return [
 	'Logout' => 'Odhlásiť ',
 	'Select Db' => 'Vybrať Db',
 	'Select Table' => 'Vybrať Tabuľku',
+    'Search'=> 'Hľadať',
 	'Home' => 'Domov',
 	'Surname' => 'Priezvisko',
 	'Name' => 'Meno',
