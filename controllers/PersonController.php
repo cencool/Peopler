@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace app\controllers;
 
+use app\models\basic\GeneralSearch;
 use yii\web\Controller;
 use app\models\basic\Person;
 use app\models\basic\PersonSearch;
@@ -203,6 +204,34 @@ class PersonController extends Controller {
     }
 
     public function actionSearch() {
-        return $this->render('detailSearch');
+        $model = new GeneralSearch();
+        if ($model->load($_POST)) {
+            //tu musim vytvorit query na zaklade zadanych parametrov
+            // nieco ako select * from person left join details on id..=id andFilterWhere
+            // ('LIKE','name', $model->name)....
+            // a potom zobrazit vysledok query v gridview. Teda asi to query bude ako dataprovider
+            // pre gridview...
+            $query = new \yii\db\Query();
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query
+            ]);
+            $query = $query->select(['person.id', 'name', 'surname'])
+                ->distinct()
+                ->from('person')
+                ->join('LEFT JOIN', 'person_detail', 'person_detail.person_id = person.id')
+                ->join('LEFT JOIN', 'items', 'items.person_id = person.id')
+                ->andFilterWhere(['LIKE', 'name', $model->name])
+                ->andFilterWhere(['LIKE', 'surname', $model->surname])
+                ->andFilterWhere(['LIKE', 'place', $model->place])
+                ->andFilterWhere(['LIKE', 'gender', $model->gender])
+                ->andFilterWhere(['LIKE', 'marital_status', $model->marital_status])
+                ->andFilterWhere(['LIKE', 'maiden_name', $model->maiden_name])
+                ->andFilterWhere(['LIKE', 'address', $model->address])
+                ->andFilterWhere(['LIKE', 'item', $model->item])
+                ->andFilterWhere(['LIKE', 'note', $model->note]);
+            $rows = $query->all();
+            return $this->render('searchResults', compact('dataProvider'));
+        }
+        return $this->render('generalSearch', compact('model'));
     }
 }

@@ -37,7 +37,7 @@ class Person extends ActiveRecord {
 		if ($userId == 'admin')
 			return parent::find();
 		else
-			return parent::find()->andWhere(['owner'=>$userId]);
+			return parent::find()->andWhere(['owner' => $userId]);
 	}
 
 	public static function tableName() {
@@ -61,12 +61,12 @@ class Person extends ActiveRecord {
 	}
 
 	public function getPersonItems() {
-		return $this->hasMany(Items::class, ['person_id'=> 'id']);
+		return $this->hasMany(Items::class, ['person_id' => 'id']);
 	}
 
-    public function getPersonPhoto() {
-        return $this->hasOne(PersonPhoto::class, ['person_id'=>'id']);
-    }
+	public function getPersonPhoto() {
+		return $this->hasOne(PersonPhoto::class, ['person_id' => 'id']);
+	}
 
 	public function getRelationsFromPerson() {
 		$sql = <<<SQL

@@ -20,11 +20,11 @@ $this->beginPage();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= Html::encode($this->title) ?></title>
     <style>
-        @media screen and (min-width:800px) {
-            #collapse-button {
-                display: none;
-            }
+    @media screen and (min-width:800px) {
+        #collapse-button {
+            display: none;
         }
+    }
     </style>
     <?php $this->head() ?>
 </head>
@@ -35,8 +35,10 @@ $this->beginPage();
         <nav class='navbar navbar-default navbar-fixed-top '>
             <div class='container'>
                 <div class='navbar-header'>
-                    <a href=<?= Url::to(['site/index']) ?> class='navbar-brand'><img src='/icicle.png' width='25' height='25'></a>
-                    <button id='collapse-button' type="button" class='btn btn-primary navbar-btn' data-toggle="collapse" data-target="#myNavbar">
+                    <a href=<?= Url::to(['site/index']) ?> class='navbar-brand'><img src='/icicle.png' width='25'
+                            height='25'></a>
+                    <button id='collapse-button' type="button" class='btn btn-primary navbar-btn' data-toggle="collapse"
+                        data-target="#myNavbar">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </button>
                 </div>
@@ -46,22 +48,18 @@ $this->beginPage();
                             <?= Html::a(Yii::t('app', 'List'), ['person/index']) ?>
                         </li>
                         <li>
-                            <?= Html::a(Yii::t('app','Search'), ['person/search']) ?>
-                        </li>
-                        <li>
-                            <?= Yii::$app->request->getRemoteIp() ?> 
-                             <!-- <?= 'Ahoj'?>  -->
+                            <?= Html::a(Yii::t('app', 'Search'), ['person/search']) ?>
                         </li>
                     </ul>
                     <ul class='nav navbar-nav navbar-right'>
                         <?php if (Yii::$app->user->isGuest) { ?>
-                            <li>
-                                <?= Html::a(Yii::t('app', 'Login'), ['site/login']) ?>
-                            </li>
+                        <li>
+                            <?= Html::a(Yii::t('app', 'Login'), ['site/login']) ?>
+                        </li>
                         <?php } else { ?>
-                            <li>
-                                <?= Html::a(Yii::t('app', 'Logout') . ': ' . Yii::$app->user->id, ['site/logout']) ?>
-                            </li>
+                        <li>
+                            <?= Html::a(Yii::t('app', 'Logout') . ': ' . Yii::$app->user->id, ['site/logout']) ?>
+                        </li>
                         <?php } ?>
                         <li class='dropdown'>
                             <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
@@ -90,6 +88,7 @@ $this->beginPage();
 
     <footer>
         <p style='text-align:center;'><b>&copy; 2021 Cencul </b></p>
+        <p style='text-align:center;'>IP:<?= Yii::$app->request->getRemoteIp() ?></p>
     </footer>
     <?php $this->endBody() ?>
 </body>

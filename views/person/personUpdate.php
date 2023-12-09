@@ -67,7 +67,9 @@ $this->title = Yii::t('app', 'Edit');
                     ) ?>
                 </div>
             </div>
-            <div id='personPhoto' class='col-xs-3' style='border:solid 1px blue;height:14em;overflow:scroll;'><?= Html::img(['photo/send-photo', 'personId' => $person->id], ['style' => 'height:100%;width:auto']) ?></div>
+            <div id='personPhoto' class='col-xs-3' style='border:solid 1px blue;height:14em;overflow:scroll;'>
+                <?= Html::img(['photo/send-photo', 'personId' => $person->id], ['style' => 'height:100%;width:auto']) ?>
+            </div>
             <div class='col-xs-3'>
                 <?= Html::a('Change Photo', ['photo/upload', 'id' => $person->id], ['class' => 'btn btn-primary']) ?>
             </div>
@@ -166,9 +168,19 @@ $this->title = Yii::t('app', 'Edit');
             ?>
         </div>
     </div>
-
+    <?php ActiveForm::end() ?>
     <div id='Detail' class='tab-pane fade'>
-
+        <?php
+        $form2 = ActiveForm::begin([
+            'layout' => 'horizontal',
+            'fieldConfig' => [
+                'template' => "
+        <div class='col-sm-3 text-left'>
+        {label}</div><div class='col-sm-8'>{input}</div>\n{error}{hint}",
+                'labelOptions' => ['class' => 'control-label'],
+            ],
+        ]);
+        ?>
         <div class='row'>
             <div class='col-xs-3'>
                 <p><b><?= Yii::t('app', 'Detail Information') ?></b></p>
@@ -184,22 +196,22 @@ $this->title = Yii::t('app', 'Edit');
             <div class='col-xs-8'>
                 <div class='form-group'>
 
-                    <?= $form->field($personDetail, 'marital_status') ?>
+                    <?= $form2->field($personDetail, 'marital_status') ?>
 
                     <?php
                     if ($person->gender == null || $person->gender === 'f') {
-                        echo $form->field($personDetail, 'maiden_name');
+                        echo $form2->field($personDetail, 'maiden_name');
                     }
                     ?>
-                    <?= $form->field($personDetail, 'address') ?>
-                    <?= $form->field($personDetail, 'note')->textarea(['rows' => 4,]) ?>
+                    <?= $form2->field($personDetail, 'address') ?>
+                    <?= $form2->field($personDetail, 'note')->textarea(['rows' => 4,]) ?>
 
                 </div>
 
 
-                <?php ActiveForm::end() ?>
             </div>
         </div>
+        <?php ActiveForm::end() ?>
         <?= Html::a(
             Yii::t('app', 'Attachments') . '(' . $attachmentCount . ')',
             [
