@@ -54,7 +54,9 @@ class Person extends ActiveRecord {
             return false;
         }
 
-        $this->owner = Yii::$app->user->id;
+        if ($insert) {
+            $this->owner = Yii::$app->user->id;
+        }
         return true;
     }
 
