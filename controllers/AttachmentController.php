@@ -106,16 +106,18 @@ class AttachmentController extends Controller {
 
         $fileRecord = PersonAttachment::findOne($fileId);
         $person = Person::findOne($fileRecord->person_id);
-        if ($person){
+        if ($person) {
             $fileName = $fileRecord->file_name;
             $thumbnailPrefix = Yii::getAlias('@app/uploads/thumbnails/');
             $uploadPrefix = Yii::getAlias('@app/uploads/');
             if (file_exists($thumbnailPrefix . $fileName)) {
-                $response =  Yii::$app->response->sendFile($thumbnailPrefix . $fileName);
+                // $response =  Yii::$app->response->sendFile($thumbnailPrefix . $fileName);
+                Yii::$app->response->sendFile($thumbnailPrefix . $fileName);
             } else {
-                $response =  Yii::$app->response->sendFile($uploadPrefix . $fileName);
+                // $response =  Yii::$app->response->sendFile($uploadPrefix . $fileName);
+                Yii::$app->response->sendFile($uploadPrefix . $fileName);
             }
-            return $response;
+            // return $response;
         } else {
             return $this->redirect(['person/index']);
         }
@@ -123,22 +125,21 @@ class AttachmentController extends Controller {
 
     public function actionShowAttachment($id) {
         $person = Person::findOne($id);
-        if ($person){
+        if ($person) {
 
             $fileQuery = PersonAttachment::find()->where(['person_id' => $id]);
             $countQuery = clone $fileQuery;
             $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 8]);
             $fileGallery = $fileQuery->offset($pages->offset)->limit($pages->limit)->all();
             return $this->render('attachmentView', ['fileGallery' => $fileGallery, 'pages' => $pages, 'id' => $id]);
-
         } else $this->redirect(['person/index']);
     }
 
     public function actionSendFile($fileId) {
 
         $fileRecord = PersonAttachment::findOne($fileId);
-        $person= Person::findOne($fileRecord->person_id);
-        if ($person){
+        $person = Person::findOne($fileRecord->person_id);
+        if ($person) {
             $fileName = $fileRecord->file_name;
             $thumbnailPrefix = Yii::getAlias('@app/uploads/thumbnails/');
             $uploadPrefix = Yii::getAlias('@app/uploads/');
@@ -154,8 +155,8 @@ class AttachmentController extends Controller {
     }
     public function actionDeleteAttachment($fileId) {
         $attachmentRecord = PersonAttachment::findOne($fileId);
-        $person= Person::findOne($attachmentRecord->person_id);
-        if ($person){
+        $person = Person::findOne($attachmentRecord->person_id);
+        if ($person) {
             $thumbnailPrefix = Yii::getAlias('@app/uploads/thumbnails/');
             $uploadPrefix = Yii::getAlias('@app/uploads/');
             $fileNameUpload = $uploadPrefix . $attachmentRecord->file_name;

@@ -101,14 +101,14 @@ class PhotoController extends Controller {
                 $photoName = $personPhoto->file_name;
                 $pathPrefix = Yii::getAlias('@app/uploads/person_photo/');
                 $photoFileName = $pathPrefix . $photoName;
-                $response =  Yii::$app->response->sendFile($photoFileName);
+                Yii::$app->response->sendFile($photoFileName);
             } else {
                 $defaultPhoto = Yii::getAlias('@app/web/') . 'avatar.svg';
-                $response =  Yii::$app->response->sendFile($defaultPhoto);
+                Yii::$app->response->sendFile($defaultPhoto);
             }
         } else {
             $defaultPhoto = Yii::getAlias('@app/web/') . 'avatar.svg';
-            $response =  Yii::$app->response->sendFile($defaultPhoto);
+            Yii::$app->response->sendFile($defaultPhoto);
         }
     }
 

@@ -6,12 +6,18 @@ use yii\web\Controller;
 use app\models\basic\Login;
 use app\models\basic\User;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\db\Exception;
+use yii\base\InvalidArgumentException;
 
 class SiteController extends Controller {
 
 
 	public function beforeAction($action) {
 
+		if ($action->id == 'get-token') {
+			$this->enableCsrfValidation = false;
+		}
 		$session = Yii::$app->session;
 		$request = Yii::$app->request;
 		if ($request->get('lng') == 'sk') {
@@ -54,5 +60,18 @@ class SiteController extends Controller {
 	public function actionLogout() {
 		Yii::$app->user->logout();
 		return $this->redirect(['site/login']);
+	}
+	public function actionGetToken() {
+		$request = Yii::$app->request;
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		if ($request->isPost) {
+			$user = $request->getBodyParam('user');
+			$password = $request->getBodyParam('password');
+			$identity = User::findIdentity($user);
+			if ($identity && $identity->validateAuthKey($password)) {
+				return ['token' => $identity->getAccessToken()];
+			}
+		}
+		return ['token' => null];
 	}
 }

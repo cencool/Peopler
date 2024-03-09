@@ -3,6 +3,8 @@
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
+$baseUrl = str_replace('/web', '', (new \yii\web\Request)->getBaseUrl());
+
 $config = [
     'id' => 'peopler',
     'basePath' => dirname(__DIR__),
@@ -19,13 +21,16 @@ $config = [
     'components' => [
         'assetManager' => [
             'class' => 'yii\web\AssetManager',
-            'forceCopy' => true,
+            'appendTimestamp' => true,
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'QlJXFYMvTcg47A7JMG9ID3k23pixne-p',
             'enableCookieValidation' => true,
             'enableCsrfValidation' => true,
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -54,11 +59,24 @@ $config = [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'cache' => null,
+            'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v1/person'],
+                    'pluralize' => false,
+                ],
+            ],
         ],
         'user' => [
             'identityClass' => 'app\models\basic\User',
             'loginUrl' => ['site/login', 'required' => true],
             'enableAutoLogin' => 'true',
+        ],
+    ],
+    'modules' => [
+        'v1' => [
+            'class' => 'app\modules\v1\Module',
+            // ... other configurations for the module ...
         ],
     ],
     'params' => $params,

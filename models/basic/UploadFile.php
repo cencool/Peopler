@@ -12,7 +12,7 @@ class UploadFile extends Model {
 
 	public function rules() {
 		return [
-			[['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, bmp'],
+			[['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, bmp,jpeg'],
 		];
 	}
 

@@ -16,7 +16,7 @@ class PersonSearch  extends Model {
 
     public function rules() {
         return [
-            [['name', 'surname', 'place', 'gender'], 'safe'],
+            [['id', 'name', 'surname', 'place', 'gender'], 'safe'],
         ];
     }
 
@@ -39,7 +39,8 @@ class PersonSearch  extends Model {
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'surname', $this->surname])
             ->andFilterWhere(['like', 'place', $this->place])
-            ->andFilterWhere(['like', 'gender', $this->gender]);
+            ->andFilterWhere(['like', 'gender', $this->gender])
+            ->andFilterWhere(['like', 'id', $this->id]);
 
         return $dataProvider;
     }

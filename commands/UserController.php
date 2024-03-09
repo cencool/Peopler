@@ -19,12 +19,14 @@ class UserController extends Controller {
 		}
 
 		if (!User::find()->where(['user_id' => $userId])->one()) {
-            $user = new User();
+			$user = new User();
 			if ('' == $password) $password = readline('Enter password: ');
 			$pwd_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
-            $user->user_id = $userId;
-            $user->pwd_hash = $pwd_hash;
-			echo $user->save()== true ?  'User created, OK' : 'User creation error, NG';
+			$access_token = Yii::$app->getSecurity()->generateRandomString();
+			$user->user_id = $userId;
+			$user->pwd_hash = $pwd_hash;
+			$user->access_token = $access_token;
+			echo $user->save() == true ?  'User created, OK' : 'User creation error, NG';
 			echo PHP_EOL;
 			return ExitCode::OK;
 		} else {
@@ -47,8 +49,8 @@ class UserController extends Controller {
 				if ($passwordNew == '') return ExitCode::OK;
 
 				$pwd_hash = Yii::$app->getSecurity()->generatePasswordHash($passwordNew);
-                $user->pwd_hash = $pwd_hash;
-				echo $user->save()== true ?  'User updated, OK' : 'User update error, NG';
+				$user->pwd_hash = $pwd_hash;
+				echo $user->save() == true ?  'User updated, OK' : 'User update error, NG';
 				echo PHP_EOL;
 				return ExitCode::OK;
 			} else {
@@ -69,7 +71,7 @@ class UserController extends Controller {
 
 		$user = User::find()->where(['user_id' => $userId])->one();
 		if ($user) {
-			echo 'User Id: ' . $user->user_id . PHP_EOL . 'pwd_hash: ' . $user->pwd_hash . PHP_EOL;
+			echo 'User Id: ' . $user->user_id . PHP_EOL . 'pwd_hash: ' . $user->pwd_hash . PHP_EOL . 'access_token: ' . $user->access_token . PHP_EOL;
 			return ExitCode::OK;
 		}
 		echo 'User: ' . $userId . ' not found!' . PHP_EOL;

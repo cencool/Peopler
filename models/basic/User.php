@@ -20,6 +20,8 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     public static function findIdentityByAccessToken($token, $type = null) {
+        $user = User::find()->where(['access_token' => $token])->one();
+        return $user;
     }
 
     public function getAuthKey() {
@@ -31,5 +33,9 @@ class User extends ActiveRecord implements IdentityInterface {
             $this->authKey = $authKey; // password has to be stored for auth. check, cookie ?
             return true;
         } else return false;
+    }
+
+    public function getAccessToken() {
+        return $this->access_token;
     }
 }
