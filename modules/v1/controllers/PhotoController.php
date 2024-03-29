@@ -2,12 +2,11 @@
 
 namespace app\modules\v1\controllers;
 
-use yii\rest\ActiveController;
+use yii\rest\Controller;
 use yii\filters\auth\HttpBasicAuth;
+use app\models\basic\PersonPhoto;
 
-class PersonController extends ActiveController {
-
-
+class PhotoController extends Controller {
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
@@ -23,12 +22,6 @@ class PersonController extends ActiveController {
             'cors' => [
                 'Origin' => ['*'],
                 'Access-Control-Allow-Headers' => ['X-Requested-With', 'Authorization'],
-                'Access-Control-Expose-Headers' => [
-                    'x-pagination-current-page',
-                    'x-pagination-page-count',
-                    'x-pagination-total-count',
-                    'x-pagination-per-page'
-                ],
             ],
         ];
 
@@ -40,15 +33,7 @@ class PersonController extends ActiveController {
         return $behaviors;
     }
 
-    public $modelClass = 'app\modules\v1\models\Person';
-
-    public function actions() {
-        $actions = parent::actions();
-        $actions['index']['dataFilter'] = [
-            'class' => \yii\data\ActiveDataFilter::class,
-            'searchModel' => 'app\models\basic\PersonSearch',
-        ];
-
-        return $actions;
+    public function actionSendPhoto($id) {
+        PersonPhoto::sendPersonPhoto($id);
     }
 }

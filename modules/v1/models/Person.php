@@ -56,6 +56,9 @@ class Person extends ActiveRecord {
 
         if ($insert) {
             $this->owner = Yii::$app->user->id;
+        } else {
+            $originalOwner = $this->getOldAttribute('owner');
+            $this->owner = $originalOwner;
         }
         return true;
     }

@@ -28,6 +28,7 @@ $config = [
             'cookieValidationKey' => 'QlJXFYMvTcg47A7JMG9ID3k23pixne-p',
             'enableCookieValidation' => true,
             'enableCsrfValidation' => true,
+            'baseUrl' => $baseUrl,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ],
@@ -59,10 +60,16 @@ $config = [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'cache' => null,
+            'baseUrl' => $baseUrl,
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['v1/person'],
+                    'pluralize' => false,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v1/person-detail'],
                     'pluralize' => false,
                 ],
             ],

@@ -94,22 +94,7 @@ class PhotoController extends Controller {
         }
     }
     public function actionSendPhoto($personId) {
-        $person = Person::findOne($personId);
-        if ($person) {
-            $personPhoto = PersonPhoto::find()->where(['person_id' => $personId])->one();
-            if ($personPhoto) {
-                $photoName = $personPhoto->file_name;
-                $pathPrefix = Yii::getAlias('@app/uploads/person_photo/');
-                $photoFileName = $pathPrefix . $photoName;
-                Yii::$app->response->sendFile($photoFileName);
-            } else {
-                $defaultPhoto = Yii::getAlias('@app/web/') . 'avatar.svg';
-                Yii::$app->response->sendFile($defaultPhoto);
-            }
-        } else {
-            $defaultPhoto = Yii::getAlias('@app/web/') . 'avatar.svg';
-            Yii::$app->response->sendFile($defaultPhoto);
-        }
+        PersonPhoto::sendPersonPhoto($personId);
     }
 
     public function actionReceive() {

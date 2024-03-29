@@ -7,10 +7,11 @@ use Yii;
 
 PhotoUploadAsset::register($this);
 $this->registerJsVar('_csrf', Yii::$app->request->getCsrfToken());
+$this->registerJsVar('webUrl', Yii::getAlias('@web'));
 
 ?>
 
-<input type='file' id='photoFile' accept=".jpg,.jpeg,.png"/>
+<input type='file' id='photoFile' accept=".jpg,.jpeg,.png" />
 <input type="button" id='resetBtn' value='Reset Cropper'>
 
 <button class='btn btn-primary' id='uploadBtn'>Upload</button>
@@ -22,7 +23,7 @@ $this->registerJsVar('_csrf', Yii::$app->request->getCsrfToken());
 <div class='row'>
     <div class='col-sm-3'><img id='cropPreview' src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" style='max-width:200px; max-height:200px;width:auto; height:auto;display:block;'>
     </div>
-    <div class='col-sm-9'> <?= Html::img("data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==", ['id' => 'image', 'style' => 'display:block; max-width:100%']) ?></div>
+    <div class='col-sm-9'>
+        <?= Html::img("data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==", ['id' => 'image', 'style' => 'display:block; max-width:100%']) ?>
+    </div>
 </div>
-
-

@@ -92,7 +92,7 @@ function uploadPhoto() {
   myForm.set("_csrf", _csrf);
   myForm.set("subor", newFile);
   myForm.set("id", id);
-  fetch(window.location.origin + "/photo/receive", {
+  fetch(window.location.origin + webUrl + "/photo/receive", {
     method: "POST",
     body: myForm,
     redirect: "follow",
@@ -107,9 +107,9 @@ function uploadPhoto() {
     .then((text) => {
       console.log("response: " + text);
       if (text === "success") {
-        window.location.href = window.location.origin + "/person/update" + "?id=" + id;
+        window.location.href = window.location.origin + webUrl + "/person/update" + "?id=" + id;
       } else {
-        window.location.href = window.location.origin + "/person/index";
+        window.location.href = window.location.origin + webUrl + "/person/index";
       }
     })
     .catch((e) => {

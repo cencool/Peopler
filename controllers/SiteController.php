@@ -63,7 +63,10 @@ class SiteController extends Controller {
 	}
 	public function actionGetToken() {
 		$request = Yii::$app->request;
+		/* enabling cors so that api can work */
 		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		Yii::$app->response->getHeaders()->add('Access-Control-Allow-Origin', '*');
+
 		if ($request->isPost) {
 			$user = $request->getBodyParam('user');
 			$password = $request->getBodyParam('password');

@@ -35,8 +35,8 @@ $this->beginPage();
         <nav class='navbar navbar-default navbar-fixed-top '>
             <div class='container'>
                 <div class='navbar-header'>
-                    <a href=<?= Url::to(['site/index']) ?> class='navbar-brand'><img src='/icicle.png' width='25'
-                            height='25'></a>
+                    <a href=<?= Url::to(['site/index']) ?> class='navbar-brand'><img
+                            src=<?= Yii::getAlias('@web') . '/icicle.png' ?> width='25' height='25'></a>
                     <button id='collapse-button' type="button" class='btn btn-primary navbar-btn' data-toggle="collapse"
                         data-target="#myNavbar">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
@@ -89,6 +89,7 @@ $this->beginPage();
     <footer>
         <p style='text-align:center;'><b>&copy; 2021 Cencul </b></p>
         <p style='text-align:center;'>IP:<?= Yii::$app->request->getRemoteIp() ?></p>
+        <p style='text-align:center;'>URL:<?= Yii::getAlias('@web') ?></p>
     </footer>
     <?php $this->endBody() ?>
 </body>

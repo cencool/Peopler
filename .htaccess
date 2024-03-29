@@ -1,0 +1,16 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+
+  RewriteCond %{REQUEST_URI} !^public
+  RewriteRule ^(.*)$ web/$1 [L]
+</IfModule>
+
+# Deny accessing below extensions
+<Files ~ "\.(lock|git)$">
+  Require all denied
+</Files>
+
+# Deny accessing dot files
+RewriteRule (^\.|/\.) - [F]

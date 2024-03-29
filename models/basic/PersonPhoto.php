@@ -3,6 +3,7 @@
 namespace app\models\basic;
 
 use yii\db\ActiveRecord;
+use app\models\basic\Person;
 
 class PersonPhoto extends ActiveRecord {
 
@@ -14,5 +15,23 @@ class PersonPhoto extends ActiveRecord {
         return [
             [['file_name'], 'safe'],
         ];
+    }
+    public static function sendPersonPhoto($personId) {
+        $person = Person::findOne($personId);
+        if ($person) {
+            $personPhoto = PersonPhoto::find()->where(['person_id' => $personId])->one();
+            if ($personPhoto) {
+                $photoName = $personPhoto->file_name;
+                $pathPrefix = \Yii::getAlias('@app/uploads/person_photo/');
+                $photoFileName = $pathPrefix . $photoName;
+                \Yii::$app->response->sendFile($photoFileName);
+            } else {
+                $defaultPhoto = \Yii::getAlias('@app/web/') . 'mavatar.jpg';
+                \Yii::$app->response->sendFile($defaultPhoto);
+            }
+        } else {
+            $defaultPhoto = \Yii::getAlias('@app/web/') . 'mavatar.jpg';
+            \Yii::$app->response->sendFile($defaultPhoto);
+        }
     }
 }
