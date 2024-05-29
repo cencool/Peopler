@@ -8,7 +8,7 @@ use app\models\basic\Person;
 
 /**
  * provides search model for grid view displaying relations table
- *  
+ *
  * */
 class RelationSearch extends Model {
 
@@ -25,7 +25,7 @@ class RelationSearch extends Model {
 
 	public function search($params = null) {
 		$relations_out = [];
-		if (isset($params['id']) && ($person=Person::findOne($params['id'])) ) {
+		if (isset($params['id']) && ($person = Person::findOne($params['id']))) {
 			$relations = $person->relations();
 			$relations_out = [];
 			$this->load($params);

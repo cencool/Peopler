@@ -2,6 +2,10 @@
 
 namespace app\modules\v1\controllers;
 
+use app\models\basic\GeneralSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBasicAuth;
 
@@ -29,6 +33,7 @@ class PersonController extends ActiveController {
                     'x-pagination-total-count',
                     'x-pagination-per-page'
                 ],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT'],
             ],
         ];
 
@@ -50,5 +55,57 @@ class PersonController extends ActiveController {
         ];
 
         return $actions;
+    }
+
+    public function actionSearch() {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            // $_POST does not contain query as we don't use form but body
+            $personAttributes = ["id", "name", "surname", "place", "gender", "owner"];
+            $post = $request->post();
+            $model = new GeneralSearch();
+            if ($model->load($post['GeneralSearch'], $formName = '')) {
+                $sort = [
+                    "params" => ["sort" => $post["sort"]],
+                    "attributes" => $personAttributes,
+                ];
+
+                $query = new \yii\db\Query();
+                $query = $query->select(['person.id', 'name', 'surname', "place", "gender", "owner"])
+                    ->distinct()
+                    ->from('person')
+                    ->join('LEFT JOIN', 'person_detail', 'person_detail.person_id = person.id')
+                    ->join('LEFT JOIN', 'items', 'items.person_id = person.id')
+                    ->join('LEFT JOIN', 'person_attachment', 'person_attachment.person_id = person.id')
+                    ->andFilterWhere(['LIKE', 'name', $model->name])
+                    ->andFilterWhere(['LIKE', 'surname', $model->surname])
+                    ->andFilterWhere(['LIKE', 'place', $model->place])
+                    ->andFilterWhere(['LIKE', 'gender', $model->gender])
+                    ->andFilterWhere(['LIKE', 'marital_status', $model->marital_status])
+                    ->andFilterWhere(['LIKE', 'maiden_name', $model->maiden_name])
+                    ->andFilterWhere(['LIKE', 'address', $model->address])
+                    ->andFilterWhere(['LIKE', 'item', $model->item])
+                    ->andFilterWhere(['LIKE', 'file_caption', $model->caption])
+                    ->andFilterWhere(['LIKE', 'note', $model->note]);
+                $dataProvider = Yii::createObject([
+                    'class' => ActiveDataProvider::class,
+                    'query' => $query,
+                    'sort' => $sort,
+                ]);
+                return $dataProvider;
+            }
+        }
+        // return empty but with pagination data
+        $query = new \yii\db\Query();
+        $query->select(['person.id', 'name', 'surname'])
+            ->distinct()
+            ->from('person');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+        // $dataProvider = new ArrayDataProvider([
+        //     'allModels' => [],
+        // ]);
+        return $dataProvider;
     }
 }

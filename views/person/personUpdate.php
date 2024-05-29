@@ -6,14 +6,14 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use app\widgets\Alert;
 
-/** 
+/**
  *
  * @var $this yii\web\view
  * @var $person app\models\Person
  * @var $personDetail app\models\PersonDetail
  * @var $searchModel app\models\RelationSearch
- * @var $provider yii\data\ArrayDataProvider 
- * 
+ * @var $provider yii\data\ArrayDataProvider
+ *
  */
 
 
@@ -204,7 +204,7 @@ $this->title = Yii::t('app', 'Edit');
                     }
                     ?>
                     <?= $form2->field($personDetail, 'address') ?>
-                    <?= $form2->field($personDetail, 'note')->textarea(['rows' => 4,]) ?>
+                    <?= $form2->field($personDetail, 'note')->textarea(['rows' => 4, 'maxlength' => 250]) ?>
 
                 </div>
 

@@ -72,6 +72,21 @@ $config = [
                     'controller' => ['v1/person-detail'],
                     'pluralize' => false,
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v1/relation'],
+                    'pluralize' => false,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v1/attachment'],
+                    'pluralize' => false,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v1/item'],
+                    'pluralize' => false,
+                ],
             ],
         ],
         'user' => [

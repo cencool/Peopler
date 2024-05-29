@@ -13,6 +13,7 @@ if (isset($id) && ($person = Person::findOne($id))) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Attachments')];
 }
 $this->registerJsVar('deleteMessage', Yii::t('app', 'Really delete the file ?'));
+$this->registerJsVar('webUrl', Yii::getAlias('@web'));
 $this->title = Yii::t('app', 'Attachments');
 ?>
 <?php $colCount = 0 ?>
@@ -23,8 +24,8 @@ $this->title = Yii::t('app', 'Attachments');
         }
         $colCount++;
 ?>
-<div class='col-sm-3  h-25'>
-    <?php $fileId = $person_file->id;
+        <div class='col-sm-3  h-25'>
+            <?php $fileId = $person_file->id;
             $id = $person_file->person_id;
             echo Html::img(
                 ['attachment/send-thumbnail', 'fileId' => $fileId],
@@ -38,7 +39,7 @@ $this->title = Yii::t('app', 'Attachments');
             echo "<button name=$fileId class='btn btn-sm btn-primary' data-toggle='modal' data-target='#imgModal'><span class='glyphicon glyphicon-fullscreen'></span></button>";
             echo Html::a("<span class='glyphicon glyphicon-trash'></span>", ['attachment/delete-attachment', 'fileId' => $fileId, 'id' => $id], ['class' => 'delete', 'id' => $fileId]);
             ?>
-</div>
+        </div>
 <?php
         if ($colCount >= 4) {
             $colCount = 0;

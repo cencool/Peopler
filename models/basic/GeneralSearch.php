@@ -14,10 +14,11 @@ class GeneralSearch extends Model {
     public $address;
     public $note;
     public $item;
+    public $caption;
 
     public function rules() {
         return [
-            [['name', 'surname', 'place', 'gender', 'marital_status', 'maiden_name', 'address', 'note', 'item'], 'safe']
+            [['name', 'surname', 'place', 'gender', 'marital_status', 'maiden_name', 'address', 'note', 'item', 'caption'], 'safe']
         ];
     }
 }

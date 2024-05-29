@@ -28,7 +28,7 @@ class Person extends ActiveRecord {
 		];
 	}
 
-	/* 
+	/*
 	 * overriding find() to check ownership
 	 * find() is also used by findOne()
 	 */
@@ -87,16 +87,16 @@ class Person extends ActiveRecord {
 	public function getRelationsToPerson() {
 		$sql = <<<SQL
 		select
-		pa.owner as a_owner, pb.owner as b_owner, pr.id as relation_id, 
+		pa.owner as a_owner, pb.owner as b_owner, pr.id as relation_id,
 		case when rp.relation_ab = rn.relation_name then rp.relation_ba else rp.relation_ab end as relation,
-		pb.id as to_whom_id, 
+		pb.id as to_whom_id,
 		concat(pb.surname,' ',pb.name) as relation_to_whom
 		from person pa
 		left join person_relation pr on pa.id = pr.person_b_id
 		left join person pb on pb.id = pr.person_a_id
 		left join relation_name rn on rn.id = pr.relation_ab_id
 		left join relation_pair rp on (rp.relation_ab = rn.relation_name or rp.relation_ba = rn.relation_name)
-		where (pa.id = :id 
+		where (pa.id = :id
 		and ((pa.gender = rp.gender_a and pb.gender = rp.gender_b) or (pa.gender = rp.gender_b and pb.gender = rp.gender_a)))
 		SQL;
 		$relationsIndirect = Yii::$app->db->createCommand($sql, [':id' => $this->id])->queryAll();
