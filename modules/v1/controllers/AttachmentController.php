@@ -149,7 +149,8 @@ class AttachmentController extends Controller {
                     return $attachment;
                 } else {
                     $uploadError = $uploadModel->getFirstError('imageFile');
-                    throw new \yii\web\ServerErrorHttpException('Attachment id:' . $id . 'error: ' . $uploadError);
+                    throw new  \yii\web\UnsupportedMediaTypeHttpException;
+                    ('Attachment id:' . $id . 'error: ' . $uploadError);
                 }
             } else {
                 throw new \yii\web\BadRequestHttpException();
@@ -228,9 +229,9 @@ class AttachmentController extends Controller {
             } else {
                 throw new \yii\web\NotFoundHttpException('File id:' . $id . ' not found');
             }
+        } else {
+            throw new \yii\web\BadRequestHttpException();
         }
-
-        throw new \yii\web\BadRequestHttpException();
     }
 
     public function actionList($personId) {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace app\models\basic;
@@ -9,12 +10,8 @@ class Items extends ActiveRecord {
 
     public function rules() {
         return [
-            [['person_id','item'],'safe'],
-            [['person_id','item'],'required']
+            [['person_id', 'item'], 'safe'],
+            [['person_id', 'item'], 'required']
         ];
     }
-
 }
-
-?>
-

@@ -55,7 +55,7 @@ class PhotoController extends Controller {
                 $personPhoto = new PersonPhoto();
                 $personPhoto->person_id = $person->id;
                 $personPhoto->file_name = 'default';
-                $personPhoto->save();
+                // removed to avoid failed upload entry in db $personPhoto->save();
             }
             $file = UploadedFile::getInstanceByName('personPhoto');
             if ($file->error > 0) {
@@ -73,6 +73,8 @@ class PhotoController extends Controller {
                 $personPhoto->file_name = $fileName;
                 $personPhoto->save();
                 return ["photo_upload" => "succes"];
+            } else {
+                throw new \yii\web\UnsupportedMediaTypeHttpException();
             }
         } else {
 

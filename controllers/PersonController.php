@@ -215,20 +215,39 @@ class PersonController extends Controller {
             $dataProvider = new ActiveDataProvider([
                 'query' => $query
             ]);
-            $query = $query->select(['person.id', 'name', 'surname'])
-                ->distinct()
-                ->from('person')
-                ->join('LEFT JOIN', 'person_detail', 'person_detail.person_id = person.id')
-                ->join('LEFT JOIN', 'items', 'items.person_id = person.id')
-                ->andFilterWhere(['LIKE', 'name', $model->name])
-                ->andFilterWhere(['LIKE', 'surname', $model->surname])
-                ->andFilterWhere(['LIKE', 'place', $model->place])
-                ->andFilterWhere(['LIKE', 'gender', $model->gender])
-                ->andFilterWhere(['LIKE', 'marital_status', $model->marital_status])
-                ->andFilterWhere(['LIKE', 'maiden_name', $model->maiden_name])
-                ->andFilterWhere(['LIKE', 'address', $model->address])
-                ->andFilterWhere(['LIKE', 'item', $model->item])
-                ->andFilterWhere(['LIKE', 'note', $model->note]);
+            $userId = Yii::$app->user->id;
+            if ($userId == 'admin') {
+                $query = $query->select(['person.id', 'name', 'surname'])
+                    ->distinct()
+                    ->from('person')
+                    ->join('LEFT JOIN', 'person_detail', 'person_detail.person_id = person.id')
+                    ->join('LEFT JOIN', 'items', 'items.person_id = person.id')
+                    ->andFilterWhere(['LIKE', 'name', $model->name])
+                    ->andFilterWhere(['LIKE', 'surname', $model->surname])
+                    ->andFilterWhere(['LIKE', 'place', $model->place])
+                    ->andFilterWhere(['LIKE', 'gender', $model->gender])
+                    ->andFilterWhere(['LIKE', 'marital_status', $model->marital_status])
+                    ->andFilterWhere(['LIKE', 'maiden_name', $model->maiden_name])
+                    ->andFilterWhere(['LIKE', 'address', $model->address])
+                    ->andFilterWhere(['LIKE', 'item', $model->item])
+                    ->andFilterWhere(['LIKE', 'note', $model->note]);
+            } else {
+                $query = $query->select(['person.id', 'name', 'surname'])
+                    ->distinct()
+                    ->from('person')
+                    ->join('LEFT JOIN', 'person_detail', 'person_detail.person_id = person.id')
+                    ->join('LEFT JOIN', 'items', 'items.person_id = person.id')
+                    ->andFilterWhere(['LIKE', 'name', $model->name])
+                    ->andFilterWhere(['LIKE', 'surname', $model->surname])
+                    ->andFilterWhere(['LIKE', 'place', $model->place])
+                    ->andFilterWhere(['LIKE', 'gender', $model->gender])
+                    ->andFilterWhere(['LIKE', 'marital_status', $model->marital_status])
+                    ->andFilterWhere(['LIKE', 'maiden_name', $model->maiden_name])
+                    ->andFilterWhere(['LIKE', 'address', $model->address])
+                    ->andFilterWhere(['LIKE', 'item', $model->item])
+                    ->andFilterWhere(['LIKE', 'note', $model->note])
+                    ->andFilterWhere(['=', 'owner', $userId]);
+            }
             $rows = $query->all();
             return $this->render('searchResults', compact('dataProvider'));
         }

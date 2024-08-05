@@ -71,22 +71,43 @@ class PersonController extends ActiveController {
                 ];
 
                 $query = new \yii\db\Query();
-                $query = $query->select(['person.id', 'name', 'surname', "place", "gender", "owner"])
-                    ->distinct()
-                    ->from('person')
-                    ->join('LEFT JOIN', 'person_detail', 'person_detail.person_id = person.id')
-                    ->join('LEFT JOIN', 'items', 'items.person_id = person.id')
-                    ->join('LEFT JOIN', 'person_attachment', 'person_attachment.person_id = person.id')
-                    ->andFilterWhere(['LIKE', 'name', $model->name])
-                    ->andFilterWhere(['LIKE', 'surname', $model->surname])
-                    ->andFilterWhere(['LIKE', 'place', $model->place])
-                    ->andFilterWhere(['LIKE', 'gender', $model->gender])
-                    ->andFilterWhere(['LIKE', 'marital_status', $model->marital_status])
-                    ->andFilterWhere(['LIKE', 'maiden_name', $model->maiden_name])
-                    ->andFilterWhere(['LIKE', 'address', $model->address])
-                    ->andFilterWhere(['LIKE', 'item', $model->item])
-                    ->andFilterWhere(['LIKE', 'file_caption', $model->caption])
-                    ->andFilterWhere(['LIKE', 'note', $model->note]);
+                $userId = Yii::$app->user->id;
+                if ($userId == 'admin') {
+                    $query = $query->select(['person.id', 'name', 'surname', "place", "gender", "owner"])
+                        ->distinct()
+                        ->from('person')
+                        ->join('LEFT JOIN', 'person_detail', 'person_detail.person_id = person.id')
+                        ->join('LEFT JOIN', 'items', 'items.person_id = person.id')
+                        ->join('LEFT JOIN', 'person_attachment', 'person_attachment.person_id = person.id')
+                        ->andFilterWhere(['LIKE', 'name', $model->name])
+                        ->andFilterWhere(['LIKE', 'surname', $model->surname])
+                        ->andFilterWhere(['LIKE', 'place', $model->place])
+                        ->andFilterWhere(['LIKE', 'gender', $model->gender])
+                        ->andFilterWhere(['LIKE', 'marital_status', $model->marital_status])
+                        ->andFilterWhere(['LIKE', 'maiden_name', $model->maiden_name])
+                        ->andFilterWhere(['LIKE', 'address', $model->address])
+                        ->andFilterWhere(['LIKE', 'item', $model->item])
+                        ->andFilterWhere(['LIKE', 'file_caption', $model->caption])
+                        ->andFilterWhere(['LIKE', 'note', $model->note]);
+                } else {
+                    $query = $query->select(['person.id', 'name', 'surname', "place", "gender", "owner"])
+                        ->distinct()
+                        ->from('person')
+                        ->join('LEFT JOIN', 'person_detail', 'person_detail.person_id = person.id')
+                        ->join('LEFT JOIN', 'items', 'items.person_id = person.id')
+                        ->join('LEFT JOIN', 'person_attachment', 'person_attachment.person_id = person.id')
+                        ->andFilterWhere(['LIKE', 'name', $model->name])
+                        ->andFilterWhere(['LIKE', 'surname', $model->surname])
+                        ->andFilterWhere(['LIKE', 'place', $model->place])
+                        ->andFilterWhere(['LIKE', 'gender', $model->gender])
+                        ->andFilterWhere(['LIKE', 'marital_status', $model->marital_status])
+                        ->andFilterWhere(['LIKE', 'maiden_name', $model->maiden_name])
+                        ->andFilterWhere(['LIKE', 'address', $model->address])
+                        ->andFilterWhere(['LIKE', 'item', $model->item])
+                        ->andFilterWhere(['LIKE', 'file_caption', $model->caption])
+                        ->andFilterWhere(['LIKE', 'note', $model->note])
+                        ->andFilterWhere(['=', 'owner', $userId]);
+                }
                 $dataProvider = Yii::createObject([
                     'class' => ActiveDataProvider::class,
                     'query' => $query,
