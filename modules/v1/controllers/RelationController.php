@@ -68,7 +68,8 @@ class RelationController extends Controller {
 
     public function actionDelete($id) {
         $relationRecord = PersonRelation::findOne($id);
-        if ($relationRecord && $relationRecord->delete()) {
+        // only the owner of both persons (or admin) may delete the relation
+        if ($relationRecord && $relationRecord->checkOwnership() && $relationRecord->delete()) {
             return ["deleted_id" => $id];
         }
         throw new \yii\web\NotFoundHttpException('Relation id:' . $id . ' not found');
@@ -104,7 +105,8 @@ class RelationController extends Controller {
 
     public function actionViewRelation($relationId) {
         $relation = PersonRelation::findOne($relationId);
-        if ($relation) {
+        // only the owner of both persons (or admin) may view the relation
+        if ($relation && $relation->checkOwnership()) {
             return $relation;
         }
         throw new \yii\web\NotFoundHttpException('Relation id:' . $relationId . ' not found');

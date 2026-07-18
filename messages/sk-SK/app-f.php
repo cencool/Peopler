@@ -18,8 +18,13 @@ return [
 	'acquaintance'=>'známa',
 	'aunt' => 'teta',
 	'godmother' => 'krstná',
-
-
-
+	// deeper computed relations
+	'great-grandmother' => 'prababka',
+	'great-granddaughter' => 'pravnučka',
+	'great-great-grandmother' => 'praprababka',
+	'great-great-granddaughter' => 'prapravnučka',
+	'great-aunt' => 'prateta',
+	'grand-niece' => 'praneter',
+	'relative' => 'príbuzná',
 ];
 ?>

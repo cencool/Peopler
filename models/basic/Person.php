@@ -79,7 +79,13 @@ class Person extends ActiveRecord {
 		left join relation_name rn on rn.id = pr.relation_ab_id
 		where pr.person_a_id = :id
 		SQL;
-		$relationsDirect = Yii::$app->db->createCommand($sql, [':id' => $this->id])->queryAll();
+		$params = [':id' => $this->id];
+		if (Yii::$app->user->id !== 'admin') {
+			// non-admin users only see relations to persons they also own
+			$sql .= ' and pb.owner = :owner';
+			$params[':owner'] = $this->owner;
+		}
+		$relationsDirect = Yii::$app->db->createCommand($sql, $params)->queryAll();
 
 		return $relationsDirect;
 	}
@@ -99,7 +105,13 @@ class Person extends ActiveRecord {
 		where (pa.id = :id
 		and ((pa.gender = rp.gender_a and pb.gender = rp.gender_b) or (pa.gender = rp.gender_b and pb.gender = rp.gender_a)))
 		SQL;
-		$relationsIndirect = Yii::$app->db->createCommand($sql, [':id' => $this->id])->queryAll();
+		$params = [':id' => $this->id];
+		if (Yii::$app->user->id !== 'admin') {
+			// non-admin users only see relations to persons they also own
+			$sql .= ' and pb.owner = :owner';
+			$params[':owner'] = $this->owner;
+		}
+		$relationsIndirect = Yii::$app->db->createCommand($sql, $params)->queryAll();
 
 		return $relationsIndirect;
 	}
@@ -116,111 +128,13 @@ class Person extends ActiveRecord {
 		return ArrayHelper::merge($relationsFrom, $relationsTo);
 	}
 
+	/**
+	 * Implicit relations inferred from the graph of explicit relations.
+	 * Delegates to {@see KinshipResolver} (BFS over the owner's relation graph).
+	 * Computed rows are flagged with relation_id = -1.
+	 */
 	public function computedRelations() {
-		$thisPersonRelations = $this->givenRelations();
-		$computedRelations = [];
-		$tokenChains = [
-			'child' => [
-				'child' => 'grandchild',
-				'sibling' => 'nephew',
-				'partner' => 'child',
-				'parent' => 'sibling'
-			],
-			'sibling' => [
-				'child' => 'child',
-				'sibling' => 'sibling',
-				'partner' => 'sibling-in-law',
-				'parent' => 'uncle',
-			],
-			'partner' => [
-				'child' => 'child-in-law',
-				'sibling' => 'sibling-in-law',
-				'partner' => 'partner',
-				'parent' => 'parent',
-			],
-			'parent' => [
-				'child' => 'partner',
-				'sibling' => 'parent',
-				'partner' => 'parent-in-law',
-				'parent' => 'grandparent',
-			],
-		];
-		$currentTokenChain = [];
-		$currentRelations = $thisPersonRelations;
-		do {
-			$newRelations = [];
-
-			foreach ($currentRelations as $relationA) {
-				$relA = RelationName::find()->where(
-					[
-						'and',
-						['gender' => $this->gender],
-						['relation_name' => $relationA['relation']]
-					]
-				)->one();
-				// TODO - this is to skip undefined relations
-				if ($relA == null) {
-					continue;
-				}
-				$tokenA = RelationName::find()->where(
-					[
-						'and',
-						['gender' => $this->gender],
-						['relation_name' => $relationA['relation']]
-					]
-				)->one()->token;
-				$currentTokenChain[] = $tokenA;
-
-				$personBid = $relationA['to_whom_id'];
-				$personB = Person::findOne($personBid);
-				if (!$personB) continue; // if person B has different owner or not exist skip
-				$personBrelations = $personB->givenRelations();
-				foreach ($personBrelations as $relationB) {
-					if ($relationB['to_whom_id'] != $this->id) {
-						$relationName = (RelationName::find()->where([
-							'and',
-							['relation_name' => $relationB['relation']],
-							['gender' => $personB->gender]
-						])->one());
-						// TODO - this is hack to skip undefined relations
-						if ($relationName == null) {
-							continue;
-						}
-						$tokenB = (RelationName::find()->where([
-							'and',
-							['relation_name' => $relationB['relation']],
-							['gender' => $personB->gender]
-						])->one())->token;
-						$currentTokenChain[] = $tokenB;
-						$index = $currentTokenChain[0] . '.' . $currentTokenChain[1];
-						if ($resultToken = ArrayHelper::getValue($tokenChains, $index)) {
-							$relation = RelationName::find()->where([
-								'and',
-								['token' => $resultToken],
-								['gender' => $this->gender]
-							])->one()['relation_name'];
-							$newRelations[] = [
-								'relation_id' => -1,
-								'to_whom_id' => $relationB['to_whom_id'],
-								'relation_to_whom' => $relationB['relation_to_whom'],
-								'relation' => $relation,
-							];
-							if ($this->checkRelationExists(end($newRelations), $thisPersonRelations)) {
-								array_pop($newRelations);
-							} else if ($this->checkRelationExists(end($newRelations), $computedRelations)) {
-								array_pop($newRelations);
-							} else {
-								$computedRelations[] = end($newRelations);
-							}
-						}
-						array_pop($currentTokenChain);
-					}
-				}
-				$currentTokenChain = [];
-			}
-			$currentRelations = $newRelations;
-		} while (count($newRelations) > 0);
-		return $computedRelations;
+		return (new KinshipResolver($this->id, $this->owner, $this->gender))->compute();
 	}
 
 	public function relations() {
@@ -234,16 +148,5 @@ class Person extends ActiveRecord {
 			$relations[$key] = $value;
 		}
 		return $relations;
-	}
-
-	public function checkRelationExists(array $relationToCheck, array $relations) {
-		foreach ($relations as $relation) {
-			$a = $relationToCheck['to_whom_id'] == ArrayHelper::getValue($relation, 'to_whom_id');
-			$b = $relationToCheck['relation'] == ArrayHelper::getValue($relation, 'relation');
-			if ($a && $b) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

@@ -18,10 +18,14 @@ return [
 	'acquaintance' => 'známy',
 	'godfather' => 'kmotor',
 	'uncle' => 'strýko',
-	 
-
-	
-	
+	// deeper computed relations
+	'great-grandfather' => 'pradedko',
+	'great-grandson' => 'pravnuk',
+	'great-great-grandfather' => 'prapradedko',
+	'great-great-grandson' => 'prapravnuk',
+	'great-uncle' => 'prastrýko',
+	'grand-nephew' => 'prasynovec',
+	'relative' => 'príbuzný',
 ]	;
 
 ?>

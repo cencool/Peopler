@@ -38,15 +38,22 @@ class PersonRelation extends ActiveRecord {
         return $this->hasOne(RelationName::class, ['id' => 'relation_ab_id']);
     }
 
+    /**
+     * A relation is "owned" by the current user only when BOTH of its persons
+     * belong to that user; admin owns everything. Owners are read directly (not
+     * via the owner-scoped Person::find relations, which would return null for a
+     * foreign person and break the check).
+     */
     public function checkOwnership() {
         $userId = Yii::$app->user->id;
-        $ownerA = $this->person_a->owner;
-        $ownerB = $this->person_b->owner;
-        $conditionA = ($userId == $ownerA);
-        $conditionB = ($userId == $ownerB);
-        if (($conditionA && $conditionB) || ($userId == 'admin')) {
+        if ($userId == 'admin') {
             return true;
         }
-        return false;
+        $foreignCount = (new \yii\db\Query())
+            ->from('person')
+            ->where(['id' => [$this->person_a_id, $this->person_b_id]])
+            ->andWhere(['not', ['owner' => $userId]])
+            ->count();
+        return $foreignCount == 0;
     }
 }
