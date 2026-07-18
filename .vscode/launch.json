@@ -5,13 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Listen for XDebug",
+            "name": "Listen for Vagrant",
             "type": "php",
             "request": "launch",
             "port": 9003,
             "pathMappings": {
-                "/home/vagrant/web/peopler": "${workspaceFolder}",
-            },
+                "/home/vagrant/web/peopler": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Listen for Docker",
+            "type": "php",
+            "request": "launch",
+            "port": 9005,
+            "pathMappings": {
+                "/app": "${workspaceFolder}"
+            }
         },
         {
             "name": "Launch currently open script",

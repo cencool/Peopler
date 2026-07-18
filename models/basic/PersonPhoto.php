@@ -20,7 +20,7 @@ class PersonPhoto extends ActiveRecord {
         $person = Person::findOne($personId);
         if ($person) {
             $personPhoto = PersonPhoto::find()->where(['person_id' => $personId])->one();
-            if ($personPhoto) {
+            if ($personPhoto !== null && $personPhoto->file_name != 'default') {
                 $photoName = $personPhoto->file_name;
                 $pathPrefix = \Yii::getAlias('@app/uploads/person_photo/');
                 $photoFileName = $pathPrefix . $photoName;

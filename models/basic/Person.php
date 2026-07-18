@@ -151,6 +151,17 @@ class Person extends ActiveRecord {
 			$newRelations = [];
 
 			foreach ($currentRelations as $relationA) {
+				$relA = RelationName::find()->where(
+					[
+						'and',
+						['gender' => $this->gender],
+						['relation_name' => $relationA['relation']]
+					]
+				)->one();
+				// TODO - this is to skip undefined relations
+				if ($relA == null) {
+					continue;
+				}
 				$tokenA = RelationName::find()->where(
 					[
 						'and',
@@ -166,6 +177,15 @@ class Person extends ActiveRecord {
 				$personBrelations = $personB->givenRelations();
 				foreach ($personBrelations as $relationB) {
 					if ($relationB['to_whom_id'] != $this->id) {
+						$relationName = (RelationName::find()->where([
+							'and',
+							['relation_name' => $relationB['relation']],
+							['gender' => $personB->gender]
+						])->one());
+						// TODO - this is hack to skip undefined relations
+						if ($relationName == null) {
+							continue;
+						}
 						$tokenB = (RelationName::find()->where([
 							'and',
 							['relation_name' => $relationB['relation']],

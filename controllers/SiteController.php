@@ -72,6 +72,7 @@ class SiteController extends Controller {
 			$password = $request->getBodyParam('password');
 			$identity = User::findIdentity($user);
 			if ($identity && $identity->validateAuthKey($password)) {
+				/** @var \app\models\basic\User $identity */
 				return ['token' => $identity->getAccessToken()];
 			}
 		}

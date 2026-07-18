@@ -18,7 +18,7 @@ class Person extends ActiveRecord {
             [['name', 'surname', 'place', 'gender', 'owner',], 'safe'],
             [['name', 'surname', 'place', 'gender'], 'trim'],
             [['surname', 'gender'], 'required'],
-            [['name', 'surname', 'place'], 'string', 'max' => 20],
+            [['name', 'surname', 'place'], 'string', 'max' => 50],
             ['gender', 'string', 'max' => 1],
             ['gender', 'match', 'pattern' => '@\bm\b|\bf\b|\?@', 'message' => Yii::t('app', 'Gender undefined')],
         ];

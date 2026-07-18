@@ -47,6 +47,20 @@ class PersonController extends ActiveController {
 
     public $modelClass = 'app\modules\v1\models\Person';
 
+    /**
+     * Configures the default REST actions for the Person controller.
+     * Specifically, it adds data filtering capability to the 'index' action
+     * using ActiveDataFilter. This allows API clients to filter person records
+     * using query parameters based on the PersonSearch model attributes.
+     * 
+     * Note: The searchModel must have appropriate validation rules for filtering.
+     * While Person model could be used, its strict validation rules (required fields,
+     * pattern matching) would cause 422 errors during filtering. PersonSearch is
+     * better suited as it only has 'safe' rules, allowing partial/optional search
+     * criteria without validation errors.
+     *
+     * @return array The configured actions
+     */
     public function actions() {
         $actions = parent::actions();
         $actions['index']['dataFilter'] = [
@@ -56,6 +70,8 @@ class PersonController extends ActiveController {
 
         return $actions;
     }
+
+
 
     public function actionSearch() {
         $request = Yii::$app->request;
