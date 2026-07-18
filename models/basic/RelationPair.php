@@ -115,6 +115,12 @@ class RelationPair extends ActiveRecord {
 		)
 			->asArray()->all();
 
+		if (empty($relationPairs)) {
+			// no relation_pair for this gender/relation combination — e.g. one of
+			// the persons has unknown gender '?'. No complement can be derived.
+			return null;
+		}
+
 		$relationComplement = ($relationPairs[0]['relation_ab'] == $relation) ?
 			$relationPairs[0]['relation_ba'] : $relationPairs[0]['relation_ab'];
 

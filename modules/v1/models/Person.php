@@ -112,7 +112,7 @@ class Person extends ActiveRecord {
     }
 
     public function getRelationsToPerson() {
-        $sql = <<<SQL
+        $genderedSql = <<<SQL
 		select
 		pa.owner as a_owner, pb.owner as b_owner, pr.id as relation_id,
 		case when rp.relation_ab = rn.relation_name then rp.relation_ba else rp.relation_ab end as relation,
@@ -126,15 +126,30 @@ class Person extends ActiveRecord {
 		where (pa.id = :id
 		and ((pa.gender = rp.gender_a and pb.gender = rp.gender_b) or (pa.gender = rp.gender_b and pb.gender = rp.gender_a)))
 		SQL;
+        // unknown-gender ('?') persons have no gendered inverse in relation_pair,
+        // so fall back to the neutral complement token (child, sibling, godchild…).
+        $neutralSql = <<<SQL
+		select distinct
+		pa.owner as a_owner, pb.owner as b_owner, pr.id as relation_id,
+		rn_inv.token as relation,
+		pb.id as to_whom_id,
+		concat(pb.surname,' ',pb.name) as relation_to_whom
+		from person pa
+		join person_relation pr on pa.id = pr.person_b_id
+		join person pb on pb.id = pr.person_a_id
+		join relation_name rn on rn.id = pr.relation_ab_id
+		join relation_pair rp on (rp.relation_ab = rn.relation_name or rp.relation_ba = rn.relation_name)
+		join relation_name rn_inv on rn_inv.relation_name = case when rp.relation_ab = rn.relation_name then rp.relation_ba else rp.relation_ab end
+		where pa.id = :id
+		SQL;
+        $sql = $this->gender === '?' ? $neutralSql : $genderedSql;
         $params = [':id' => $this->id];
         if (Yii::$app->user->id !== 'admin') {
             // non-admin users only see relations to persons they also own
             $sql .= ' and pb.owner = :owner';
             $params[':owner'] = $this->owner;
         }
-        $relationsIndirect = Yii::$app->db->createCommand($sql, $params)->queryAll();
-
-        return $relationsIndirect;
+        return Yii::$app->db->createCommand($sql, $params)->queryAll();
     }
 
     /**

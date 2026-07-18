@@ -26,5 +26,17 @@ return [
 	'great-aunt' => 'prateta',
 	'grand-niece' => 'praneter',
 	'relative' => 'príbuzná',
+	// step / half / god / partnership / adoptive / foster
+	'step-mother' => 'nevlastná matka',
+	'step-daughter' => 'nevlastná dcéra',
+	'step-sister' => 'nevlastná sestra',
+	'half-sister' => 'polsestra',
+	'goddaughter' => 'krstná dcéra',
+	'ex-wife' => 'bývalá manželka',
+	'fiancee' => 'snúbenica',
+	'adoptive-mother' => 'adoptívna matka',
+	'adoptive-daughter' => 'adoptovaná dcéra',
+	'foster-mother' => 'pestúnka',
+	'foster-daughter' => 'zverená dcéra',
 ];
 ?>

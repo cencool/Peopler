@@ -56,6 +56,7 @@ return [
 	'Really delete the record ?' => 'Naozaj vymazať záznam ?',
 	'Select relation !' => 'Vyber vzťah !',
 	'Edit' => 'Upraviť',
-	'Upload Photo' => 'Nahrať fotku'
+	'Upload Photo' => 'Nahrať fotku',
+	'Relation not defined for this gender combination' => 'Vzťah nie je definovaný pre túto kombináciu pohlaví'
 
 ];

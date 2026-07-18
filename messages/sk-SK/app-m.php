@@ -26,6 +26,18 @@ return [
 	'great-uncle' => 'prastrýko',
 	'grand-nephew' => 'prasynovec',
 	'relative' => 'príbuzný',
+	// step / half / god / partnership / adoptive / foster
+	'step-father' => 'nevlastný otec',
+	'step-son' => 'nevlastný syn',
+	'step-brother' => 'nevlastný brat',
+	'half-brother' => 'polbrat',
+	'godson' => 'krstný syn',
+	'ex-husband' => 'bývalý manžel',
+	'fiance' => 'snúbenec',
+	'adoptive-father' => 'adoptívny otec',
+	'adoptive-son' => 'adoptovaný syn',
+	'foster-father' => 'pestún',
+	'foster-son' => 'zverený syn',
 ]	;
 
 ?>

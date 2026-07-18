@@ -85,9 +85,22 @@ class RelationController extends Controller {
 			$relationFromName = $model->relationName->relation_name;
 			$personBgender = $model->person_b->gender;
 			$relationToName = RelationPair::relationComplement($person->gender, $personBgender, $relationFromName);
-			$relationToId = RelationName::find()->where(['relation_name' => $relationToName, 'gender' => $personBgender])->all()[0]->id;
-			$duplicate = PersonRelation::find()
-				->where(['person_a_id' => $model->person_b_id, 'relation_ab_id' => $relationToId, 'person_b_id' => $id])->all();
+			// the reverse relation is only needed to detect an already-existing
+			// mirror row; it can't be resolved when a gender combination has no
+			// relation_pair entry (e.g. an unknown-gender '?' person), so skip the
+			// duplicate check gracefully instead of crashing.
+			$duplicate = false;
+			if ($relationToName !== null) {
+				$relationTo = RelationName::find()
+					->where(['relation_name' => $relationToName, 'gender' => $personBgender])->one();
+				if ($relationTo) {
+					$duplicate = PersonRelation::find()->where([
+						'person_a_id' => $model->person_b_id,
+						'relation_ab_id' => $relationTo->id,
+						'person_b_id' => $id,
+					])->all();
+				}
+			}
 
 			if (!$duplicate && ($model->person_a_id != $model->person_b_id)) {
 
@@ -170,8 +183,20 @@ class RelationController extends Controller {
 					$genderFrom = $person->gender;
 					$genderTo = $personRelation->person_a->gender;
 					$relationName = RelationPair::relationComplement($genderFrom, $genderTo, $relationName);
-					$relationId = RelationName::find()->where(['relation_name' => $relationName])->all()[0]->id;
-					$personRelation->relation_ab_id = $relationId;
+					$relationTo = $relationName !== null
+						? RelationName::find()->where(['relation_name' => $relationName, 'gender' => $genderTo])->one()
+						: null;
+					if (!$relationTo) {
+						// unknown-gender person or missing pair: can't map the
+						// reverse relation — warn instead of crashing.
+						Yii::$app->session->setFlash('warning', Yii::t('app', 'Relation not defined for this gender combination'));
+						return $this->render('relationUpdate', [
+							'person' => $person,
+							'model' => $model,
+							'relationsList' => $relationsList,
+						]);
+					}
+					$personRelation->relation_ab_id = $relationTo->id;
 				}
 
 				$session = Yii::$app->session;
