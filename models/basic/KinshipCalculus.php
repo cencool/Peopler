@@ -79,6 +79,9 @@ class KinshipCalculus
         'parent-in-law'             => 'child-in-law',
         'child-in-law'              => 'parent-in-law',
         'sibling-in-law'            => 'sibling-in-law',
+        'step-parent'               => 'step-child',
+        'step-child'                => 'step-parent',
+        'step-sibling'              => 'step-sibling',
         'friend'                    => 'friend',
         'colleague'                 => 'colleague',
         'classmate'                 => 'classmate',
@@ -96,9 +99,17 @@ class KinshipCalculus
         'child'   => ['partner' => 'child-in-law'],   // my child's spouse
         'sibling' => ['partner' => 'sibling-in-law'], // my sibling's spouse
         'uncle'   => ['partner' => 'uncle'],          // aunt/uncle by marriage
+        // A couple is assumed to share their children: a current partner's child
+        // counts as your own child (and their parent as your own parent), so the
+        // relation resolves to child/parent — not step-child/step-parent. Genuine
+        // step relations must be entered explicitly (and, being given, are never
+        // overridden by this inference). Ex-partners carry a different token, so
+        // an ex's child is deliberately NOT claimed here.
+        'parent'  => ['partner' => 'parent'],         // my parent's spouse -> my parent
         'partner' => [
             'parent'  => 'parent-in-law',             // my spouse's parent
             'sibling' => 'sibling-in-law',            // my spouse's sibling
+            'child'   => 'child',                     // my spouse's child -> my child
         ],
     ];
 
