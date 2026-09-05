@@ -316,6 +316,49 @@ Implemented on branch `dev` (2026-07-18):
   `config/test_db.php` (currently absent from the repo — a dummy config is enough
   since the pure tests never hit the DB; the Yii `db` component connects lazily).
 
+## 11. Lesson learned — a partner's child is inferred as your own child (2026-09-02)
+
+**Symptom:** with `A`, `B = wife of A`, and `C = child of B` (no explicit A–C
+relation), listing A's relations showed B but **not** C. The son silently
+disappeared.
+
+**Cause:** the BFS reached C only via `A --partner--> B --child--> C`, i.e.
+`compose('partner', 'child')`. The `MARRIAGE` table had no such entry and
+`partner` is not a `COORDS` (blood) token, so `compose()` returned `null` — the
+correct signal for "not expressible, prune this path". Pruning was right in
+general but wrong here: a spouse's child *is* expressible.
+
+**Decision (deliberate, not just a null-fix):** the relation graph **cannot
+distinguish** a couple's shared biological child from a step-child — both are
+stored identically as `partner(A,B)` + `parent(B,C)`. We resolve the ambiguity
+in favour of the common case: a **current** partner's child counts as your own
+`child` (and, symmetrically, a parent's spouse as your own `parent`). So the
+fix adds `MARRIAGE['partner']['child'] = 'child'` and
+`MARRIAGE['parent']['partner'] = 'parent'` — **not** `step-child`/`step-parent`.
+
+**Why this is safe:**
+- Genuine step relations can still be entered **explicitly**; given relations
+  always win and are never overridden by inference (they're in the `given` set
+  and skipped by `traverse()`).
+- **Ex-partners carry a distinct token** (`ex-partner`), which has no `MARRIAGE`
+  rule, so an ex's child is deliberately **not** claimed.
+- Because the path now yields the blood token `child`, deeper lineage through a
+  spouse composes naturally via the coordinate arithmetic (a spouse's grandchild
+  → `grandchild`). The old `step-child` token was a dead-end (not in `COORDS`),
+  so it silently truncated those chains too.
+
+**Takeaways for future edits to `compose()`:**
+- `compose()` returning `null` drops the person entirely — before adding a
+  `null` (prune) case, check you aren't hiding a real, nameable relation.
+- New `MARRIAGE`/marriage-step entries should prefer a **blood token** as the
+  result whenever the couple-shares-lineage assumption applies, so the
+  coordinate algebra can keep extending the path; reserve `step-*`/`*-in-law`
+  result tokens for relations that genuinely shouldn't deepen.
+- **Code-only** change: computed relations are derived at read time and the
+  son/daughter vocabulary already existed — **no migration or data change**.
+
+Fixed on branch `dev`, commit `3caa5f8`.
+
 Still open / future work:
 - Extend the `MARRIAGE` table / step-relation handling if deeper in-law chains
   are wanted (currently pruned).
