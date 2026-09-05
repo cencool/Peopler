@@ -33,9 +33,12 @@ class Undelete {
         // extract and store person_detail	attributes
         $dataAttributes = [];
 
-        foreach ($data->detail as $attr => $val) {
-            if ($attr != 'id' && $attr != 'person_id') {
-                $dataAttributes[$attr] = $val;
+        // detail is a hasOne relation: null when the person has no detail row
+        if ($data->detail !== null) {
+            foreach ($data->detail as $attr => $val) {
+                if ($attr != 'id' && $attr != 'person_id') {
+                    $dataAttributes[$attr] = $val;
+                }
             }
         }
 
@@ -104,21 +107,24 @@ class Undelete {
             $undeleteRecord[] = ['item' => $dataAttributes];
         }
 
+        // personPhoto is a hasOne relation: null when the person has no photo
         $photo = $data->personPhoto;
-        $dataAttributes = [];
-        foreach ($photo as $attr => $val) {
-            if ($attr != 'id' && $attr != 'person_id') {
-                $dataAttributes[$attr] = $val;
+        if ($photo !== null) {
+            $dataAttributes = [];
+            foreach ($photo as $attr => $val) {
+                if ($attr != 'id' && $attr != 'person_id') {
+                    $dataAttributes[$attr] = $val;
+                }
             }
-        }
-        $pathFrom = Yii::getAlias('@app/uploads/person_photo/');
-        $pathTo = Yii::getAlias('@app/uploads/delete/');
-        if (!file_exists($pathTo) || !is_dir($pathTo)) {
-            mkdir($pathTo);
-        }
-        rename($pathFrom . $dataAttributes['file_name'], $pathTo . $dataAttributes['file_name']);
+            $pathFrom = Yii::getAlias('@app/uploads/person_photo/');
+            $pathTo = Yii::getAlias('@app/uploads/delete/');
+            if (!file_exists($pathTo) || !is_dir($pathTo)) {
+                mkdir($pathTo);
+            }
+            rename($pathFrom . $dataAttributes['file_name'], $pathTo . $dataAttributes['file_name']);
 
-        $undeleteRecord[] = ['photo' => $dataAttributes];
+            $undeleteRecord[] = ['photo' => $dataAttributes];
+        }
 
 
         // this exercise with session is due fact that 
